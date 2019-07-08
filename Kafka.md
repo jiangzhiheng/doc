@@ -6,7 +6,7 @@
 
 1. 消息队列
 
-   ![1562550374968](C:\Users\JiangZhiheng\Documents\Typora\img\1562550374968.png)
+   ![1562550374968](img\1562550374968.png)
 
 2. 什么是Kafka
 
@@ -16,11 +16,11 @@
 
 3. Kafka架构
 
-   ![1562551545327](C:\Users\JiangZhiheng\Documents\Typora\img\kafka架构01)
+   ![kafka01](img\kafka架构01.png)
 
    
 
-   ![1562552246114](C:\Users\JiangZhiheng\Documents\Typora\img\kafka架构02)
+   ![kafka02](img\kafka架构02.png)
 
    - producer：消息生产者，就是向kafka broker发消息的客户端
    - Consumer：消息消费者，向kafka broker取消息的客户端
