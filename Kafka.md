@@ -108,3 +108,43 @@
       [root@db02 kafka]# bin/kafka-topics.sh --delete --zookeeper 172.16.100.11:2181 --topic first
       ```
 
+#### 三、Kafka工作流程分析
+
+1. Kafka生产过程分析
+
+   - 写入方式
+
+     producer采用推（push）模式将消息发布到broker，每条消息都被追加（append）到分区（parttition）中，属于顺序写磁盘（顺序写磁盘比随机写内存要高，保证kafka吞吐率）
+
+   - 分区（Partition）
+
+     消息发送时都被发送到一个topic，其本质就是一个目录，而topic是由一些Partition Logs组成
+
+     ![partition01](img\partition01.jpg)
+
+     ![partiton02](img\partition02.jpg)
+
+   - 分区原则
+
+     1. 指定了partition，则直接使用
+     2. 未指定partition但指定key，则通过key的值hash出一个partition
+     3. partition和key都未指定，则随即轮询出一个
+
+   - 副本
+
+   - 写入流程
+
+     ![写入流程](img\pruducer写入流程.jpg)
+
+2. Kafka保存消息
+
+   - 存储位置
+
+   - 存储时间
+
+   - zookeeper中存储结构
+
+     ![kafka-zookeeper](img\kafka-zookeeper.jpg)
+
+3. Kafka消费过程分析
+
