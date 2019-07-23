@@ -62,6 +62,8 @@
    [root@db02 bin]# ./zkServer.sh start
    #启动kafka
    bin/kafka-server-start.sh  config/server.properties
+   # 启动到后台
+   bin/kafka-server-start.sh -daemon config/server.properties &
    ```
 
 5. kafka命令行操作
@@ -147,4 +149,3 @@
      ![kafka-zookeeper](img\kafka-zookeeper.jpg)
 
 3. Kafka消费过程分析
-
