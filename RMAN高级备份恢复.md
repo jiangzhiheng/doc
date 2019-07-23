@@ -257,3 +257,124 @@ Tips：这种在本机还原时不用输入密码,wallet自动解密无法异机
   ```
   
   
+
+##### 四、使用DataRecoveryAdvisor恢复数据
+
+恢复指导，是一款oracle数据库工具，自动故障诊断，提供适当的恢复建议，修复
+
+- 恢复情形
+
+  如何在丢失一个或多个数据文件后使用RMAN使数据库恢复正常运行
+
+  ```plsql
+  1.备份数据库
+  backup database；
+  2.删除数据文件
+  rm 数据文件
+  [oracle@db01 orcdb]$ rm system01.dbf 
+  [oracle@db01 orcdb]$ rm users01.dbf  
+  [oracle@db01 orcdb]$ rm sysaux01.dbf 
+  SQL> shutdown abort
+  3.startup mount
+  RMAN> list failure; 查看failure项，需要触发才会有输出
+  RMAN> list failure;
+  
+  List of Database Failures
+  =========================
+  
+  Failure ID Priority Status    Time Detected        Summary
+  ---------- -------- --------- -------------------- -------
+  202        CRITICAL OPEN      2019-JUL-22 18:47:27 System datafile 1: '/u01/app/oracle/oradata/orcdb/system01.dbf' is missing
+  45         HIGH     OPEN      2019-JUL-22 18:47:27 One or more non-system datafiles are missing
+  
+  RMAN> list failure;    查看failure建议
+  RMAN> repair failure preview;   查看修复过程
+  RMAN> repair failure;   执行恢复
+  
+  
+  Tips：
+  	1.数据库mount状态
+  	2.尽量使用恢复知道工具进行恢复
+  ```
+
+##### 五、增量备份
+
+1. 使用快跟踪加速备份
+
+​    Block Change Tracking块跟踪，主要用于RMAN的增量备份，记录自上一次备份以来数据库的变化，标识更改的块进行            增量备份，CTWR（change tracking writer）进程，只读取改变的内容，不需要对整个数据库进行扫描，从而提高RMAN的备份性能
+
+```plsql
+SQL> select * from v$block_change_tracking;   #默认为禁用状态
+SQL> alter database enable block change tracking using file '/dbbackup/ctf';  启用该功能并指定记录文件
+
+[oracle@db01 ~]$ ps -ef |grep ctwr
+oracle     4077      1  0 19:09 ?        00:00:00 ora_ctwr_orcdb
+oracle     4148   3465  0 19:11 pts/0    00:00:00 grep --color=auto ctwr
+[oracle@db01 ~]$ 
+```
+
+
+
+2. 增量备份-差异增量备份
+
+    增量备份：
+
+   - 缩短备份时间
+
+   类型：
+
+   - 差异增量备份
+
+     自上一次同级别的差异备份或者是上一次更高级别的备份完成之后的数据库发生改变的数据块。
+
+   - 累计增量备份
+
+   - 增量更新备份（oracle特有）
+
+   backup database：整库备份，不能作为增量策略的一部分。
+
+   backup incremental level 0 database；整库备份，可以作为增量备份的基础。
+
+   归档打开
+
+   非归档，mount下增量备份
+
+   ```plsql
+   差异增量备份
+   打开块跟踪:
+   SQL> alter database enable block change tracking using file '/dbbackup/ctf';
+   RMAN> backup incremental level 0 database format '/dbbackup/l0_%U';
+   增量备份:
+   RMAN> backup incremental level 1 database format '/dbbackup/l1_%U';
+   ```
+
+   ```plsql
+   累计增量备份
+   自上一次上一级备份完成以来数据库改变的数据块
+   RMAN> backup incremental level 1 cumulative database format '/dbbackup/lc1_%U';
+   
+   Tips
+   	不要混用
+   ```
+
+   ```plsql
+   增量更新备份
+   run{
+   recover copy of database with tag 'incr_update';
+   backup incremental level 1 for recover of copy with tag 'incr_update' database;
+   }
+   执行三次
+   1.没有相应的备份集来应用到文件映像上。产生映像文件
+   2.产生增量备份集
+   3.应用上一次的备份集来恢复文件
+   ```
+
+   
+
+   
+
+   
+
+   
+
+   
