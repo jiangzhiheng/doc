@@ -369,12 +369,90 @@ oracle     4148   3465  0 19:11 pts/0    00:00:00 grep --color=auto ctwr
    3.应用上一次的备份集来恢复文件
    ```
 
-   
+##### 六、基于增量备份的数据恢复
 
-   
+1. 差异增量备份
+2. 累计增量备份
+3. 增量更新备份
 
-   
+- 周六：0级备份
 
-   
+- 周日-周五：1级备份差异增量备份
 
-   
+  ```plsql
+  RMAN> backup incremental level 0 format '/dbbackup/full_%U' database;   #0级备份
+  RMAN> backup incremental level 1 format '/dbbackup/level1_%U' database;  #差异增量备份
+  RMAN> backup incremental level 1 format '/dbbackup/level1_%U' database;  #差异增量备份
+  
+  破坏数据库
+  [oracle@db01 ~]$ cd /u01/app/oracle/oradata/orcdb/
+  [oracle@db01 orcdb]$ rm system01.dbf 
+  [oracle@db01 orcdb]$ rm undotbs01.dbf 
+  [oracle@db01 orcdb]$ rm users01.dbf 
+  [oracle@db01 orcdb]$ rm sysaux01.dbf
+  
+  恢复数据库
+  SQL> shut abort;
+  SQL> startup mount
+  1.恢复文件
+  RMAN> restore database;
+  SCN：834126
+  SQL> select CHECKPOINT_CHANGE# from v$datafile_header; #查询SCN
+  2.recover database；
+  应用增量备份集--->归档文件---->日志文件
+  
+  
+  恢复到过去某个时间点
+  run{
+  set until time "to_date('2019-JUL-21 18:59:16','YYYY-MON-DD HH24:MI:SS')";
+  restore database;
+  recover database;
+  }
+  
+  SQL> alter database open resetlogs;
+  ```
+
+##### 七、Catalog恢复目录管理备份信息
+
+catalog恢复目录就是一个Oracle数据库，用来存储Oracle数据库的备份信息，一个或多个。
+
+- 默认使用控制文件存储备份信息
+- control_file_record_keep_time   默认七天
+- rman target / 默认使用控制文件存储备份信息
+
+前提：
+
+- dbid必须不一样
+- SQL> select dbid from v$database;
+
+修改dbid：
+
+```
+mount状态下
+[oracle@db03 ~]$ nid target=sys/PASSWORD
+SQL> startup mount
+SQL> alter database open resetlogs;
+```
+
+恢复目录步骤：
+```plsql
+1.在catalog数据库中创建用户
+[oracle@db03 ~]$ sqlplus / as sysdba
+SQL> create user rco identified by rco quota unlimited on users;
+SQL> grant connect,resource,recovery_catalog_owner to rco;
+
+2.创建恢复目录
+在源库rman连接恢复目录
+[oracle@db01 ~]$ rman target / catalog rco/rco@172.16.100.12:1521/orcdb
+RMAN> create catalog;
+
+3.在恢复目录中注册数据库
+RMAN> register database;
+手工同步备份信息
+resync database；
+
+使用情形：
+恢复spfile--->启动到nomount
+---->恢复控制文件
+```
+
