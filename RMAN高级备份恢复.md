@@ -456,3 +456,85 @@ resync database；
 ---->恢复控制文件
 ```
 
+##### 八、手工制造坏块
+
+创建一个用户，创建表，插入数据
+
+```plsql
+创建用户，授权，创建表
+SQL> create user jzh identified by jzh;
+SQL> grant connect,resource to jzh;
+SQL> alter user jzh quota unlimited on users;
+SQL> conn jzh/jzh
+SQL> create table jzhtbs(name varchar2(50));
+插入数据
+SQL> begin
+  2  for i in 1 .. 5000 loop
+  3  insert into jzhtbs values('jzh_test');
+  4  end loop;
+  5  commit;
+  6  end;
+  7  /
+SQL>select distinct --dbms_rowid.rowid_object(rowid),
+dbms_rowid.rowid_relative_fno(rowid),
+dbms_rowid.rowid_block_number(rowid)
+--dbms_rowid.rowid_row_number(rowid)
+from jzh.jzhtbs;    #查询该表对应的块以及文件号。
+
+SQL> conn / as sysdba
+SQL> alter system flush buffer_Cache;
+
+提取块：
+[oracle@db01 orcdb]$ dd if=users01.dbf of=test.dbf bs=8192 count=1 skip=150 conv=notrunc
+破坏快：
+[oracle@db01 orcdb]$ dd if=/dev/zero of=users01.dbf bs=8192 count=1 seek=150 conv=notrunc
+查询报错：
+ERROR:
+ORA-01578: ORACLE data block corrupted (file # 4, block # 150)
+ORA-01110: data file 4: '/u01/app/oracle/oradata/orcdb/users01.dbf'
+
+检查坏块
+1.RMAN> validate datafile 4;
+2.[oracle@db01 orcdb]$ dbv file=users01.dbf
+3.SQL> select * from v$database_block_corruption;
+```
+
+##### 九、快屏幕与块恢复
+
+块恢复：
+可以使用块恢复来恢复一个或多个损坏文件块
+优点：
+
+1. 降低MTTR平均故障恢复时间，只需恢复损坏的块。
+2. 恢复期间，数据文件处于联机状态。
+3. 如果没有块恢复，单个块，整个数据文件离线，恢复，online。
+
+前提条件：
+
+1. 必须得有RMAN备份
+
+```plsql
+recover datafile 4 block 132;
+恢复指导recovery advisor
+list failure
+advise failure
+repair failure preview
+repair failure
+```
+
+块屏蔽:
+没有备份的话，可以屏蔽坏块,其他块不影响。
+
+```plsql
+SQL> exec dbms_repair.skip_corrupt_blocks('JZH','JZHTBS');
+SQL> select skip_corrupt from dba_tables where table_name='JZHTBS' 
+```
+
+
+
+
+
+
+
+
+
