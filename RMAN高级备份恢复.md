@@ -530,6 +530,59 @@ SQL> exec dbms_repair.skip_corrupt_blocks('JZH','JZHTBS');
 SQL> select skip_corrupt from dba_tables where table_name='JZHTBS' 
 ```
 
+##### 十、使用dbms_backup_restore包
+
+使用场景
+
+- 只有备份集（控制文件和数据文件）
+- 控制文件没有，数据文件也没有，spfile参数文件，启动到mount
+
+```plsql
+[oracle@db01 ~]$ cd /u01/app/oracle/oradata/orcdb/
+[oracle@db01 orcdb]$ rm control01*    
+[oracle@db01 orcdb]$ rm system01.dbf 
+[oracle@db01 orcdb]$ rm sysaux01.dbf 
+[oracle@db01 orcdb]$ rm users01.dbf  
+[oracle@db01 orcdb]$ rm undotbs01.dbf
+
+
+1.nomount下恢复控制文件
+declare
+deviceType varchar2(256);
+done boolean;
+begin
+devicetype:=dbms_backup_restore.deviceAllocate(type=>'',ident=>'t1');
+dbms_backup_restore.restoresetDataFile;
+dbms_backup_restore.restoreControlFileto('/u01/app/oracle/oradata/orcdb/control01.ctl');
+dbms_backup_restore.restoreBackupPiece('/dbbackup/full_02u7j4qh_1_1',done=>done);
+dbms_backup_restore.deviceDeallocate;
+end;
+/
+2.nomount下恢复数据文件
+declare
+deviceType varchar2(256);
+done boolean;
+begin
+devicetype:=dbms_backup_restore.deviceAllocate(type=>'',ident=>'t1');
+dbms_backup_restore.restoresetDataFile;
+dbms_backup_restore.restoreDataFileto(dfnumber=>1,toname=>'/u01/app/oracle/oradata/orcdb/system01.dbf');
+dbms_backup_restore.restoreDataFileto(dfnumber=>2,toname=>'/u01/app/oracle/oradata/orcdb/sysaux01.dbf');
+dbms_backup_restore.restoreDataFileto(dfnumber=>3,toname=>'/u01/app/oracle/oradata/orcdb/undotbs01.dbf');
+dbms_backup_restore.restoreDataFileto(dfnumber=>4,toname=>'/u01/app/oracle/oradata/orcdb/users01.dbf');
+dbms_backup_restore.restoreBackupPiece('/dbbackup/full_01u7j4o6_1_1',done=>done);
+dbms_backup_restore.deviceDeallocate;
+end;
+/
+
+
+Tips:
+dbms_backup_restore局限性
+恢复时需要了解备份片信息
+恢复数据库需要指明文件号，新的文件名，数据文件备份集在哪个路径。
+
+
+```
+
 
 
 
