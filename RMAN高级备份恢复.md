@@ -583,6 +583,38 @@ dbms_backup_restore局限性
 
 ```
 
+##### 十一、使用RMAN进行表级别恢复
+
+```plsql
+Tips
+Oracle 11g不支持，12c开始支持
+在oracle数据库中，对于用户DDL(drop,truncate)等误操作,引起的数据丢失,基于数据库时间点不完全恢复,基于
+表空间时间点恢复TSPITR进行数据恢复。 delete。
+12c rman新的特性,基于表的时间点恢复。更加方便。
+将一个或多个表恢复到指定的时间点，而不影响其他对象。
+
+恢复原理:
+1.建立一个辅助的实例
+2.在辅助实例上做全库的恢复
+3.通过datapump工具导出，导入
+exp,expdp imp impdp
+
+1.已经有RMAN备份
+T1:2018-05-20 15:53:29 有数据
+T2:
+
+恢复过程
+
+rman target /
+rman target sys/Oracle123@127.0.0.01:1521/prod
+recover table fx.fxtbs
+until time "to_date('2018-05-20 15:53:29','yyyy-mm-dd hh24:mi:ss')"
+auxiliary destination '/u01/tsbak'
+remap table fx.fxtbs:fx.fstbs_new
+datapump destination '/tmp'
+dumpfile 'exp.dat';
+```
+
 
 
 
