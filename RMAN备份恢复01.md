@@ -123,14 +123,14 @@ SQL> alter system switch logfile;
    ```
 4. 归档模式备份数据库
 ```plsql
-      启用归档模式：
-      SQL> alter database archivelog;
-      RMAN备份：open状态
-      RMAN> backup database;
+启用归档模式：
+SQL> alter database archivelog;
+RMAN备份：open状态
+RMAN> backup database;
    
 Tips：如果备份含有system表空间的文件，将会自动备份控制文件和spfile。
 
-   RMAN> backup database plus archivelog;  同时备份归档文件。
+RMAN> backup database plus archivelog;  同时备份归档文件。
 ```
 
    
@@ -203,7 +203,7 @@ Report of database schema for database with db_unique_name ORCDB
 ​	
 ```plsql
 		2.查看需要备份的文件
-			RMAN> report need backup;
+		RMAN> report need backup;
 		RMAN retention policy will be applied to the command
 		RMAN retention policy is set to redundancy 1
 		Report of files with less than 1 redundant backups
@@ -215,7 +215,6 @@ Report of database schema for database with db_unique_name ORCDB
 		4    0     /u01/app/oracle/oradata/orcdb/users01.dbf
 
 		3.列出三天未备份的对象
-
 		RMAN> report need backup days 3;
 
 		4.列出需要三个备份的所有文件
@@ -236,18 +235,18 @@ Report of database schema for database with db_unique_name ORCDB
       1. cp
    
       ```plsql
-      	数据文件（包括undo文件）3
+      数据文件（包括undo文件）3
       SQL> select * from v$dbfile;
       控制文件	
       SQL> show parameter control;
       SQL> select * from v$controlfile;
       spfile
       SQL> show parameter spfile;
-      	redo联机重做日志文件
+      redo联机重做日志文件
       SQL> select * from v$logfile;
       临时文件	
-      	SQL> select * from v$tempfile;
-      	拷贝的时候先关闭数据库
+      SQL> select * from v$tempfile;
+      拷贝的时候先关闭数据库
       ```
    
    2.rman
@@ -262,7 +261,7 @@ Report of database schema for database with db_unique_name ORCDB
    RMAN> configure channel device type disk maxpiecesize 200m;
    
 5. crosscheck交叉检查
-      
+   
       ```plsql
       RMAN> crosscheck backupset;
       RMAN> delete expired backupset;
@@ -279,17 +278,17 @@ Report of database schema for database with db_unique_name ORCDB
 [oracle@db01 2019_07_03]$ mv o1_mf_nnndf_TAG20190703T235813_gkv8w5yk_.bkp /dbbackup/user01.bkp
 RMAN> crosscheck backupset;
 RMAN> delete backupset;
-  注册单个备份片
-  catalog backuppiece '/dbbackup/user01.bkp'
-  注册整个目录
-  RMAN> catalog start with '/dbbackup/';
+注册单个备份片
+catalog backuppiece '/dbbackup/user01.bkp'
+注册整个目录
+RMAN> catalog start with '/dbbackup/';
   	
-  注册归档文件
-  注册单个归档文件
-  SQL> alter database register physical logfile '/archive/arc/1_75_1011938106.arch'
+注册归档文件
+注册单个归档文件
+SQL> alter database register physical logfile '/archive/arc/1_75_1011938106.arch'
   	
-  注册整个目录
-  RMAN> catalog start with '/archive/arc/'
+注册整个目录
+RMAN> catalog start with '/archive/arc/'
 ```
 
 6.使用validate验证数据库
