@@ -615,7 +615,115 @@ datapump destination '/tmp'
 dumpfile 'exp.dat';
 ```
 
+##### 十二、RMAN Duplicate克隆|复制技术
 
+需求：
+
+1. 开发人员需要一套真实生产数据的数据库测试环境
+
+   exp imp
+   
+
+目的
+
+1. 提供给开发测试
+2. 测试升级到新版本
+3. 测试应用程序对数据库性能的影响
+4. 创建备用数据库，dataguard
+
+测试环境的方法：
+
+1. 关闭主库，操作系统命令，cp，控制文件，spfile，数据文件，redo文件
+2. 使用rman备份集，然后异机恢复。
+3. rman在线生产
+
+rman dulicate的实现方法：
+
+1. 基于备份集的复制
+
+2. 基于活动数据库的复制
+
+   是通过网络将实时数据库复制到辅助实例来创建，通过网络直接copy到辅助实例，它可以减少数据落地，TB级。
+
+步骤：
+
+1. 环境说明
+
+   源库：db01
+
+   测试库：db03
+
+2. 创建副本数据库的密码文件
+
+   ```bash
+   orapwSID
+   
+   [oracle@db03 dbs]$ orapwd file=orapworcdb password=SYS_PASSWD entries=10 format=12
+   ```
+
+   
+
+3. 手工创建副本数据库所需要的目录
+
+   ```bash
+   cd /u01/app/oracle/admin/
+   mkdir testdb
+   mkdir adump dpdump pfile
+   
+   cd /u01/app/oracle/oradata/
+   mkdir testdb 
+   ```
+
+   
+
+4. 创建副本数据库的初始化文件inittestdb.ora
+   
+   ```bash
+   audit_file_dest='/u01/app/oracle/admin/testdb/adump'
+   compatible='12.2.0'
+   control_files='/u01/app/oracle/oradata/testdb/control01.ctl', '/u01/app/oracle/ oradata/testdb/control02.ctl'
+   db_block_size=8192
+   db_name='prod'
+   log_archive_dest='/u01/arch'
+   log_archive_format='%t_%s_%r.arc'
+   remote_login_passwordfile='EXCLUSIVE'
+   memory_target=2g
+   undo_management='AUTO'
+   undo_tablespace='UNDOTBS1'
+db_file_name_convert=('/u01/app/oracle/oradata/prod','/u01/app/oracle/oradata/testdb')
+   log_file_name_convert=('/u01/app/oracle/oradata/prod','/u01/app/oracle/oradata/testdb') 
+   ```
+   
+   
+   
+5. 启动副本数据库
+   startup nomount
+
+6. 配置副本上的静态监听
+      nomount block状态
+   状态为UNKNOWN
+
+7. 测试静态监听
+     从源库测试:
+     sqlplus sys/Oracle123@192.168.230.101:1522/testdb as sysdba
+     
+8. 用rman duplicate链接目标数据库（源库）和副本数据库
+   
+     ```plsql
+     tnsnames.ora
+     rman target sys/Oracle123@192.168.230.100:1521/prod auxiliary sys/Oracle123@192.168.230.101:1522/testdb
+     rman target sys/Oracle123@source auxiliary sys/Oracle123@dest 
+     
+     RMAN> duplicate target database to prod from active database nofilenamecheck;
+     ```
+     
+     
+     
+##### 
+
+  
+
+   
 
 
 
