@@ -1,0 +1,6 @@
+run{
+delete noprompt backupset completed before 'sysdate-14';
+sql 'alter system archive log current';
+backup incremental level 0 format '/dbbackup/%d_inc0_%U' database;
+backup archivelog all format '/dbbackup/%d_arch_%U' delete all input;
+}
