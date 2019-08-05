@@ -78,10 +78,86 @@
      }
      ```
 
-     
-
    - 多分支switch
 
+     switch(值){     //int  char
+     
+     ​	case 值1：
+     
+     ​		代码1；
+     
+     ​	。。。
+     
+     ​	default：
+     
+     }
+     
+     ```java
+     import java.util.Scanner;
+     
+     public class testSwitch {
+         public static void main(String[] args) {
+             Scanner input = new Scanner(System.in);
+             System.out.println("Please input a number:");
+             int day = input.nextInt();
+             switch (day){
+                 case 1:
+                     System.out.println("Monday");
+                     break;
+                 case 2:
+                     System.out.println("Tuesday");
+                     break;
+                 case 3:
+                     System.out.println("Wendensday");
+                     break;
+                 default:
+                     System.out.println("Input Error");
+                     break;
+             }
+         }
+     }
+     ```
+     
+     ```java
+     //Demo01
+     
+     import java.util.Scanner;
+     
+     public class GradeTest {
+         public static void main(String[] args) {
+             //创建一个变量存储Score
+             Scanner input = new Scanner(System.in);
+             System.out.println("Please input Score:");
+             int score = input.nextInt();
+             //利用成绩的值，来判断区间
+             switch (score/10){
+                 case 1:
+                 case 2:
+                 case 3:
+                 case 4:
+                 case 5:
+                     System.out.println("不及格");
+                 case 6:
+                     System.out.println("及格");
+                     break;
+                 case 7:
+                     System.out.println("中等");
+                     break;
+                 case 8:
+                     System.out.println("良好");
+                     break;
+                 case 9:
+                     System.out.println("优秀");
+                     break;
+                 default:
+                     System.out.println("Input Error");
+             }
+         }
+     }
+     ```
+     
+     
+     
      
 
 3. 循环结构
