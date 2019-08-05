@@ -158,12 +158,31 @@
      
      
      
-     
-
+   
 3. 循环结构
 
    - for
+
+     ```java
+     public class ForLoop {
+         public static void main(String[] args) {
+             for (int x = 100;x <= 999;x ++){
+                 int a = x%10;
+                 int b = (x/10)%10;
+                 int c = (x/100)%10;
+                 int sum = a*a*a + b*b*b + c*c*c;
+                 if (sum == x){
+                     System.out.println(x+"是水仙花数");
+                 }
+             }
+         }
+     }
+     ```
+
+     
+
    - while
+
    - do...while
 
 4. 
