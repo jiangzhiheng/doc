@@ -166,22 +166,46 @@
      ```java
      public class ForLoop {
          public static void main(String[] args) {
+             //double value = Math.pow(a,b);a的b次方
              for (int x = 100;x <= 999;x ++){
                  int a = x%10;
                  int b = (x/10)%10;
                  int c = (x/100)%10;
-                 int sum = a*a*a + b*b*b + c*c*c;
+                 //int sum = a*a*a + b*b*b + c*c*c;
+                 double sum = Math.pow(a,3) + Math.pow(b,3)+Math.pow(c,3);
                  if (sum == x){
                      System.out.println(x+"是水仙花数");
                  }
              }
          }
      }
+     
+     ```
+
+     循环嵌套
+
+     ```java
+     public class ForLoop02 {
+         public static void main(String[] args){
+             for (int i = 1; i <= 4; i ++){
+                 for (int j = 1; j <= i ;j ++){
+                     System.out.print("*");
+                 }
+                 System.out.println();
+             }
+         }
+     }
+     //*
+     //**
+     //***
+     //****
      ```
 
      
 
    - while
+
+     
 
    - do...while
 
