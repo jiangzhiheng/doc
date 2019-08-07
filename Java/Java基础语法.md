@@ -273,13 +273,44 @@
      }
      ```
 
-     
-
    - while
 
-     
+     ```java
+     public class WhileDemo {
+         //初始值
+         //while(终点判断条件){
+         // }
+         public static void main(String[] args) {
+             int i = 1;
+             while (i <= 5){
+                 System.out.println("hello World");
+                 i ++;
+             }
+             System.out.println("exec Complete");
+         }
+     }
+     ```
 
    - do...while
+
+     ```java
+     public class DoWhileDemo {
+         //初始值
+         //do{
+         // }while()
+     
+         public static void main(String[] args) {
+             int i = 1;
+             do {
+                 i++;
+                 System.out.println("hello World");
+             }while (i<=5);
+             System.out.println("Exec Complete");
+         }
+     }
+     ```
+
+     
 
 4. 
 
