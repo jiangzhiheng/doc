@@ -185,6 +185,7 @@
      循环嵌套
 
      ```java
+     //Demo02
      public class ForLoop02 {
          public static void main(String[] args){
              for (int i = 1; i <= 4; i ++){
@@ -199,6 +200,77 @@
      //**
      //***
      //****
+     ```
+
+     ```java
+     import java.util.Scanner;
+     
+     public class ForLoop03{
+         public static void main(String[] args){
+             Scanner input = new Scanner(System.in);
+             System.out.println("Please input line number:");
+             int line = input.nextInt();
+             for(int i = 1;i <= line;i ++){//控制行数
+                 if(i == 1){//第一行规则
+                     for (int j = 1;j <= 2*line-1;j++){
+                         System.out.print("*");
+                     }
+                 }else{//后三行规则
+                     for(int j = 1;j<=(line+1)-i;j++){
+                         System.out.print("*");
+                     }
+                     for (int j = 1;j<=2*i-3;j++){
+                         System.out.print(" ");
+                     }
+                     for (int j = 1;j<=(line+1)-i;j++){
+                         System.out.print("*");
+                     }
+                 }
+             System.out.println();
+             }
+     
+         }
+     }
+     //*******
+     //*** ***
+     //**   **
+     //*     *
+     
+     ```
+
+     ```java
+     //9*9乘法表
+     public class Demo03 {
+         public static void main(String[] args) {
+             for(int i = 1;i <= 9;i++){
+                 for (int j = 1;j <= i; j++){
+                     System.out.print(i+"*"+j+"="+(i*j)+"\t");
+                 }
+                 System.out.println();
+             }
+         }
+     }
+     ```
+
+     ```java
+     //素数
+     public class Demo04 {
+         public static void main(String[] args) {
+             for(int num = 2;num <= 100;num++) {
+                 boolean flag = false;
+                 for (int i = 2; i <= num/2 - 1; i++) {
+                     if (num % i == 0) {
+                         System.out.println(num + "不是素数");
+                         flag = true;
+                         break;
+                     }
+                 }
+                 if (flag == false) {
+                     System.out.println(num + "是素数");
+                 }
+             }
+         }
+     }
      ```
 
      
