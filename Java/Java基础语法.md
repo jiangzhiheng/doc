@@ -312,5 +312,131 @@
 
      
 
-4. 
+
+4. Java数组的使用
+
+   数据组是一组数据类型相同的数据的组合，将这些数据统一的管理起来
+
+   数组是一个引用类型，数组内存储的类型可以是基本类型，也可以是引用类型
+
+   1. 数据的定义（声明）
+
+      - 数据类型[]    数组名字
+
+        int[] x;
+
+        char[] y;
+
+        String[] m;
+
+   2. 数组的初始化
+
+      - 静态初始化
+
+        int[] array = new int[]{10,20,30,40,50};
+
+        int[] array = {10,20,30,40,50};
+
+      - 动态初始化  有长度，无元素
+
+        int [] array = new int[5];
+
+      - 
+
+      
+
+   3. 数组元素的访问
+
+      通过元素在数组中的位置来访问
+
+      索引有取值范围，会出现异常ArrayIndexOutOfBoundsException
+
+   4. 通过循环遍历数组
+
+      JDK1.5版本之后，新特性，增强for循环 forEach
+
+      for(自己定义的变量（接受数组内的每一个元素：遍历的数组Array）){
+
+      }
+
+      ```java
+      public class TestArray {
+          public static void main(String[] args) {
+              int[] array01 = new int[5];   //动态初始化
+              for(int value:array01){
+                  System.out.println(value);
+              }
+              
+              
+              int[] array = new int[]{10,20,30,40,50};
+              //通过元素在数组中的位置index来访问
+              //array[index]
+              int value = array[1];
+              //改变数组内值
+              array[3] = 400;
+              System.out.println(value);
+              //value = array[5];
+              //System.out.println(value);
+              //异常----运行时异常InputMisMatchException输入类型不匹配
+              //ArrayIndexOutOfBoundsException数组索引越界
+      
+              //遍历数据
+              for(int i = 0;i < 5;i ++){
+                  System.out.println(array[i]);
+              }
+              //增强for循环:有两个条件，无索引，只能取值，不能存，找不到索引
+              System.out.println("--------------------");
+              for (int value1:array){
+                  System.out.println(value1);
+              } 
+          }
+      }
+      ```
+
+      
+
+   5. 基本数据类型和引用数据类型在内存结构上的区别
+
+      new关键字相当于在堆内存中申请开辟一块新的空间
+
+      - 数组在堆内存的空间形态，是一串连续的地址
+
+      - 基本类型变量空间存储的是值，传递的是值
+
+      - 数组是在堆内存中的一段连续的地址存在
+
+      - 堆内存的数组空间长度一旦确定，不能发生改变
+
+      所有的基本类型都存储在栈内存
+
+      如果存储的是基本数据类型，存储的是值
+
+      如果存储的是引用数据类型，传递的是引用，值存储在堆内存
+
+      ```java
+      public class TestArray {
+          public static void main(String[] args) {
+              //1.创建一个数组
+              int[] array = new int[50];
+              //2.将1-100之间的偶数存入数据
+              for (int i = 0;i < array.length;i ++){
+                  array[i] = 2*i +2;
+              }
+              //3.输出验证
+              for (int value:array){
+                  System.out.println(value);
+              }
+          }
+      }
+      /*
+      1.使用动态初始化
+      2.使用两个循环
+      */
+      ```
+
+      
+
+   6. 
+
+5. 
 
