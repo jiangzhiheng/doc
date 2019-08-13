@@ -492,6 +492,8 @@
 
       - Demo03
 
+        
+      
       ```java
       //找寻一个数组中的最大值和最小值
       public class Demo3 {
@@ -505,11 +507,11 @@
               }
               System.out.println("min:"+min);
           }
-      }
+   }
       ```
 
       - Demo04
-
+      
       ```java
       //合并两个数组（数组长度一旦确定不能改变）
       public class Demo4 {
@@ -530,11 +532,11 @@
                   System.out.println(v);
               }
           }
-      }
+   }
       ```
 
       - Demo05
-
+      
       ```java
       public class Demo5 {
           public static void main(String[] args){
@@ -568,11 +570,11 @@
                   System.out.println(v);
               }
           }
-      }
+   }
       ```
 
       
-
+      
       - Demo06
       - 
 
