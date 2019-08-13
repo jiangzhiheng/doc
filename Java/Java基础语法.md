@@ -473,7 +473,7 @@
 
       
 
-      ```java
+   ```java
    //给定一个数组a{1,2,3,4,5,6}将这个数组中的元素头尾对应位置呼唤
    public class Demo02 {
         public static void main(String[] args) {
@@ -488,7 +488,7 @@
               }
           }
    }
-      ```
+   ```
 
       - Demo03
 
