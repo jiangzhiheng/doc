@@ -440,43 +440,43 @@
 
       ```java
       //给定两个数组a{1,2,3,4} b{5,6,7,8}，将两个数组内的元素对应位置互换
-      
-   public class Demo01 {
-          public static void main(String[] args) {
-           int[] a = {1,2,3,4};
-              int[] b = {5,6,7,8};
-              //每次交换两个数字，换四次
-      
-           //方式一：更换数组元素（循环次数多，受数组长度限制）
-              /*
-              for(int i = 0;i < 4;i ++){
-                  int x = a[i];
-                  a[i] = b[i];
-                  b[i] = x;
-              }*/
-              //方式2，直接交换变量a和变量b中数组的引用地址
-              int[] tmp = a;
-              a = b;
-              b = tmp;
-              //输出两个数组
-              for(int v:a){
-                  System.out.println(v);
-              }
-              System.out.println("-----------------");
-              for(int v:b){
-                  System.out.println(v);
-              }
-           }
-      }
-      
+          public class Demo01 {
+             public static void main(String[] args) {
+              int[] a = {1,2,3,4};
+                 int[] b = {5,6,7,8};
+                 //每次交换两个数字，换四次
+          //方式一：更换数组元素（循环次数多，受数组长度限制）
+             /*
+             for(int i = 0;i < 4;i ++){
+                 int x = a[i];
+                 a[i] = b[i];
+                 b[i] = x;
+             }*/
+             //方式2，直接交换变量a和变量b中数组的引用地址
+             int[] tmp = a;
+             a = b;
+             b = tmp;
+             //输出两个数组
+             for(int v:a){
+                 System.out.println(v);
+             }
+             System.out.println("-----------------");
+             for(int v:b){
+                 System.out.println(v);
+             }
+          }
       ```
+
+   
+
+   - Demo02
+
       
-      - Demo02
-      
+
       ```java
-      //给定一个数组a{1,2,3,4,5,6}将这个数组中的元素头尾对应位置呼唤
-      public class Demo02 {
-          public static void main(String[] args) {
+   //给定一个数组a{1,2,3,4,5,6}将这个数组中的元素头尾对应位置呼唤
+   public class Demo02 {
+        public static void main(String[] args) {
               int[] array = {1,2,3,4,5,6};
               for(int i = 0;i < array.length/2;i++){
                   int x = array[i];
@@ -487,11 +487,11 @@
                   System.out.println(v);
               }
           }
-      }
+   }
       ```
-      
+
       - Demo03
-      
+
       ```java
       //找寻一个数组中的最大值和最小值
       public class Demo3 {
@@ -507,9 +507,9 @@
           }
       }
       ```
-      
+
       - Demo04
-      
+
       ```java
       //合并两个数组（数组长度一旦确定不能改变）
       public class Demo4 {
@@ -532,9 +532,9 @@
           }
       }
       ```
-      
+
       - Demo05
-      
+
       ```java
       public class Demo5 {
           public static void main(String[] args){
@@ -570,9 +570,9 @@
           }
       }
       ```
+
       
-      
-      
+
       - Demo06
       - 
 
