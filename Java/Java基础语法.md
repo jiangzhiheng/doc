@@ -493,7 +493,7 @@
       - Demo03
 
         
-      
+
       ```java
       //找寻一个数组中的最大值和最小值
       public class Demo3 {
@@ -511,7 +511,7 @@
       ```
 
       - Demo04
-      
+
       ```java
       //合并两个数组（数组长度一旦确定不能改变）
       public class Demo4 {
@@ -536,7 +536,7 @@
       ```
 
       - Demo05
-      
+
       ```java
       public class Demo5 {
           public static void main(String[] args){
@@ -574,8 +574,53 @@
       ```
 
       
-      
+
       - Demo06
+
+   ```java
+   public class Demo6 {
+       //给定一个数组array{1，2，3，4，0，6，23，0，7}去掉数组中的0元素
+       public static void main(String[] args) {
+           int[] oldArray = {1,2,3,5,0,5,8,0,4,11,0,43};
+           //找到非零元素个数
+           int count = 0;
+           for (int i = 0 ;i < oldArray.length;i ++){
+               if (oldArray[i] != 0){
+                   count++;
+               }
+           }
+   
+           //创建一个新数组存放
+           int[] newArray = new int[count];
+           //将非0元素添入newArray
+           int index = 0;
+           for(int i = 0;i < oldArray.length;i ++){
+               if(oldArray[i]!=0){
+                   newArray[index] = oldArray[i];
+                   index++;
+               }
+           }
+           //验证：
+           for(int v:newArray){
+               System.out.println(v);
+   
+           }
+           //清空oldArray
+           oldArray = null; //堆内存中的数组由于没有引用指向，会被GC回收
+       }
+   }
+   ```
+
+   
+
+      -  Demo07
+
+   ```java
+   
+   ```
+
+   
+
       - 
 
 5. 
