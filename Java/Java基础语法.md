@@ -616,12 +616,72 @@
       -  Demo07
 
    ```java
+   //冒泡排序
+   public class Demo7 {
+       public static void main(String[] args) {
+           //
+           int[] array = {5,2,3,1,4};
    
+           for(int i = 1;i < 5;i ++){
+               for (int j = 4;j >= i;j --){
+                   if(array[j] < array[j-1]){
+                       int x = array[j];
+                       array[j] = array[j-1];
+                       array[j-1] = x;
+                   }
+               }
+           }
+           for(int v:array) {
+               System.out.println(v);
+           }
+       }
+   }
    ```
 
    
 
-      - 
+      - Demo8
 
-5. 
+   ```java
+   import java.util.Scanner;
+   
+   //用户登陆
+   public class Demo8 {
+       public static void main(String[] args) {
+           //用户信息
+           String[] userBox = {"Martin","Jerry","Tom"};
+           int[] passWordBox = {123,666,888};
+           //用户输入
+           Scanner input = new Scanner(System.in);
+           System.out.println("Please input username：");
+           String user = input.nextLine();
+           System.out.println("Please input passwd:");
+           int passwd = input.nextInt();
+           //比较
+           boolean flag = false;
+           for(int i = 0;i < userBox.length; i ++){
+               if(userBox[i].equals(user)){
+                   if(passWordBox[i]==passwd){
+                       System.out.println("登陆成功");
+                       flag = true;
+                   }//else {
+   //                    System.out.println("密码错误");
+   //                }
+                   
+                   break;
+               }
+           }
+           if(!flag){
+               System.out.println("用户名或密码不存在");
+           }
+   
+       }
+   }
+   ```
+
+   
+
+5. 多维数组
+
+6. 
 
