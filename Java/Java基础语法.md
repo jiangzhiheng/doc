@@ -683,5 +683,44 @@
 
 5. 多维数组
 
-6. 
+   1. 二维数组
+
+      - 数组的定义/声明
+
+        int\[][] array;
+
+      - 数组的初始化
+
+        - 静态初始化 int\[][] array = {{1,2,3},{,4,6},{8,9,11}}
+        - 动态初始化 int\[][] array = new int\[3][2]
+
+      - 数组元素的访问
+
+      - 二维数组在内存中的结构---->树
+
+      ```java
+      public class TestArray1 {
+          public static void main(String[] args){
+              //定义
+              int[][] array = {{1,2,3},{4,6},{8,9,11}};
+              //访问
+              //int value = array[0][0];
+              //遍历
+              for (int i = 0;i< array.length;i++){
+                  int[] arr = array[i];
+                  for (int j = 0;j < arr.length;j ++){
+                      int value = arr[j];
+                      System.out.println(value+"\t");
+                  }
+                  System.out.println();
+              }
+          }
+      }
+      
+      //main 方法
+      //public 访问权限修饰符
+      // static 特征修饰符 
+      ```
+
+      
 
