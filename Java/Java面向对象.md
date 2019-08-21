@@ -178,4 +178,54 @@
 
      
 
-3. 
+3. 方法参数返回值
+
+   ```java
+   public class Test {
+       public int changeNum(int x){
+           System.out.println("Start: "+x);
+           x = 10;
+           System.out.println("End: "+x);
+           return x;  //
+       }
+   
+       public void changeArray(int[] x){
+           System.out.println("Start: "+x[0]);
+           x[0] = 10;
+           System.out.println("End: "+x[0]);
+       }
+   /*
+       public static void main(String[] args) {
+   
+           //创建一盒对象-前提：有类模板
+           //类加载器
+           Test t =new Test();  //堆内存中开辟空间
+           int a = 1;
+           //调用方法
+           //方法存储在堆内存的对象空间内
+           //栈内存中开辟一块临时的执行空间
+           a = t.changeNum(a);
+           System.out.println(a);
+           //如果想让a的值变化，return返回值
+           //输出结果：
+           //Start: 1
+           //End: 10
+           //10
+       }
+       */
+   
+       public static void main(String[] args) {
+           Test t = new Test();
+           int[] a = new int[]{1,2,3};
+           t.changeArray(a);
+           System.out.println(a[0]);
+           //注意数组为引用类型，会改变数组里面的值，实际传递的是数组的地址
+       }
+   }
+   ```
+
+   Demo01:
+
+   
+
+4. 
