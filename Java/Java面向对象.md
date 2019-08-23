@@ -226,6 +226,31 @@
 
    Demo01:
 
+   ```java
+   public class Demo {
+   
+       public int[][] changeTwoArray(int[] a,int[] b){
+           //将两个数组的地址引用直接交换
+           int[] tmp;
+           tmp = a;
+           a=b;
+           b=tmp;
+           int[][] result = {a,b};
+           return result;
+       }
+   
+       public static void main(String[] args) {
+           //交换两个数组对应位置的元素
+           int[] a = {1,2,3,4};
+           int[] b = {5,6,7,8};
+           Demo d = new Demo();
+           int[][] value = d.changeTwoArray(a,b);
+           a = value[0];
+           b = value[1];
+       }
+   }
+   ```
+
    
 
 4. 
