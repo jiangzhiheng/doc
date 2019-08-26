@@ -271,6 +271,66 @@
    }
    ```
 
+   Demo03
+
+   ```java
+   public class TestFunctions {
+   
+       //冒泡排序
+       //flag = true升序
+       //flag = false 降序
+       public void orderArray(int[] array,boolean flag){
+           for(int i = 1;i <array.length;i ++){
+               for(int j =array.length-1;j >=i;j --){ //控制比较的次数
+                   if((flag == true && array[j]<array[j-1]) ||(flag ==false && array[j]>array[j-1])){
+                       int tmp = array[j];
+                       array[j] = array[j-1];
+                       array[j-1] = tmp;
+                   }
+   //                if(flag){
+   //                    if(array[j]<array[j-1]){
+   //                        int tmp = array[j];
+   //                        array[j] = array[j-1];
+   //                        array[j-1] = tmp;
+   //                    }
+   //                }else {
+   //                    if(array[j]>array[j-1]){
+   //                        int tmp = array[j];
+   //                        array[j] = array[j-1];
+   //                        array[j-1] = tmp;
+   //                    }
+   //                }
+               }
+           }
+       }
+   }
+   
+   ```
+
+   Demo04
+
+   ```java
+   public class TestFunctions {
+       //用户数据信息
+       String[][] userBox = {{"Martin","123456"},{"Tony","666666"},{"Java","888888"}};
+       //用户输入登陆信息
+       //提供用户名和密码  返回值
+       public String login(String user,String password){
+   
+           String result = "用户名或密码不正确";
+           for(int i=0;i<userBox.length;i++){
+               if(userBox[i][0].equals(user)) {
+                   if (userBox[i][1].equals(password)) {
+                       result = "登陆成功";
+                   }
+                   break;
+               }
+           }
+           return result;
+       }
+   }
+   ```
+
    
 
 4. 
