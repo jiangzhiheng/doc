@@ -251,6 +251,26 @@
    }
    ```
 
+   Demo02
+
+   ```java
+   public class Functions {
+   
+       //找寻数组内最大值最小值问题
+       public int findMaxOrMinNum(int[] array,boolean flag){
+           int temp = array[0];
+           for(int i = 0;i <array.length;i ++){
+               if (flag && array[i]<temp){    //最小值
+                   temp = array[i];
+               }else if (!flag && array[i]>temp){  //最小值
+                   temp = array[i];
+               }
+           }
+           return temp;
+       }
+   }
+   ```
+
    
 
 4. 
