@@ -333,4 +333,55 @@
 
    
 
-4. 
+4. 面向对象之方法重载
+
+   - 概念
+     1. 一个类中的一组方法 相同的方法名字 不同的参数列表 这样的一组方法，构成了方法重载
+
+   - 作用：为了让使用者便于记忆与调用 只需要记录一个名字 执行不同的操作
+     1. 参数的个数 参数的类型
+     2. 调用方法的时候 首先通过方法名字定位方法
+     3. 如果方法名字有一致 可以通过参数的数据类型定位方法
+     4. 如果没有与传递参数类型一致的方法 可以找一个参数类型可以进行转化（自动）
+
+   - JDK1.5之后 动态参数列表
+     1. 动态参数列表的方法，不能与相同意义的数组类型方法构成方法重载  本质一样
+     2. 动态参数列表在方法的参数中只能存在一份，并且放置在方法参数的末尾
+
+   ```java
+   public class TestOverLoad {
+   
+       public void test(int... x){   //动态参数个数
+           //动态参数列表本质上为一个数组
+           for (int i = 0;i <= x.length;i++){
+               System.out.println("参数为"+x);
+           }
+       }
+   
+       public void test(boolean flag){
+           System.out.println("参数为"+flag);
+       }
+   
+       public void test(int a){
+           System.out.println("参数为"+a);
+       }
+   
+       public void test(String b){
+           System.out.println("参数为"+b);
+       }
+   
+       public static void main(String[] args) {
+           //1.创建对象
+           TestOverLoad t = new TestOverLoad();
+           //2.调用方法
+           t.test(false); //必须传参数个数，类型一致的参数
+           System.out.println();  //println()-----方法  属于out对象
+           System.out.println(232);
+           System.out.println(t);
+       }
+   }
+   ```
+
+   
+
+5. 
