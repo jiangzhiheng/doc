@@ -484,6 +484,85 @@
    }
    ```
 
+   Tips：方法之间来回调用执行可能会产生`StackOverflowError` 栈溢出错误
+
+   知识补充：Scanner类及其中方法的使用
+
+   包装类：`String<------->int      int--Integer   char--Character   byte--Byte`
+
+   `String password = input.nextLine()`
+
+   `int value = Integer.parseInt(password)`
+
+8. Demo01----计算器的实现
+
+   ```java
+   import java.util.Scanner;
+   
+   public class Calculator {
+       //设计一个方法  加法运算
+       public float add(float a, float b){
+           return a + b;
+       }
+       //减法
+       public float sub(float a, float b){
+           return a - b;
+       }
+       //乘法
+       public float multi(float a, float b){
+           return a * b;
+       }
+       //除法
+       public float devide(float a, float b){
+           return a / b;
+       }
+       //控制计算流程
+       public void calculate(){
+           Scanner input = new Scanner(System.in);
+           System.out.println("请输入第一个数字：");
+           String one = input.nextLine();
+           float a = Float.parseFloat(one);
+           while (true) {
+               System.out.println("请输入运算符：");
+               String symbol = input.nextLine();
+               if(symbol.equals("=")){
+                   System.out.println("运行完毕");
+                   break;
+               }
+               if(!(symbol.equals("+")||symbol.equals("-")||symbol.equals("*")||symbol.equals("/"))){
+                   System.out.println("输入的运算符不支持[+ - * /]");
+                   continue;
+               }
+               System.out.println("请输入第二个数字：");
+               String two = input.nextLine();
+               float b = Float.parseFloat(two);
+   
+               switch (symbol) {
+                   case "+":
+                       a = this.add(a, b);
+                       break;
+                   case "-":
+                       a = this.sub(a, b);
+                       break;
+                   case "*":
+                       a = this.multi(a, b);
+                       break;
+                   case "/":
+                       a = this.devide(a, b);
+                       break;
+               }
+               System.out.println(a);
+           }
+       }
+   }
+   
+   //Scanner用法
+   //1.从读取方式上来讲，除了nextLine外，其余方法都不读取回车符
+   //2.读取的返回结果来讲
+   //      next方法看到回车或空格都认为结束 nextLine只认回车符
+   //利用包装类做String与基本类型转化的问题
+   ```
+
    
 
-8. 
+9. 
