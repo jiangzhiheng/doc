@@ -565,4 +565,170 @@
 
    
 
-9. 
+9. 动态数组的实现
+
+   异常处理：
+
+   ```java
+   public class BoxIndexOutOfBoundException extends RuntimeException{
+       //想要描述这个类是一个（我们自己的异常 is a 异常）异常
+       //继承extends  泛化（实现）implememts
+       public BoxIndexOutOfBoundException(){}
+       public BoxIndexOutOfBoundException(String msg){
+           super(msg);  //msg提供给父类
+       }
+   }
+   ```
+
+   动态数组实现：
+
+   ```java
+   public class ArrayBox {
+       //动态数组
+       //描述事物
+       //属性
+       private int[] elementData;
+       private int size = 0; //记录有效的元素个数
+   
+   
+       //构造方法
+       public ArrayBox(){
+           elementData = new int[10];  //默认长度
+       }
+       public ArrayBox(int capacity){
+           elementData = new int[capacity];
+       }
+   
+       //负责创建一个新数组，并将旧元素移入
+       //条件 新数组长度  需要提供旧数组
+       //告知新数组的位置
+       private int[] copyOf(int[] oldArray,int newCapacity){
+           //创建一个新的数组
+           int[] newArray = new int[newCapacity];
+           //将旧数组元素移入新数组
+           for(int i = 0;i< oldArray.length;i++){
+               newArray[i] = oldArray[i];
+           }
+           return newArray;
+       }
+   
+       //扩容数组
+       //条件 需要扩的最小容量
+       private void grow(int minCapacity){
+           //获取旧数组的长度
+           int oldCapacity = elementData.length;
+           //以旧长度的1.5倍扩容
+           int newCapacity = oldCapacity + (oldCapacity >> 1);  //右位移相当于除2
+           //如扩容后还达不到要求，则直接利用minCapacity
+           if(newCapacity-minCapacity < 0){
+               newCapacity = minCapacity;
+           }
+           //按照新长度创建一个新的数组，并移动旧数组中的元素
+           elementData = this.copyOf(elementData,newCapacity);
+   
+       }
+   
+       //计算数组容量
+       //条件？ 需要的最小容量
+       private void ensureCapacityInternal(int minCapacity){
+           if(minCapacity - elementData.length > 0){  //存不下
+               //扩容
+               this.grow(minCapacity);
+   
+           }
+       }
+       //方法   添加元素方法
+       // 参数？  返回值？
+       public boolean add(int element){
+           //确保属性数组容量
+           this.ensureCapacityInternal(size + 1);
+           elementData[size ++] = element;
+           return true;
+       }
+   
+   
+       //帮忙判断给定index范围是是否合法
+       //需要提供index
+       private void rangeCheck(int index){
+           if(index<0 ||index>=size){
+               //自定义异常
+               throw new  BoxIndexOutOfBoundException("Index:"+index+",Size:"+size);
+           }
+       }
+       //获取元素方法
+       //条件  提供元素的位置
+       //返回值
+       public int get(int index){
+           //检测index范围是否合法>=0  <size
+           this.rangeCheck(index);
+           //如果上面执行顺利，证明index合法
+           return elementData[index];
+       }
+   
+       //删除元素
+       //提供元素的位置   返回值---删除掉的那个元素
+       public int remove(int index){
+           //检测index范围
+           this.rangeCheck(index);
+           //保存index位置原始值
+           int oldValue = elementData[index];
+   
+           for (int i = index;i<size-1;i++){
+               elementData[i] = elementData[i+1]; //将后面位置元素向前移动覆盖
+           }
+           elementData[--size] = 0;
+           return oldValue;
+       }
+   
+       public int size(){
+           return this.size;
+       }
+       //构造方法
+   
+       //程序块
+   }
+   
+   ```
+
+   测试验证：
+
+   ```java
+   public class Test {
+       public static void main(String[] args) {
+           //想要存储元素
+           //创建对象
+           ArrayBox box = new ArrayBox();
+           //存储元素
+           for(int i = 1;i <= 9; i++){
+               box.add(i*10);
+           }
+           //System.out.println("有效元素个数："+box.size);
+           //System.out.println("真实数组长度："+box.elementData.length);
+   
+           //获取第二个元素
+           //int value = box.get(2);
+           //System.out.println(value);
+   
+           //获取所有元素
+           for (int i = 0;i < box.size();i++){
+               int value = box.get(i);
+               System.out.print(" "+value);
+           }
+   
+           //删除2号位置的元素
+           int removeValue = box.remove(2);
+           System.out.println();
+           System.out.println(removeValue);
+           System.out.println(box.size());
+           //查看删除后的数组
+           for (int i = 0;i < box.size();i++){
+               int value = box.get(i);
+               System.out.print(" "+value);
+           }
+   
+       }
+   }
+   
+   ```
+
+   
