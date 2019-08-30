@@ -66,6 +66,44 @@
         2. this和super在构造方法中调用另一个类的构造方法不能同时出现在第一行
       - 
 
-   3. 
+   3. Demo
+
+      ```java
+      public class Animal {
+          public String name;
+      
+          public void eat(){
+              System.out.println("Eat");
+          }
+      
+          public void sleep(){
+              System.out.println("Sleep");
+          }
+      
+          //public protected  默认不写  private
+          //子类的权限修饰符可以大于等于父类
+          //特征修饰符 final static abstract
+          //父类方法是final   子类不能重写
+          //父类方法是static  子类不存在
+          //父类方法是abstract 子类必须重写，否则子类是抽象类
+      }
+      ```
+
+      ```java
+      public class Person extends Animal {
+      
+          //方法重写
+          public void eat(){
+              System.out.println("Eat 。。。。。");
+          }
+          //添加一些独有的方法或属性
+          public void study(){
+              System.out.println("Study");
+          }
+      }
+      
+      ```
+
+      
 
 2. 
