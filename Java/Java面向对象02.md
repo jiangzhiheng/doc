@@ -104,6 +104,102 @@
       
       ```
 
+      Tips：
+      
+      1. 包Package
+      
+         类的第一行会出现package关键字
+      
+         如果package和import同时出现，先写package后写import
+      
+         package只能有一个，import可以有多个
+      
+         
+
+2. 类的关系之包含和依赖
+
+   1. has-a    包含关系（组合  聚合  关联）
+
+      ​								亲密成都不一样
+
+      组合----->整体和部分的关系，不可分割，关系最紧密
+
+      聚合----->整体和部分的关系，创建时有可能是分开的
+
+      关联----->可以分割，后期组合程一起
+
+      从Java程序来描述这样的关系 通过一个类的对象当作另一个类的属性来存储
+
+      Demo：
+
+      ```java
+      package contains;
+      
+      public class Wheel {
+          //属性
+          public String brand; //品牌
+          public int size;
+          public String color; //颜色
+      
+          //方法
+          public Wheel(){}
+      
+          public Wheel(String brand,int size,String color){
+              this.brand = brand;
+              this.size = size;
+              this.color = color;
+          }
+      
+      
+          public void turn(){
+              System.out.println("旋转");
+          }
+      }
+      
+      ```
+
+      ```java
+      package contains;
+      
+      public class Car {
+          //属性
+          public String brand; //汽车品牌
+          public String type;  //型号
+          public String color; //颜色
+          public Wheel whell;  //车里面有一个轮子--->包含关系
+      
+          //方法
+          public Car(){}
+      
+          public Car(String brand,String type,String color,Wheel wheel){
+              this.brand = brand;
+              this.type = type;
+              this.color = color;
+              this.whell = wheel;
+          }
+      
+          public void showCar(){
+              System.out.println("这是一辆"+brand+"品牌"+type+"型号"+color+"的小汽车");
+              System.out.println("车上搭载着"+whell.brand+"品牌的"+whell.size+"尺寸"+whell.color+"颜色的车轮子");
+              whell.turn();   //方法一定是对象调用的
+          }
+          
+      }
+      ```
+
+      ```java
+      package contains;
+      
+      public class Test {
+          public static void main(String[] args) {
+              Car car = new Car("BMW","Z4","宝石蓝",new Wheel("米其林",400,"黑色"));
+              car.showCar();
+          }
+      }
+      ```
+
       
 
-2. 
+   2. use-a   依赖
+
+3. 
