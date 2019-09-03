@@ -215,4 +215,134 @@
 
    3. 
 
-3. 
+3. 类和类关系Demo
+
+   ```java
+   package computer;
+   
+   public class Student {
+   
+       private String name;
+   
+       public Student(){}
+       public Student(String name){
+           this.name = name;
+       }
+       //依赖关系
+       public void useComputer(Computer computer){
+           System.out.println(this.name+"开始使用电脑");
+           computer.beOpen();
+           computer.beUsing();
+           computer.beClose();
+       }
+   
+       public String getName(){
+           return this.name;
+       }
+   }
+   ```
+
+   ```java
+   package computer;
+   
+   public class Computer {
+       //属性  开 关
+       private boolean used = false; //true 开 false 关
+       private int number;
+   
+       //构造方法
+       public Computer(){}
+       public Computer(int number){
+           this.number = number;
+       }
+   
+       //设计普通方法  打开 使用 关闭
+   
+       public void beOpen(){
+           this.used = true;
+           System.out.println(this.number+"号被打开");
+       }
+   
+   
+       public void beClose(){
+           this.used = false;
+           System.out.println(this.number+"号被关闭");
+       }
+   
+       public void beUsing(){
+           System.out.println(this.number+"号在使用中");
+       }
+   
+       //获取状态和编号
+       public int getNumber(){
+           return this.number;
+       }
+   
+       public boolean isUsed(){
+           return this.used;
+       }
+   
+   }
+   
+   ```
+
+   ```java
+   package computer;
+   
+   public class MachineRoom {
+       //机房内有一台电脑
+   
+       //数组 ：存储5台电脑Computer[]
+       public Computer[] computers = new Computer[5];
+   
+       //该方法迎来给数组初始化
+       public MachineRoom(){  //也可以用程序块解决
+           this.init();
+       }
+       //=============================程序块===================
+   //    {
+   //        for (int i = 0;i <computers.length;i++){
+   //            computers[i] = new Computer(i+1);
+   //        }
+   //    }
+       //===========================================================
+       public void init(){
+           for (int i = 0;i <computers.length;i++){
+               computers[i] = new Computer(i+1);
+           }
+       }
+   
+       //机房--学生  依赖关系
+       public void welcomeStudent(Student student){
+           String studentName = student.getName();
+           System.out.println("欢迎"+studentName+"进入机房");
+           //使用电脑
+           //进入机房后找出一台状态关闭的电脑
+           for (int i = 0;i < computers.length;i++){
+               boolean computerStatus = computers[i].isUsed();
+               if(!computerStatus){
+                   student.useComputer(computers[i]);
+                   break;
+               }
+           }
+           //student.useComputer(computers[]);
+   
+       }
+   }
+   ```
+
+   ```java
+   package computer;
+   
+   public class Test {
+       public static void main(String[] args) {
+           MachineRoom room = new MachineRoom();
+           Student student = new Student("Martin");
+           room.welcomeStudent(student);
+       }
+   }
+   ```
+
+   
+
+4. 
