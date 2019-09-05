@@ -383,6 +383,8 @@
 
    <u>***特征修饰符***</u>
 
+   **final**
+
    1. 可以修饰什么
 
       final                  最终的 不可更改的
@@ -408,6 +410,80 @@
       - 此类不可被其它子类继承，通常都是一些定义好的工具类
       - 例如`Math Scanner Integer  String`
 
-   2. 
 
-5. 
+   **static**
+
+   1. 可以修饰什么
+
+   2. 修饰后有什么特点
+
+      修饰属性，修饰方法，***修饰快***，修饰类（内部类）
+
+      特点：
+
+      - 静态元素在类加载时就已经初始化，创建的非常早，此时没有创建对象
+      - 静态元素存储在静态元素区中，每一个类有一个自己的区域，与别的类不冲突
+      - 静态元素只加载一次（只有一份），全部类对象及类本身共享
+      - 由于静态元素区加载的时候，有可能没有创建对象，可以通过类名字直接访问
+      - 可以理解为静态元素不属于任何一个对象，属于类的
+      - 内存管理 栈内存创建开始用完即回收 ，堆内存GC回收，静态元素去GC无法管理，可以粗暴的认为内存常驻
+      - 非静态成员（堆内存对象里）中访问静态成员（静态区）
+      - 静态成员中可以访问静态成员（都存在静态区中）
+      - 静态成员中不可以访问非静态成员（静态元素属于类，非静态成员属于对象）
+      - 静态元素中不可以出现this或super关键字
+
+      Demo
+
+      ```java
+      package bookStore;
+      
+      public class BookShop {
+      
+          private static final int BOOKSTORE_ADMIN = 0;   //私有静态常量
+          private static final int BOOKSTORE_VIP = 1;
+          private static final int BOOKSTORE_NORMAL = 2;
+      
+          //打折的计算方法
+          public void buyBook(float price,int identity){  //买书方法
+              switch (identity){
+                  case BookShop.BOOKSTORE_ADMIN:  //管理员
+                      System.out.println("管理员5折:"+price*0.5);
+                      break;
+                  case BookShop.BOOKSTORE_VIP:  //VIP
+                      System.out.println("VIP 8折:"+price*0.8);
+                      break;
+                  case BookShop.BOOKSTORE_NORMAL:  //普通用户
+                      System.out.println("普通用户0折:"+price*1);
+                      break;
+                  default:
+                      System.out.println("输入有误");
+                      break;
+              }
+          }
+      }
+      ```
+
+      ```java
+      package bookStore;
+      import java.util.Scanner;
+      
+      public class TestMain {
+          public static void main(String[] args) {
+              BookShop bookStore = new BookShop();
+              Scanner input = new Scanner(System.in);
+              System.out.println("请输入价格");
+              float price = input.nextFloat();
+              System.out.println("请出示身份");
+              int identity = input.nextInt();
+              bookStore.buyBook(price,identity);
+          }
+      }
+      ```
+
+      
+
+5. 单例模式Singleton
+
+   
+
+6. 
