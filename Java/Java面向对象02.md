@@ -478,12 +478,115 @@
               bookStore.buyBook(price,identity);
           }
       }
+      
       ```
 
       
 
-5. 单例模式Singleton
+3. 单例模式Singleton
+
+   设计模式
+
+   - 设计模式用来解决某些场景下的某一类问题的------>通用的解决方案
+
+   设计模式分为三类
+
+   1. 创建型模式------>用于解决对象创建的过程
+
+      *单例模式  工厂方法模式   抽象工厂模式   建造者模式  原型模式*
+
+   2. 结构型模式------>把类和对象通过某种形式结合在一起，构成某种复杂或合理的结构
+
+      *适配器模式  装饰者模式  代理模式  外观模式  桥接模式  组合模式 享元模式*
+
+   3. 行为型模式------>用来解决类和对象之间的交互，更合理的优化类或对象之间的关系
+
+      *观察者模式  策略模式   模板模式   责任链模式  解析器模式  迭代子模式 命令模式  状态模式*
+
+      *备忘录模式  访问者模式 中介者模式* 
+
+   单例模式
+
+   - 设计-->一个类只能创建一个对象，有效减小内存占用空间
+
+   单例模式的实现
+
+   1. 私有的构造方法
+   2. 私有的静态的当前类作为属性
+   3. 共有的静态的方法返回当前类对象
+
+   对象的加载模式
+
+   1. 立即加载
+
+      ```java
+      package singleton;
+      
+      public class SingleTon {
+          //通过设计，让这个类只能创建一个对象
+      
+          //默认无参数构造方法---公有,在外面可以随意创建
+          //1.让构造方法变成私有，外面无法随便创建
+          private SingleTon(){}
+      
+          //2.单例 在本类中的某个成员位置上创建唯一的一个对象
+          //在类中的某一成员中写一行new SingleTon
+          //属性
+          //方法 -----每次执行都会产生一个过程，无法保证唯一
+          //构造方法 ----私有
+          //块 -----无返回值，创建对象也无法给别人使用
+          //3.在当前类中存在私有静态一个属性，属于当前类类型
+          private static SingleTon single = new SingleTon();   //直接加载
+      
+          //4.提供一个获取单个对象的方法
+          public static SingleTon getSingleTon(){  //get类名 newInstance
+              return single;
+          }
+      
+      }
+      ```
+
+      ```java
+      package singleton;
+      
+      public class Test {
+          public static void main(String[] args) {
+              //SingleTon single = new SingleTon();
+              SingleTon s1 = SingleTon.getSingleTon();
+              SingleTon s2 = SingleTon.getSingleTon();
+              System.out.println(s1==s2);  //true比较地址
+              System.out.println(s1.equals(s2)); //默认比地址
+              System.out.println(s1);
+              System.out.println(s2);
+          }
+      }
+      //true
+      //true
+      //singleton.SingleTon@1b6d3586
+      //singleton.SingleTon@1b6d3586
+      ```
+
+      
+
+   2. 延迟加载
+
+      ```java
+      package singleton;
+      
+      public class SingleTon {
+          private SingleTon(){}
+          private static SingleTon single ;
+          public static SingleTon getSingleTon(){  //get类名 newInstance
+              if (single == null){
+                  single = new SingleTon();  //延迟加载的方式
+              }
+              return single;
+          }
+      }
+      ```
+
+   3. 生命周期托管
 
    
 
-6. 
+4. 
