@@ -710,6 +710,289 @@
 
          接口----------多继承-------接口       可以直接多实现
 
-   6. 
+5. LinkedBox封装
 
-5. 
+   链表 链式结构
+
+   - 单向链表
+   - 双向链表
+   - 环链表
+
+   长度可变，解决插入和删除效率低的问题，但不适合遍历
+
+   ```java
+   package util;
+   
+   public interface Box {
+       public boolean add(int element);
+       public int get(int index);
+       public int remove(int index);
+       public int size();
+   }
+   ```
+
+   
+
+   ```java
+   package util;
+   
+   public class Node {
+       public Node prev; //上一节点地址
+       public int item; //当前数据
+       public Node next; //下一节点地址
+   
+       public Node(Node prev,int item,Node next){
+           this.prev = prev;
+           this.item = item;
+           this.next = next;
+       }
+   }
+   ```
+
+   ```java
+   package util;
+   
+   public class BoxIndexOutOfBoundException extends RuntimeException{
+       //想要描述这个类是一个（我们自己的异常 is a 异常）异常
+       //继承extends  泛化（实现）implememts
+       public BoxIndexOutOfBoundException(){}
+       public BoxIndexOutOfBoundException(String msg){
+           super(msg);  //msg提供给父类
+       }
+   }
+   ```
+
+   ```java
+   package util;
+   
+   public class ArrayBox implements Box{
+       //动态数组
+       //描述事物
+       //属性
+       //设置一个静态常量，用来存储数组的默认长度
+       private static final int DEFAULT_CAPACITY = 10;
+       private int[] elementData;
+       private int size = 0; //记录有效的元素个数
+   
+   
+       //构造方法
+       public ArrayBox(){
+           elementData = new int[DEFAULT_CAPACITY];  //默认长度
+       }
+       public ArrayBox(int capacity){
+           elementData = new int[capacity];
+       }
+   
+       //负责创建一个新数组，并将旧元素移入
+       //条件 新数组长度  需要提供旧数组
+       //告知新数组的位置
+       private int[] copyOf(int[] oldArray,int newCapacity){
+           //创建一个新的数组
+           int[] newArray = new int[newCapacity];
+           //将旧数组元素移入新数组
+           for(int i = 0;i< oldArray.length;i++){
+               newArray[i] = oldArray[i];
+           }
+           return newArray;
+       }
+   
+       //扩容数组
+       //条件 需要扩的最小容量
+       private void grow(int minCapacity){
+           //获取旧数组的长度
+           int oldCapacity = elementData.length;
+           //以旧长度的1.5倍扩容
+           int newCapacity = oldCapacity + (oldCapacity >> 1);  //右位移相当于除2
+           //如扩容后还达不到要求，则直接利用minCapacity
+           if(newCapacity-minCapacity < 0){
+               newCapacity = minCapacity;
+           }
+           //按照新长度创建一个新的数组，并移动旧数组中的元素
+           elementData = this.copyOf(elementData,newCapacity);
+   
+       }
+   
+       //计算数组容量
+       //条件？ 需要的最小容量
+       private void ensureCapacityInternal(int minCapacity){
+           if(minCapacity - elementData.length > 0){  //存不下
+               //扩容
+               this.grow(minCapacity);
+   
+           }
+       }
+   
+   
+       //帮忙判断给定index范围是是否合法
+       //需要提供index
+       private void rangeCheck(int index){
+           if(index<0 ||index>=size){
+               //自定义异常
+               throw new  BoxIndexOutOfBoundException("Index:"+index+",Size:"+size);
+           }
+       }
+       //-------------------------------------------------------------------------------------------
+   
+       //方法   添加元素方法
+       // 参数？  返回值？
+       public boolean add(int element){
+           //确保属性数组容量
+           this.ensureCapacityInternal(size + 1);
+           elementData[size ++] = element;
+           return true;
+       }
+   
+       //获取元素方法
+       //条件  提供元素的位置
+       //返回值
+       public int get(int index){
+           //检测index范围是否合法>=0  <size
+           this.rangeCheck(index);
+           //如果上面执行顺利，证明index合法
+           return elementData[index];
+       }
+   
+       //删除元素
+       //提供元素的位置   返回值---删除掉的那个元素
+       public int remove(int index){
+           //检测index范围
+           this.rangeCheck(index);
+           //保存index位置原始值
+           int oldValue = elementData[index];
+   
+           for (int i = index;i<size-1;i++){
+               elementData[i] = elementData[i+1]; //将后面位置元素向前移动覆盖
+           }
+           elementData[--size] = 0;
+           return oldValue;
+       }
+   
+       public int size(){
+           return this.size;
+       }
+   
+       //程序块
+   }
+   
+   ```
+
+   ```java
+   package util;
+   
+   public class LinkedBox implements Box{
+   
+       //创建几个属性 记录链表头 链表尾
+       private Node first;  //记录尾节点
+       private Node last; //记录头节点
+       private int size ; //记录有效元素的个数
+   
+       //数据结构
+   
+       //设计一个方法，负责将元素添加在新的node里，挂在链表的尾端
+       private void linkLast(int element){
+           //获取尾节点
+           Node l = last;
+           //创建新的node对象，将新数据包装起来
+           Node newNode = new Node(l,element,null);
+           //将新节点对象设置为尾节点
+           last = newNode;
+           //判断
+           if (l ==null){ //如果原来尾节点没有对象，则证明这个链表未使用
+               first = newNode;
+           }else { //原来用过，刚才已经将新的节点连接在last之后
+               l.next = newNode;
+           }
+   
+           //有效元素个数加1
+           size++;
+       }
+   
+       //检测index是否合法
+       private void rangeCheck(int index){
+           if (index <0 || index >=size){
+               throw new  BoxIndexOutOfBoundException("index:"+index+",size:"+size);
+           }
+       }
+   
+       //负责找寻给定index的对象
+       private Node node(int index){
+           Node targetNode;
+           //判断index范围是在前半段还是后半段
+           if(index < (size>>1)){  //从前往后找比较快
+               targetNode = first;
+               for (int i = 0;i < index;i ++){
+                   targetNode = targetNode.next;
+               }
+           }else {  //从后往前找
+               targetNode = last;
+               for (int i =size-1;i > index; i --){
+                   targetNode = targetNode.prev;
+               }
+           }
+           return targetNode;
+       }
+   
+       //删除node，并且保留数据
+       private int unLink(Node targetNode){
+           //获取当前node的item
+           int oldValue = targetNode.item;
+           //当前node的前一个
+           Node prev = targetNode.prev;
+           //当前节点的下一个
+           Node next = targetNode.next;
+           //删除节点对象
+           if (prev == null){ //当前节点为第一个节点
+               first = next;
+           }else {
+               prev.next = next;
+               targetNode.prev = null;
+           }
+           if (next == null){ //当前节点是最后一个
+               last = prev;
+           }else {
+               next.prev = prev;
+               targetNode.next = null;
+           }
+   
+           //有效元素少一个
+           size --;
+           return oldValue;
+       }
+       //--------------------------------------------------------------------
+   
+       public boolean add(int element) {
+           //将elelment存入一个新的Node对象里，添加至链表的尾端
+           this.linkLast(element);
+           return true;
+       }
+   
+       public int get(int index) {
+           //检测index是否合法
+           this.rangeCheck(index);
+           //找寻index对应位置的对象
+           Node targetNode = this.node(index);
+           //返回找到的数据
+           return targetNode.item;
+       }
+   
+       public int remove(int index) {
+           //检测范围是否合法
+           this.rangeCheck(index);
+           //找到index位置的node
+           Node targetNode = this.node(index);
+           int oldValue = targetNode.item;
+           //删除当前目标节点，并返回oldValue
+           this.unLink(targetNode);
+           return oldValue;
+       }
+       
+       public int size() {
+           return size;
+       }
+   }
+   
+   ```
+
+   
+
+6. 
