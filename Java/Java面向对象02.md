@@ -1032,4 +1032,150 @@
 
         如果想要避免造型异常，可以用instanceof 关键字进行判断
 
-7. 
+7. 策略模式+内部类
+
+   1. 策略模式Strategy----行为型模式
+
+      方法---抽象     具体实现-----一个策略
+
+      用来解决执行流程固定 执行的结果由于提供了不同的策略而不同
+
+      ```java
+      package bank;
+      
+      public class Bank {
+          //开门，等待用户办理
+          public void profession(Person p){
+              System.out.println(p.getName()+"进入银行");
+              p.callNumber();
+              p.transact();
+              p.leave();
+          }
+      
+      }
+      ```
+
+      ```java
+      package bank;
+      
+      public abstract class Person {
+          protected String name;
+          public void setName(){
+              this.name = name;
+          }
+      
+          public String getName(){
+              return this.name;
+          }
+          //1.进银行 ，叫号，排队
+          public abstract void callNumber();
+          //2.去窗口办理
+          public abstract void transact();
+          //3.办理完毕离开
+          public abstract void leave();
+      }
+      
+      ```
+
+      ```java
+      package bank;
+      
+      public class OldMan extends Person{
+      
+          public OldMan(){}
+          public OldMan(String name){
+              this.name = name;
+          }
+      
+          //1.进银行 ，叫号，排队
+          public void callNumber(){
+              System.out.println("oldMan 叫号");
+          }
+          //2.去窗口办理
+          public void transact(){
+              System.out.println("oldMan 办理");
+          }
+          //3.办理完毕离开
+          public void leave(){
+              System.out.println("oldMan 离开");
+          }
+      }
+      ```
+
+      ```java
+      package bank;
+      
+      public class YoungMan extends Person{
+      
+          public YoungMan(){}
+          public YoungMan(String name){
+              this.name = name;
+          }
+      
+      
+          //1.进银行 ，叫号，排队
+          public void callNumber(){
+              System.out.println("YoungMan 叫号");
+          }
+          //2.去窗口办理
+          public void transact(){
+              System.out.println("YoungMan 办理");
+          }
+          //3.办理完毕离开
+          public void leave(){
+              System.out.println("YoungMan 离开");
+          }
+      }
+      ```
+
+      ```java
+      package bank;
+      
+      public class Toff extends Person{
+      
+          public Toff(){}
+          public Toff(String name){
+              this.name = name;
+          }
+      
+      
+          //1.进银行 ，叫号，排队
+          public void callNumber(){
+              System.out.println("Toff 叫号");
+          }
+          //2.去窗口办理
+          public void transact(){
+              System.out.println("Toff 办理");
+          }
+          //3.办理完毕离开
+          public void leave(){
+              System.out.println("Toff 离开");
+          }
+      }
+      ```
+
+      ```java
+      package bank;
+      
+      public class Test {
+          public static void main(String[] args) {
+              Bank bank = new Bank();
+              Person p = new Toff("有钱人");
+              bank.profession(p);
+          }
+      }
+      
+      
+      //问题：
+      //1.三个不同的人类方法名不一致
+      //2.银行办理业务的方法写了三个
+      //解决如上问题，可以在三个人类之上创建一个父类
+      //1.解决三个人类中的相同代码比如Name属性，get方法之类的
+      //
+      ```
+
+   2. 
+
+   
+
+8. 
