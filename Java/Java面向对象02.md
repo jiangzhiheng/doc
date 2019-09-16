@@ -1174,8 +1174,100 @@
       //
       ```
 
-   2. 
+   2. 内部类
 
-   
+      指的是在Java中可以将一个类定义在另一个类的内部
 
-8. 
+      内部类定义在 类的内部（与类成员层次一致）
+
+      内部类可以定义在 方法/块内部（与类成员相差一个层次）
+
+      1. **成员内部类**
+
+         直接定义在类的里面，做为成员
+
+         ```java
+         package innerclass;
+         
+         public class Demo {
+             private String name = "Martin";
+             public void testDemo(){
+                 System.out.println("testDemo");
+             }
+         
+             //成员内部类
+             public class InnerDemo{
+                 public void testInnerDemo(){
+                     System.out.println(Demo.this.name);
+                     Demo.this.testDemo();
+                 }
+             }
+         
+             public void testDemoOne(){
+                 //定义一个局部内部类
+                 class InnerTestOneMethod{}
+             }
+         }
+         ```
+
+         ```java
+         package innerclass;
+         
+         public class TestMain {
+             public static void main(String[] args) {
+                 //内部类属于外部类，需要外部类对象
+                 //创建内部类的对象
+                 Demo demo = new Demo();
+                 Demo.InnerDemo innerDemo= demo.new InnerDemo();
+         
+                 //调用内部类的方法
+                 innerDemo.testInnerDemo();
+             }
+         }
+         ```
+
+         
+
+         - 成员内部类可以使用不同的修饰符修饰
+
+           tips：
+
+           1. 省略了一个.java方法
+           2. 成员内部类可以访问外部类的所有成员，包括私有的元素
+           3. 若想用内部类中通过对象.调用外部类的方法或者属性  外部类.this.外部类成员
+           4. 内部类存在后，源码进行编译后产生一个字节码 Demo$InnerDemo.class
+
+      2. 局部内部类
+
+         做为成员的内部结构，与零时局部变量一个层次
+
+         - 局部内部类像是一个局部的变量一样，不能用public等修饰符修饰，只能用abstract或final修饰
+         - 局部内部类命名规则
+
+      3. **匿名内部类**
+
+         ```java
+         public interface Test{
+             public void test(){
+                 
+             }
+         }
+         
+         Test t = new Test(){
+             
+         };
+         
+         //通常接口或抽象类的具体子类这样写
+         //开发中为了省略一个类文件，上述写法比较常见
+         //匿名内部类很特殊 只有类体没有类的所有结构（类体 名字 继承 实现）
+         //不能用任何修饰符来修饰 匿名内部类也，没有构造方法
+         
+         ```
+
+         
+
+      4. 静态内部类
+
+         不需要外部类对象，通过正常方式直接创建内部类
+
+         静态成员无法访问动态成员
