@@ -101,4 +101,37 @@
 
    
 
-2. 
+2. Runtime
+
+   堆内存------->new创建的对象 Garbage Collection垃圾回收
+
+   Runtime类中提供了几个管理内存的方法
+
+   Object类中有一个finalize方法，如果重写也能看见对象回收
+
+   GC----->系统提供的一个线程 回收算法
+
+   OutOfMemoryError 堆内存溢出
+
+   ```java
+   public class Test {
+       public static void main(String[] args) {
+   
+           //1.抽象类 或者 接口 2.无参数的构造方法没有 3.构造方法私有
+           //Runtime r = new Runtime();
+   
+           //堆内存中的内存
+           Runtime r = Runtime.getRuntime();
+           long max = r.maxMemory();
+           long total = r.totalMemory();
+           long free = r.freeMemory();
+           System.out.println(max);
+           System.out.println(total);
+           System.out.println(free);
+       }
+   }
+   ```
+
+   
+
+3. 
