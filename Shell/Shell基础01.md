@@ -18,5 +18,31 @@
 
      zabbix监控CPU 80%+   Python API AWS(增加/删除云主机)+ Shell Scripts（业务上线）
 
-2. 
+2. 程序语言执行
+
+   程序的组成：逻辑 + 数据
+
+   - C
+   - Java
+   - Shell
+   - Python
+
+   Shell中调用Python程序
+
+   ```shell
+   #!/bin/bash
+   #
+   ping -c1 www.baidu.com &>/dev/null && echo "www.baidu.com is ok" || echo "www.baidu.com is down!"
+   
+   /usr/bin/python <<-EOF
+   print "hello world"
+   print "hello world"
+   print "hello world"
+   EOF
+   
+   ```
+
+   
+
+3. Shell特性
 
