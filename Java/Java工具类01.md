@@ -132,6 +132,72 @@
    }
    ```
 
+   Java开发者写好的类
+
+   - 包装类
+   - 数学相关
+   - 日期相关
+   - 字符串
+   - 集合相关
+   - 异常相关
+   - 输入输出相关I/O 流
+   - 线程相关
+   - 网络通信相关
+   - 反射注解
+
+3. 包装类（封装类）
+
+   1. 类所在的包 
+   2. 类的关系
+   3. 常用方法
+   4. 是否可以创建对象
+
+   `byte---Byte  short---Short  int---Integer   long---Long`
+
+   `float---Float  double---Double  char-Character  boolean---Boolean`
+
+   1. 八个包装类都在同一个包下，`java.lang`包，不需要import直接使用
+
+   2. 八个包装类中6个与数字相关，默认继承Number类，
+
+   3. 八个包装类都实现了`Serializable, Comparable`接口
+
+   4. 每一个类中的构造方法
+
+      - 八个包装类都有带自己对应参数类型的构造方法
+
+      - 八个包装类中有七个（除了Character）还有构造方法重载 带String类型
+
+   5. 创建对象，调用方法
+
+      - 有6个与数字相关的类都继承`Number xxxValue();`将一个包装类类型转化为对应的基本类型（拆包）
+
+      - `Integer i1 = new Integer(10);`
+
+        `int value = i1.intValue`
+
+        `// int value = Integer.parseInt("123");`
+
+   6. tips
+
+      1. ==与equals()的区别
+
+         ==可以比较基本数据类型 也可以比较引用类型数据（变量中存储的内容）
+
+         如果比较基本类型，比较变量中存储的值
+
+         如果比较引用类型，比较变量中存储的地址引用
+
+         默认equals()方法比较与==一致
+
+         Integer类重写了equals()方法，所以比较的是数值
+
+      2. Integer类加载的时候，自己有一个静态的空间
+
+         空间内立即加载integer类型的数组，内存储256个Interger对象 -128~127
+
+         如果使用的对象在这范围内，直接从静态区中找对应的对象，否则在堆内存中创建
+
    
 
-3. 
+4. 
