@@ -1,4 +1,4 @@
-1. 枚举类enum
+1. ### **枚举类enum**
 
    一个类中的对象 认为个数是有限且固定的 可以挨个将每一个对象一一列举出来
 
@@ -101,7 +101,7 @@
 
    
 
-2. Runtime
+2. ### **Runtime**
 
    堆内存------->new创建的对象 Garbage Collection垃圾回收
 
@@ -145,7 +145,7 @@
    - 网络通信相关
    - 反射注解
 
-3. 包装类（封装类）
+3. ### **包装类（封装类）**
 
    1. 类所在的包 
    2. 类的关系
@@ -200,4 +200,131 @@
 
    
 
-4. 
+4. ### **数学相关**
+
+   1. 所属`java.lang`包
+
+   2. Math构造方法私有，不能直接创建对象
+
+   3. Math中提供的属性及方法都是static
+
+   4. 常用方法
+
+      - `abs()  `绝对值
+      - `ceil() 向上取整 floor() 向下取整 rint()  round()四舍五入整数`  返回临近的整数
+      - `max(a,b)  min(a,b)`
+      - `pow(a,b)` 计算a的b次方
+      - `sqrt(a)` 获取给定参数的平方根
+      - `double = random()`  随机产生一个【0.0-1.0】之间的随机数
+
+   5. 0-9之间的随机整数
+
+      `int value = (int)(Math.random()*10);`
+
+   6. `Math.random()`计算小数的时候精确程度可能会有损失
+
+   7. UUID类
+
+      - Java.util包 需要import导入
+
+      - 无任何继承关系
+
+      - 构造方法  没有无参数构造方法
+
+      - 基本用法
+
+        ```java
+            UUID uuid = UUID.randomUUID();
+            System.out.println(uuid.toString());
+        //产生一个32位16进制的随机数
+        ```
+
+   8. BigInteger类
+
+      - 所属java.math包
+
+      - 继承Number类
+
+      - 提供的构造方法都是带参数的
+
+        通常利用带String参数的构造方法创建这个类的对象
+
+        ```java
+            System.out.println(uuid.toString());
+            BigInteger bi = new BigInteger("1231412");
+        //  bi1.add();
+        //  bi1.subtract();
+        //  bi1.multiply();
+        //  bi1.divide();
+        ```
+
+      - 四则运算
+
+      - 计算阶乘
+
+        ```java
+            public BigInteger factorial(int num){//计算阶乘
+                BigInteger result = new BigInteger("1");
+                for (int i=1;i <= num;i++){
+                    result = result.multiply(new BigInteger(i+""));
+                }
+                return result;
+            }
+        ```
+
+        
+
+   9. BigDecimal  大小数
+
+      ```java
+              BigDecimal decimal = new BigDecimal("123.2341");
+              decimal =  decimal.setScale(2,BigDecimal.ROUND_DOWN);
+      		//控制保留小数位数及策略，小数点后向下取整保留两位
+              System.out.println(decimal);
+      ```
+
+      
+
+   10. DecimalFormat
+
+       ```java
+               DecimalFormat df = new DecimalFormat("000.###");  
+       	    //0表示必需，#表示可有可无
+               String value = df.format(12.23134);
+               System.out.println(value);
+               //输出012.231
+       ```
+
+       
+
+   11. Random类
+
+       - Java.util包中，需要import导入是使用
+
+       - 无任何继承关系 默认继承Obiect类
+
+       - 查看构造方法----->创建对象
+
+       - 常用方法
+
+         ```java
+         import java.util.Random;
+         
+         public class TestUtil {
+             public static void main(String[] args) {
+                 Random r = new Random();
+                 int value = r.nextInt();  //随机产生int整数 有正有负
+                 int result = r.nextInt(10); //[0,10) 之间的随机数
+                 //tips:bound必须为整数
+         
+                 float f = r.nextFloat();  //[0.0---1.0)
+                 //5.0---10.9之间的整数
+                 float f1 = r.nextInt(6)+5+r.nextFloat();
+                 Boolean b = r.nextBoolean();
+             }
+         }
+         ```
+
+       
+
+5. ### **日期相关的类**
