@@ -46,3 +46,49 @@
 
 3. Shell特性
 
+   1. login Shell  和nologin Shell
+
+      - login
+
+        su - USERNAME 时执行以下文件
+
+        `/etc/profile    /etc/bashrc   ~/.bash_profile    ~/.bashrc`
+
+      - nologin
+
+        su   USERNAME 时执行以下文件
+
+        `/etc/bashrc     ~/.bashrc`
+
+      - 退出Shell时执行
+
+        `~/.bash_history     ~/.bash_logout`
+
+   2. 命令历史记忆功能
+
+      `!$`  上一条命令的最后一个参数
+
+   3. 前后台作业控制`&   nohup screen  ^C  ^Z  bg   fg `
+
+   4. 输入输出重定向
+
+   5. 管道  |   tee
+
+   6. 命令排序       eject命令（弹出光驱）
+
+      ;    无逻辑判断，顺序执行命令
+
+      &&     ||    具备逻辑判断
+
+      Tips：
+
+      - command   &    后台执行
+      - command   &>   混合重定向（标准输出1，错误输出2）
+      - command1   &&  command2     命令排序，逻辑判断
+
+   7. Shell通配符
+
+4. 
+
+   
+
