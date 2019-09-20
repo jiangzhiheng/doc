@@ -328,3 +328,80 @@
        
 
 5. ### **日期相关的类**
+
+   1. 补充
+
+      - Scanner类
+        1. 所属包java.util包 需要导入
+        2. 通过一个带输入流的构造方法创建对象
+        3. 常用方法  nextInt(); nextFloat();  next();  nextLine();
+      - System类
+        1. 所属java.lang包，不需要导入
+        2. 不需要创建对象，类名访问
+        3. 有三个属性及若干方法
+           - 属性 out    int    error
+           - 方法gc();    exit(0);   currentTimeMillis();当前时间的毫秒值
+
+   2. Date类
+
+      1. 通常使用的是java.util包
+
+      2. 导包使用  构建对象
+
+      3. 通常使用无参数构造方法或long类型参数的构造方法
+
+      4. 处理Date日期的格式
+
+      5. Date中常用的方法
+
+         `before();    after();`
+
+         `setTime();   getTime();`
+
+         `compareTo();  -1  1  0`
+
+         ```java
+         import java.util.Date;
+         
+         public class TestDate {
+             public static void main(String[] args) {
+                 //返回当前系统时间与计算机元年之间的毫秒差
+                 long time =  System.currentTimeMillis();
+                 System.out.println(time);
+                 //1568964554959
+         
+                 Date date1 = new Date(1568964554959L);
+                 Date date2 = new Date();
+                 System.out.println(date2);  //重写了toString  格林威治时间
+                 Boolean x =  date1.after(date2);  //date1是否在date2之后
+                 Boolean y =  date1.before(date2);
+                 date1.setTime(1568964554959L);
+                 long reTime =  date1.getTime();
+         
+             }
+         }
+         
+         ```
+
+   3. DateFormat类
+
+      1. 属于java.text包，需要导包使用
+      2. 此类属于abstract类，通过字类使用
+      3. SimpleDateFormat类 是DateFormat的子类
+      4. 调用带String参数的构造方法创建对象
+
+      ```java
+              SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+              String v = sdf.format(date1);
+              System.out.println(v);
+      ```
+
+      
+
+   4. Calendar类
+
+      1. 所属java.util包
+
+   5. 
+
+6. 

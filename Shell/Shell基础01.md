@@ -1,4 +1,4 @@
-1. 概述
+1. ### **概述**
 
    - 自动化批量系统初始化（update，软件安装，时区设置，安全策略）
 
@@ -18,7 +18,7 @@
 
      zabbix监控CPU 80%+   Python API AWS(增加/删除云主机)+ Shell Scripts（业务上线）
 
-2. 程序语言执行
+2. ### **程序语言执行**
 
    程序的组成：逻辑 + 数据
 
@@ -44,7 +44,7 @@
 
    
 
-3. Shell特性
+3. ### **Shell特性**
 
    1. login Shell  和nologin Shell
 
@@ -86,9 +86,64 @@
       - command   &>   混合重定向（标准输出1，错误输出2）
       - command1   &&  command2     命令排序，逻辑判断
 
-   7. Shell通配符
+   7. Shell通配符（元字符）
 
-4. 
+      \* 匹配任意多个字符
+
+      ？匹配任意单个字符
+
+      []  匹配括号中任意一个字符  [a-zA-Z0-9]  [abc]  \[^a-z]
+
+      {}  集合  touch file{1..9}
+
+      ()  在子shell中执行  (umask 077;touch file01)
+
+   8. echo 带颜色输出
+
+      -e   执行转义等特殊字符
+
+      echo -e "\e[1;31mThis is red text\e[0m"    前景色31-37  背景色41-47
+
+4. ### **Shell变量**
+
+   1. 变量的赋值
+   
+      ```shell
+      #!/bin/bash
+      # 直接赋值
+      ip=www.baidu.com
+      
+      ping -c1 $ip &>/dev/null
+      
+      if [ $? -eq 0 ]
+      then
+              echo "$ip is ok"
+      else
+              echo "$ip is down!"
+      fi
+      
+      ```
+   
+      ```shell
+      #!/bin/bash
+      # 通过read命令读入变量值
+      read -p "Please input a ip: " ip
+      
+      ping -c1 $ip &>/dev/null
+      
+      if [ $? -eq 0 ]
+      then
+              echo "$ip is ok"
+      else
+              echo "$ip is down!"
+      fi
+      ```
+   
+      
+   
+   2. 
+   
+5. 
 
    
 
