@@ -400,8 +400,43 @@
 
    4. Calendar类
 
-      1. 所属java.util包
+      1. 所属java.util包 需要导包
 
-   5. 
+      2. 有构造方法，但是是protected修饰 通常调用默认的`getInstance()`;
 
-6. 
+      3. 常用方法
+
+         - `after();   before();`
+         - `getTime(); setTime();`
+
+         ```java
+                 Calendar calendar = Calendar.getInstance();
+                 //calendar  里面包含一个date属性，可以才做date的某一个局部属性
+                 calendar.set(Calendar.YEAR,2017);   //可以手动设置需要的时间构建对象
+                 int year = calendar.get(Calendar.YEAR);
+                 int mouth = calendar.get(Calendar.MONTH);  //从0开始数
+                 int day = calendar.get(Calendar.DAY_OF_MONTH);
+         ```
+
+      4. 
+
+   5. TimeZone
+
+      1. java.util包
+      2. 通过`calendat对象.getTimeZone()`获取 或 `TimeZone.getDefault();`创建
+      3. 常用方法
+
+      ```java
+              TimeZone tz = calendar.getTimeZone();
+              //TimeZone tz1 = TimeZone.getDefault();
+              System.out.println(tz.getID());
+              System.out.println(tz.getDisplayName());
+      ```
+
+      
+
+6. ### **字符串相关String类**
+
+   
+
+7. 
