@@ -133,15 +133,105 @@
       
       if [ $? -eq 0 ]
       then
-              echo "$ip is ok"
+              echo "${ip} is ok"
       else
-              echo "$ip is down!"
+              echo "${ip} is down!"
       fi
       ```
    
+      ```shell
+      #!/bin/bash
+      #位置变量
+      # $1  $2  $3 ......
+      ping -c1 $1 &>/dev/null
       
+      if [ $? -eq 0 ]
+      then
+              echo "$1 is ok"
+      else
+              echo "$1 is down!"
+      fi
+      ```
    
-   2. 
+   2. 变量的类型
+   
+      - 自定义变量
+   
+        作用范围：当前Shell生效
+   
+      ```shell
+      #!/bin/bash
+      ip10=1.1.1.1
+      dir_path=/etc/a.txt
+      ```
+   
+      ```shell
+      #!/bin/bash
+      #
+      . public.sh    #调用另一个脚本中定义的变量
+      
+      echo "ip10 is : $ip10"
+      echo "dir_path is :$dir_path"
+      ```
+   
+      - 环境变量
+   
+        作用范围：全局生效，需要export导出
+   
+      - 位置变量
+   
+        `$1  $2  $3   $4 ......${10}`
+   
+      - 预定义变量
+   
+        `$0` 脚本名
+   
+        `$*` 所有的参数
+   
+        `$@` 所有的参数
+   
+        `$#` 参数的个数
+   
+        `$$` 当前进程的PID
+   
+        `$!` 上一个后台进程的PID
+   
+        `$?` 上一个命令的返回值  0表示成功
+   
+        ```shell
+        # ip.txt
+        www.baidu.com
+        www.qq.com
+        127.0.0.1
+        ```
+   
+        ```shell
+        #!/bin/bash
+        #
+        #提示用户加参数
+        if [ $# -eq 0 ];then
+                echo "usage: `basename $0` file"
+                exit
+        fi
+        
+        if [ ! -f $1 ];then
+                echo "error file"
+                exit
+        fi
+        
+        for ip in `cat $1`
+        do
+                ping -c1 $ip &> /dev/null
+                if [ $? -eq 0 ];then
+                        echo "$ip is up"
+                else
+                        echo "$ip is down"
+                fi
+        done
+        
+        ```
+   
+   3. 
    
 5. 
 
