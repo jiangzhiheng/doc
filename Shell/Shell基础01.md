@@ -231,7 +231,27 @@
         
         ```
    
-   3. 
+   3. read命令用法
+   
+      ```shell
+      #!/bin/bash
+      
+      read -p "please input name: " name
+      read -p "please input sex: " sex
+      read -p "please input age: " age
+      
+      read -p "input name,age,sex[e.g. zhangsan 20 m]" name1  age1  sex1
+      
+      read -t 5 -p "please.."  #wait 5s and exit
+      ```
+   
+   4. 关于引号的问题
+   
+      - " "  弱引用
+      - ' '   强引用  
+      - ``   反引号用作命令替换 等价于$()  反引号中的Shell命令会被先执行
+   
+   5. 
    
 5. 
 
