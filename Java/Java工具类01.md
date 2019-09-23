@@ -437,6 +437,129 @@
 
 6. ### **字符串相关String类**
 
-   
+   1. String类
+
+      ```java
+      public class TestString {
+          public static void main(String[] args) {
+              String s1 = "abc";
+              String s2 = "abc";
+              String s3 = new String("abc");
+              String s4 = new String("abc");
+              System.out.println(s1 == s2); //true
+              System.out.println(s1 == s3); //false
+              System.out.println(s3 == s4); //false
+              System.out.println(s1.equals(s2)); //true    重写equals方法
+              System.out.println(s1.equals(s3)); //true    将==比较改为比较自负
+              System.out.println(s3.equals(s4)); //true
+              //  ==比较栈内存变量空间中的内容
+              //  equals（object类中的方法，默认==）
+              //如果想要改变比较的的规则，可以重写equals方法
+          }
+      }
+      ```
+
+      
+
+   2. 所属java.lang包  无继承关系，实现三个接口
+
+   3. 找寻构造方法创建对象
+
+      `String s1 = "abc"; `     直接将字符串常量赋值给str（字符串常量池）
+
+      `String s3 = new String()；`  //无参数构造方法创建的空对象
+
+      `String s2 = new String("abc"); ` //带String参数的构造方法创建对象
+
+      `String s5 = new String(byte[]);`  //将数组中的每一个元素转化成对应的char组合成String
+
+      `String s6 = new String(char[]);`  //将数组中的每一个char元素拼接成最终的String
+
+   4. String特性
+
+      String不可变特性
+
+      - 在String类中包含一个数组
+
+        private final char[]  value;  //存储String中的每一个字符
+
+        体现在两个地方 长度和内容
+
+        长度----->final修饰的数组  数组长度本身不变 final修饰数组的地址也不可变
+
+        内容------>private修饰的属性  不能在类的外部访问
+
+      
+
+   5. String类中常用方法
+
+      - boolean = equals(object obj)  //继承object类
+
+      - int = hashCode();   //
+
+      - int = compareTo(String str);  //实现Comparable接口，按照字典索引顺序比较
+
+      - String = toString();  //重写   不再输出类命@hashCode  输出字符串中的值
+
+        ```java
+        public class TestString {
+            public static void main(String[] args) {
+        //        byte[] value = new byte[]{65,97,48};
+        //        String str = new String(value);
+        //        System.out.println(str);
+        //
+        //        char[] value1 = new char[]{'a','v','c'};
+        //        String str1 = new String(value1);
+        //        System.out.println(str1);
+        //        //=============================常用方法================
+        //        str1.equals(null);   //重写
+        //        int = str1.hashCode();   //重写
+        //        int =  str1.compareTo()
+        
+                String str1 = "abc";
+                String str2 = "abc";
+        
+                System.out.println(str1.compareTo(str2));
+                //先找寻字符串中长度较短的那个做为比较循环的次数
+                //挨个比较元素  str1[i]-str2[i]
+                //如果循环过后发现所有字符都一样 len1-len2
+                //返回0表示两个字符相等
+        
+            }
+        }
+        
+        ```
+
+        
+
+      - char = charAt(int index)   //返回给定index的char值
+
+      - int = codePointAt(int index) //返回index位置char对应的code码
+
+      - length();  //返回字符串的长度
+
+      - String = concat(String)   //拼接字符串
+
+        ```java
+        public class TestString {
+            public static void main(String[] args) {
+                String str = "abcd";
+                for (int i = 0;i < str.length(); i ++){
+                    char value = str.charAt(i);
+                    int result = str.codePointAt(i);
+                    System.out.println(value);
+                }
+        
+                String str2 =  str.concat("ddd");
+                str = str.concat("ddd");
+                System.out.println(str2);
+        
+            }
+        }
+        ```
+
+      - 
+
+   6. 
 
 7. 
