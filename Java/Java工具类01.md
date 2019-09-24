@@ -493,13 +493,13 @@
 
    5. String类中常用方法
 
-      - boolean = equals(object obj)  //继承object类
+      - `boolean = equals(object obj)`  //继承object类
 
-      - int = hashCode();   //
+      - `int = hashCode();`   //
 
-      - int = compareTo(String str);  //实现Comparable接口，按照字典索引顺序比较
+      - `int = compareTo(String str);`  //实现Comparable接口，按照字典索引顺序比较
 
-      - String = toString();  //重写   不再输出类命@hashCode  输出字符串中的值
+      - `String = toString();`  //重写   不再输出类命@hashCode  输出字符串中的值
 
         ```java
         public class TestString {
@@ -532,13 +532,13 @@
 
         
 
-      - char = charAt(int index)   //返回给定index的char值
+      - `char = charAt(int index)`   //返回给定index的char值
 
-      - int = codePointAt(int index) //返回index位置char对应的code码
+      - `int = codePointAt(int index) `//返回index位置char对应的code码
 
-      - length();  //返回字符串的长度
+      - `length();  `//返回字符串的长度
 
-      - String = concat(String)   //拼接字符串
+      - `String = concat(String)`   //拼接字符串,若遇到频繁拼接字符串-->通常使用`StringBuilder`或`StringBuffer`
 
         ```java
         public class TestString {
@@ -558,7 +558,71 @@
         }
         ```
 
-      - 
+      - `boolean =  contains(CharSequence s) ` 判断给定的s是否在字符串中存在
+
+      - `startsWith(String prefix)` //以...开头
+
+        `endWith(String suffux)`  //以...结尾
+
+      - `byte[] =  getBytes() `  //将字符串转换成数组
+
+        `char[] =  toCharArray()` //将字符串转换成数组
+
+      - `indexOf();`   //找寻给定的元素第一次在字符串中出现的索引的位置,若字符串不存在则返回-1
+
+        `lastIndexOf();` //从后往前找，找寻给定的元素在字符串中最后一次出现的位置
+
+      - `boolean =  isEmpty`   //判断字符串是否为空    Tips：注意与null的区别
+
+      - `String = replace();` 
+
+        `String = replaceAll();`
+
+        `String = replaceFirst();`  //替换第一次出现的元素
+
+      - `split(String regex [,int limit]);` //按照给定的表达式将原来的字符串拆分
+
+      - `String = substring(int beginIndex [,int endIndex]);`  //将当前的字符串截取一部分
+
+        从`beginIndex`开始截取到`endIndex`结束
+
+        ```java
+        public class TestString {
+            public static void main(String[] args) {
+                String str = "abcdefg";
+                //判断此字符串中是否含有a
+                boolean value = str.contains("a");
+                System.out.println(value);
+        
+                String str1 = "abcdefgha";
+                int index = str1.indexOf("a",3); //四个方法重载
+                System.out.println(index);
+        
+                String str2 = "";
+                boolean value1 =  str2.isEmpty();
+                System.out.println(value1);
+        
+                String str3 = "a-b-c-d";
+                String[] value3=  str3.split("-");
+                for (String s:value3){
+                    System.out.println(s);
+                }
+        
+                String str4 = "abcdgdad";
+                String temp = str4.substring(3);  //从3号索引开始截取到最后
+                String temp1 = str4.substring(3,6);  //从3号索引开始截取到5号 [3,6)
+                System.out.println(temp);
+            }
+        }
+        ```
+
+      - `toUpperCase();`
+
+        `toLowerCase();`
+
+      - `trim();`  //去掉字符串前后多余的空格
+
+      - `boolean = matches(String regex)`
 
    6. 
 
