@@ -251,7 +251,74 @@
       - ' '   强引用  
       - ``   反引号用作命令替换 等价于$()  反引号中的Shell命令会被先执行
    
-   5. 
+   5. 变量的运算
+   
+      - 整数运算
+   
+        1. expr
+   
+           sum=\`expr  $num1 + $num2\`      + -  * /  %
+   
+        2. $(())
+   
+           sum=$((num1+num2))
+   
+           ```shell
+           #!/bin/bash
+           #查看当前系统内存占用百分比
+           mem_used=`free -m |grep '^Mem'|awk '{print $3}'`
+           mem_total=`free -m |grep '^Mem'|awk '{print $2}'`
+           
+           mem_percent=$((mem_used*100/mem_total))
+           
+           echo "Current memory used: ${mem_percent}%"
+           
+           ```
+   
+           
+   
+        3. $[]
+   
+           echo $[2**3]
+   
+           echo $[2+5]
+   
+        4. let
+   
+           let num=1+2
+   
+           let i++
+   
+           ```shell
+           
+           #!/bin/bash
+           #
+           ip=www.baidu.com
+           
+           i=1
+           while [ $i -le 5 ]
+           do
+                   ping -c1 $ip &> /dev/null
+                   if [ $? -eq 0 ];then
+                           echo "$ip is up.."
+                   fi
+                   let i++
+           done
+           ```
+   
+      - 小数运算
+   
+        echo "2*4" | bc
+   
+        echo "2^4" | bc
+   
+        echo "scale=2;6/4" | bc    #保留小数点后两位
+   
+        awk 'BEGIN{print 1/2}'
+   
+        echo "print 5.0/2" | python
+   
+   6. 
    
 5. 
 
