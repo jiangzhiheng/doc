@@ -624,6 +624,106 @@
 
       - `boolean = matches(String regex)`
 
-   6. 
+   6. Demo
+
+      ```java
+      public class TestString {
+          //1.反转字符串
+          //参数String  返回值String
+          public String reverse(String str){
+      //        //将str变换成数组，将数组头尾互换 然后拼接成字符串
+      //        char[] value = str.toCharArray();
+      //        for (int i = 0;i <value.length/2;i++){
+      //            char temp = value[i];
+      //            value[i] = value[value.length-1-i];
+      //            value[value.length-1-i] = temp;
+      //        }
+      //        return new  String(value);
+              return new String(new StringBuilder(str).reverse());  //通过StringBuilder操作
+          }
+      
+          //2.拼接正序反序字符串
+          public String reverseAndConcat(String str){
+              //1.反转
+              //2.拼接
+      //        String value =  this.reverse(str);
+      //        String result = str.concat(value);
+      //        return result;
+              return str.concat(this.reverse(str));
+          }
+      
+          //3.判断是否回文
+          public boolean isPalindrome(String str){
+              //先反转，然后与Str比较
+      //        String value = this.reverse(str);
+      //        if (value.equals(str)){
+      //            return true;
+      //        }else {
+      //            return false;
+      //        }
+              if (this.reverse(str).equals(str)){
+                  return true;
+              }
+              return false;
+          }
+      
+          //4.将给定的字符串右位移x位置
+          //参数string  返回值string
+          public String moveToRight(String str,int count){
+      //        if (count<0){
+      //            //自定义异常
+      //        }
+              if (count>str.length()){
+                  count %= str.length();
+              }
+              //截取  拼接  返回
+              String begin = str.substring(0,str.length()-count); //拼接时放在后面
+              String end = str.substring(str.length()-count); //拼接时放前面
+              return end.concat(begin);
+          }
+      
+          //5.寻找若干字符串中最长的那个
+          //是否需要参数？  若干个String...  返回值String
+          public String findMaxLengthString(String... strs){
+              String result = strs[0]; //第一个字符串存起来
+              int maxLength = strs[0].length();
+              for (int i=1;i<strs.length;i++){
+                  if (strs[i].length()>maxLength){
+                      maxLength = strs[i].length();
+                      result = strs[i];
+                  }
+              }
+              return result;
+          }
+          //6.统计给定字母在字符串中出现的次数
+          public int letterExistCount(String str,char letter){
+      //        int count = 0;
+      //        for (int i=0;i<str.length();i++){
+      //            if (str.charAt(i) == letter){
+      //                count++;
+      //            }
+      //        }
+      //        return count;
+              //方式2
+              return str.length()- str.replace(String.valueOf(letter),"").length();
+          }
+          //7.字符串首字母大写
+          public String fitstLetterToUpperCase(String str){
+              String result = "";
+              String[] value = str.split("");
+              for (int i=0;i<value.length;i++){
+                  String word = value[i];
+                  String firstLetter = word.substring(0,1).toUpperCase();
+                  String otherLetter = word.substring(1).toLowerCase();
+                  result = result.concat(firstLetter.concat(otherLetter)+ " ");
+              }
+              return result.trim();  //去掉最后多余的空格
+          }
+      }
+      ```
+
+      
+
+   7. 
 
 7. 
