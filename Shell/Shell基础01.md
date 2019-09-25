@@ -318,9 +318,60 @@
    
         echo "print 5.0/2" | python
    
-   6. 
+   6. 变量“内容”的删除和替换
    
-5. 
-
+      ```shell
+      #变量的切片
+      [root@martin scripts]# url=www.sina.com.cn
+      [root@martin scripts]# echo ${url}
+      www.sina.com.cn
+      [root@martin scripts]# echo ${#url}    #获取变量值的长度
+      15
+      [root@martin scripts]# echo ${url#www.}  
+      sina.com.cn
+      [root@martin scripts]# echo ${url#*.}   #从前往后，最短匹配
+      sina.com.cn
+      [root@martin scripts]# echo ${url##*.}   #从前往后，最长匹配，贪婪匹配
+      cn
+      [root@martin scripts]# echo ${url%.*}   #从后往前，最短匹配
+      www.sina.com
+      [root@martin scripts]# echo ${url%%.*}   #从后往前，最长匹配，贪婪匹配
+      www
+      #################################################################
+      [root@martin scripts]# echo ${url:0:5}  #切片
+      www.s
+      [root@martin scripts]# echo ${url:5}
+      ina.com.cn
+      #################################################################
+      #"内容的替换"
+      [root@martin scripts]# echo ${url/sina/baidu}
+      www.baidu.com.cn
+      [root@martin scripts]# echo ${url/n/N}
+      www.siNa.com.cn
+      [root@martin scripts]# echo ${url//n/N}   #贪婪匹配
+      www.siNa.com.cN
+      #################################################################
+      #变量的替代
+      
+      ```
+   
+      $(变量名-新的变量值)
+   
+      - 变量没有被赋值：会使用"新的变量值"替代
+      - 变量有被赋值(包括空值)：不会被替代
+   
+      $(变量名:-新的变量值)
+   
+      - 变量没有被赋值（包括空值）：会使用"新的变量值"替代
+      - 变量有被赋值：不会被替代
+   
+   7. i++   和++i的区别
+   
+      - i++ 先复制，在运算
+      - ++i 先运算，在赋值
+   
+   
+   
+   
    
 
