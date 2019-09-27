@@ -80,6 +80,85 @@
 
 2. ### **正则表达式**
 
+   一个带有一定规律的表达式，用来匹配字符串格式
+
+   正则表达式通常的作用如下
+
+   - 字符串的格式校验          String中的一个方法boolean = str.matches("regex");
+   - 字符串的拆分及替换       String类中提供的方法replace split
+   - 字符串的查找                  Pattern模式     Matcher匹配器
+
+   常用匹配模式：
+
+   - .  任意单个字符
+   - \d    digit数字 [0-9]
+   - \D    非数字  \[^0-9]
+   - \s     space留白  一个空格  回车 换行。。。
+   - \S    非留白
+   - \w    word单词  [0-9A-Za-z]  数字或字母都可以
+   - \W   非单词   \[^0-9A-Za-z]
+
+   匹配字符出现的次数
+
+   - ？0次或1次   [0-9]?    //只能出现一次0-9范围内的数子
+   - \*  0-n次
+   - \+ 1-n次
+   - {n}  固定n次
+   - {n,}  至少出现n次 
+   - {m,n} m-n次之间
+
+   ```java
+   public class TestUtil {
+       public static void main(String[] args) {
+           Scanner input = new Scanner(System.in);
+           System.out.println("请输入：");
+           String str = input.nextLine();
+           //判断输入的字符串是否满足给定的格式
+           boolean result = str.matches("a[abc]");    //匹配范围内的单个字符
+           boolean result1 = str.matches("a[^abc]");  //取反
+           boolean result3 = str.matches("a[a-zA-Z]");//匹配范围内的单个字符
+           boolean result4 = str.matches("a[a-z&&^[bc]]");  //a-z之间，不能是b和c
+           boolean result6 = str.matches("\\d{6,}");  //至少出现6个数字
+           boolean result8 = str.matches("[a-zA-Z]{6,10}");  //6-10位大小写字母
+   
+           String value = "a,b+c#d";
+           String[] result7 = value.split(",|\\+|#"); //+号需要转义
+           System.out.println(result7.length);
+           
+       }
+   }
+   ```
+
+   
+
+   字符串查找
+
+   ```java
+   import java.util.Scanner;
+   import java.util.regex.Matcher;
+   import java.util.regex.Pattern;
+   
+   public class TestUtil {
+       public static void main(String[] args) {
+           
+           //所有字串中找寻满足如下规则的信息  例如邮政编码
+           String str001 = "123456abc123456abc123456abc";
+           //1.利用Parttern类创建一个模式   模式理解为一个正则表达式对象
+           Pattern pattern = Pattern.compile("\\d{6}");  //6位邮编
+           //2.需要提供一个字符串
+           //3.利用pattern模式对象创建一个匹配器
+           Matcher matcher = pattern.matcher(str);
+           //找寻字符串中出现满足上述格式的字串
+           while (matcher.find()){
+               System.out.println(matcher.group()); //找到满足字符串格式的那一串文字
+           }
+   
+       }
+   }
+   ```
+
    
 
 3. 
+
+4. 
