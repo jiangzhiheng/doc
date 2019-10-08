@@ -157,8 +157,134 @@
    }
    ```
 
-   
+3. ### **List集合**
 
-3. 
+   集合是指具有某种特定性质的具体或抽象的对象汇总而成的集体
+
+   集合的两个分支
+
+   Collection   存储的都是value
+
+   - List   有序可重复
+   - Set   无序无重复
+
+   Map   存储的都是key-value形式存在
+
+   1. List集合
+
+      - ArrayList
+      - LinkedList
+      - Vector
+
+   2. ArrayList
+
+      - 所属java.util包
+
+      - 创建对象
+
+        无参数构造方法
+
+        带初始容量的构造方法
+
+        带collection参数的构造方法
+
+      - 泛型相关
+
+        由于ArrayList底层是一个Object []  什么类型都可以存进去，取出来之后是多态的效果，需要自己造型 用起来比较复杂
+
+        泛型不能使用基本类型，如果要使用基本类型，需要使用其对应的包装类
+
+        ```java
+        ArrayList<Integer> list1 = new ArrayList<Integer>();
+        ```
+
+        JDK1.5之后--->泛型
+
+        - 用来规定数据类型，定义的时候用一个符号代替某种类型，在使用的时候用具体的数据类型，将定义的那个富豪替换掉
+
+        - 泛型可以用在哪里
+
+          1. 泛型类
+
+             类定义的时候描述某种数据类型  集合的使用就是这样
+
+          2. 泛型接口
+
+             与泛型类的使用基本一致 子类实现接口时必须添加泛型
+
+          3. 泛型方法
+
+             方法调用时传参数  方法的泛型与类无关  带有泛型的方法可以不放在带有泛型的类中
+
+          4. 高级泛型  规范边界 
+
+      - 常用方法
+
+        add()
+
+        remove(int index)
+
+        removeAll()     //差集
+
+        retainAll()        //交集
+
+        get(int index)
+
+        addAll()   //拼接集合    并集
+
+        clear()   //清楚集合内的所有元素
+
+        contains()    //找寻是否含有某元素，返回值为boolean
+
+        indexOf()    //某元素第一次出现的位置
+
+        isEmpty()   //判断是否为空
+
+        iterator()   //迭代器
+
+        set(int index)   //修改
+
+        size()   
+
+        subList(int begin,int end)   //截取一段子集
+
+        toArray()   //集合变成数组
+
+        trimToSize()    变成有效元素个数那么长
+
+   3. Demo
+
+   ```java
+   import java.util.ArrayList;
+   
+   public class TestList01 {
+       public static void main(String[] args) {
+           ArrayList<Integer> list1 = new ArrayList<Integer>();
+           //ArrayList
+           ArrayList<String> list = new ArrayList<String>();   //利用泛型规定集合的元素类型
+           list.add("a");
+           list.add("b");
+           list.add("c");
+           list.add("d");
+           list.add("e");
+           System.out.println(list.size());
+   //      System.out.println(list.get(5));  //ndexOutOfBoundsException: Index: 5,
+   //        list.add(10);
+   //        list.add(true);
+   
+           for (int i=0;i<list.size();i++){
+               String value = list.get(i);
+               System.out.println(value);
+           }
+   
+           list.get(0);
+           list.remove(0);
+           System.out.println(list);  //重写了toString方法
+   
+       }
+   }
+   ```
 
 4. 
+
+   
