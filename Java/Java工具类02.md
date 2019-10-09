@@ -285,6 +285,160 @@
    }
    ```
 
-4. 
+4. ### **LinkedList+Vector+Stack+Queue**
+
+   1. LinkedList
+   
+      1. java.util包
+   
+      2. 底层使用双向链表的数据结构形式来存储
+   
+         适用于频繁插入删除，不适合遍历轮询
+   
+      3. 构建对象   
+   
+         - 无参数构造方法
+         - 有参数构造方法
+   
+      4. 常用方法
+   
+         增删改查  CURD
+   
+         手册中提供的其它常用方法
+   
+         - addAll()
+         - addFirst()
+         - clear()
+         - contains()
+         - .........
+   
+   2. Vector（ArrayList的早期版本）
+   
+      1. java.util包
+   
+      2. 是ArrayList集合的早期版本
+   
+         - Vector底层也是利用动态数组的形式存储
+         - Vector是线程同步的，安全性高，效率低
+   
+      3. 扩容方式与ArrayList不同
+   
+         默认是扩容两倍  可以通过构造方法创建对象时修改这一机制
+   
+      4. 构造方法
+   
+      5. 常用方法
+   
+      ```java
+      import java.util.Vector;
+      
+      public class TestList01 {
+          public static void main(String[] args) {
+              Vector<String> vector = new Vector();
+              //Vector<String> vector1 = new Vector(4,6);  //初始值4个元素，每次增加4个
+              vector.add("a");
+              vector.add("b");
+              System.out.println(vector);
+              vector.get(1);
+              System.out.println(vector.size());
+          }
+      }
+      ```
+   
+   3. Stack类  栈    FILO先进后出
+   
+      - java.util包   继承Vector
+   
+      - 构造方法只有一个无参数方法
+   
+      - 除了继承自Vector的方法之外只有几个特殊方法
+   
+        push()   将元素压入栈顶  压栈
+   
+        pop()   弹栈    ，将元素取出并删除
+   
+        peek()   查看栈顶的一个元素 不删除
+   
+        empty()   判断栈内元素是否为空
+   
+        search()   查看给定元素在栈中的位置
+   
+      -   应用场景
+   
+        撤销到上一步
+   
+      ```java
+      import java.util.Stack;
+      
+      public class TestList01 {
+          public static void main(String[] args) {
+              Stack<String> stack = new Stack();
+              stack.push("a");
+              stack.push("b");
+              System.out.println(stack);
+              System.out.println(stack.size());
+              System.out.println(stack.search("a"));
+          }
+      }
+      ```
+   
+   4. Queue  队列   FIFO 先进先出   接口
+   
+      - java.util包   常用子类 LinkedList ArrayList
+   
+      - 通常无参数构造方法创建
+   
+      - 常用方法
+   
+        1. 一般方法
+   
+           add()
+   
+           element()   ----->get()
+   
+           remove()
+   
+        2. 特有方法
+   
+           boolean = offer(E e);//相当于add     不会抛出异常
+   
+           E = peek();  //相当于element方法
+   
+           E = poll();    //相当于remove
+   
+      ```java
+      //Demo   ArrayList和LinkedList性能比较
+      import java.util.ArrayList;
+      import java.util.LinkedList;
+      
+      public class TestList01 {
+          public static void main(String[] args) {
+              //ArrayList
+              ArrayList<String> arrayList = new ArrayList<>();
+              long time1 = System.currentTimeMillis();
+              for (int i = 00;i<=200000;i++){
+                  arrayList.add(0,"a");
+              }
+              long time2 = System.currentTimeMillis();
+              System.out.println("ArrayList运行时间："+(time2-time1));
+      
+              //--------------------------------------------------
+              //LinkedList
+              LinkedList<String> linkedList = new LinkedList<>();
+              long time3 = System.currentTimeMillis();
+              for (int i = 0;i<=200000;i++){
+                  linkedList.add(0,"a");
+              }
+              long time4 = System.currentTimeMillis();
+              System.out.println("LinkedList运行时间："+(time4-time3));
+          }
+      }
+      //ArrayList运行时间：插入用时1332毫秒
+      //LinkedList运行时间：插入用时11毫秒
+      ```
+   
+      
+   
+5. 
 
    
