@@ -439,6 +439,92 @@
    
       
    
-5. 
+5. ### **HashSet+TreeSet**
 
+   Set的具体实现类
    
+   无序无重复
+   
+   - HashSet
+   - TreeSet
+   
+   1. HashSet     （HashMap）
+   
+      1. Java.util包
+   
+      2. 如何创建对象
+   
+         - 无参数构造方法
+         - 有参数构造方法
+   
+      3. 集合容器的基本使用
+   
+         - boolean = add()
+   
+           addAll(collection)
+   
+           retainAll()
+   
+           removeAll()
+   
+         - boolean = remove(object o)
+   
+         - 无set方法
+   
+         - 可以使用增强fao进行集合遍历
+   
+         - iterator()   获取一个迭代器对象
+   
+      4. 无重复的原则
+   
+         - 通过equals方法进行比较
+         - 同时重写equals方法和hashCode方法
+         - set集合是发现重复的元素拒绝存入
+   
+      5. Demo
+   
+      ```java
+      import java.util.HashSet;
+      import java.util.Iterator;
+      
+      public class TestSet {
+          public static void main(String[] args) {
+              HashSet<String> hashSet = new HashSet<>();
+              hashSet.add("a");
+              hashSet.add("b");
+              hashSet.add("c");
+              hashSet.add("B");
+              hashSet.add("A");
+              System.out.println(hashSet);
+              //先获取一个迭代器对象
+              Iterator<String> it = hashSet.iterator();  //Iterator接口 多态效果
+              //判断下一个位置是否有元素
+              while (it.hasNext()){
+                  String value = it.next();
+                  System.out.println(value);
+              }
+          }
+      }
+      ```
+   
+      
+   
+   2. TreeSet      （TreeMap   二叉树  ）
+   
+      - 无序无重复 java.util
+   
+      - 无参数构造方法 带collection对象的构造方法
+   
+      - 基本常用方法
+   
+        add(E e)   iterator()   remove() size()
+   
+      - TreeSet的无重复实现原理
+   
+        treeSet本身有顺序，我们只得无序存入和取出来的不一致
+   
+        conpareTo--->String类 按照字母的自然顺序排布
+   
+        如果想要把自己写的类型 存入TreeSet即合里面，不能随意得存储，需要让自己写的类先实现Comparable接口    compareTo方法
+   
+6. 
