@@ -527,4 +527,206 @@
    
         如果想要把自己写的类型 存入TreeSet即合里面，不能随意得存储，需要让自己写的类先实现Comparable接口    compareTo方法
    
-6. 
+6. ### **Map**
+
+   Map  通过某一个key可以直接定位带一个value值
+
+   存储的方式以 key-value形式存储
+
+   key无序无重复  value无序可重复
+
+   1. map基本使用
+
+      Hashmap
+
+      TreeMap
+
+      Properties
+
+   2. HashMap
+
+      1. java.util包
+
+      2. 如何创建对象
+
+      3. 基本方法
+
+         put(k,v)    存放一组映射关系
+
+         - key存储的顺序与取得顺序不同
+         - 不同的key可以存储相同的value
+         - key若相同，则将原有的value覆盖而不是拒绝存入（跟set相反）
+
+         remove(key);
+
+         replace(k,v);
+
+         get(key);
+
+         遍历hashmap
+
+      4. 其它方法
+
+         - clear()
+
+         - containsKey(key)
+
+         - containsValue(value)
+         - getOrDefault(key，defaultvalue);    如果key存在则返回，否则返回default
+         - putAll()
+         - putIfAbsent(k,v)   如果key不存在才添加，否则不添加覆盖
+
+         ```java
+         import java.util.HashMap;
+         import java.util.Iterator;
+         import java.util.Set;
+         
+         public class HashMapTest {
+             public static void main(String[] args) {
+                 //创建一个HashMap对象
+                 HashMap<Integer,String> hashMap = new HashMap<>();
+                 //存入一些关系
+                 hashMap.put(1,"martin");
+                 hashMap.put(2,"tom");
+                 hashMap.put(3,"Jerry");
+                 hashMap.put(4,"tony");
+                 System.out.println(hashMap);
+                 hashMap.remove(3);
+                 hashMap.replace(3,"timi");
+                 hashMap.putIfAbsent(9,"hahah");
+                 //遍历 先获取全部key
+                 Set<Integer> keys = hashMap.keySet();
+                 //通过迭代器遍历keys
+                 Iterator<Integer> it = keys.iterator();
+                 while (it.hasNext()){
+                     Integer key = it.next();
+                     String value = hashMap.get(key);
+                     System.out.println(key+"---"+value);
+                 }
+         
+             }
+         }
+         
+         ```
+
+         
+
+      5. HashMap底层数据存储结构
+
+         散列表的形式   数组+链表
+
+         不同的对象可能产生相同的hashCode码
+
+         不同的hashCode码应该对应不同的对象
+
+      6. map集合使用情形
+
+         1. 想要存储一组元素    数组 or 集合  如果存储的元素以后长度不变用数组  长度不确定，用集合
+
+         2. 如果长度不确定----->集合
+
+            List家族有序的 存储的有顺序用这个
+
+            - ArrayList（Vector）更适合遍历轮询
+            - LinkedList  更适合插入删除
+            - Stack    LIFO
+
+            Set家族无重复  存储元素希望自动去重的用这个
+
+            - Hash  性能更高
+            - Tree  希望存进去的元素自动去重，还能自动排序
+
+         3. Map家族k-v  通过唯一的k快速寻找v用map
+
+            - Hash  性能更高
+            - Tree  希望存进去的元素key自动排序
+
+      7. 登陆小流程------对比数组，集合以及map的存储取值特点
+
+      ```java
+      import java.util.ArrayList;
+      import java.util.HashMap;
+      import java.util.HashSet;
+      import java.util.Iterator;
+      
+      public class LoginService {
+      
+          private String[] username = new String[]{"tom","marry","Martin"};
+          private int[] passwd = new int[]{111,222,333};
+          //设计方法用来登陆认证
+          public String LoginForArray(String name,String password){
+              for (int i=0;i<username.length;i++){
+                  if (username[i].equals(name)){
+                      if (passwd[i]== Integer.parseInt(password)){
+                          return "Login succ";
+                      }
+                      break;
+                  }
+              }
+              return "username or passwd error";
+          }
+      //---------------------------------------------------------------------
+          //设计方法用ArrayList实现用户登录
+          private ArrayList<String> userBox = new ArrayList<>();
+          {
+              userBox.add("martin-111");
+              userBox.add("jerry-222");
+              userBox.add("tony-333");
+          }
+          public String loginForList(String name,String password){
+              for (int i = 0;i < userBox.size();i ++){
+                  String[] value = userBox.get(i).split("-");
+                  if (value[0].equals(name)){
+                      if (value[1].equals(password)){
+                          return "Login succ";
+                      }
+                      break;
+                  }
+              }
+              return "username or passwd error";
+          }
+      
+          //设计一个方法用Set实现登陆
+          private HashSet<String> userBoxx = new HashSet<>();
+          {
+              userBoxx.add("martin-111");
+              userBoxx.add("jerry-222");
+              userBoxx.add("tony-333");
+          }
+          public String logForSet(String name,String password){
+              Iterator<String> it = userBoxx.iterator();
+              while (it.hasNext()){
+                  String[] value = it.next().split("-");
+                  if (value[0].equals(name)){
+                      if (value[1].equals(password)){
+                          return "Login succ";
+                      }
+                      break;
+                  }
+              }
+              return "username or password error";
+          }
+      
+          //设计方法用map实现登陆认证
+          private HashMap<String,Integer> userBoxxx = new HashMap<>();
+          {
+              userBoxxx.put("martin",111);
+              userBoxxx.put("jerry",222);
+              userBoxxx.put("tony",333);
+          }
+          public String loginForMap(String name,String password){
+              Integer readPassword = userBoxxx.get(name);
+              if (readPassword!=null && readPassword ==Integer.parseInt(password)){
+                  return "Login succ";
+              }
+              return "username or password error";
+          }
+      }
+      ```
+
+   3. TreeMap
+
+   4. 
+
+7. 
+
