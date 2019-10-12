@@ -724,9 +724,258 @@
       }
       ```
 
-   3. TreeMap
+   3. TreeMap        自然有序 按照unicode编码自然有序
 
-   4. 
+      1. java.util包
 
-7. 
+      2. 构造方法
+
+         无参数构造方法
+
+         带map参数的构造方法
+
+      3. 常用方法
+
+         put    get    remove    replace   size
+
+      4. 底层数据结构的存储
+
+         二叉树     红黑二叉树
+
+   4. 考试系统练习
+
+      - 考试题目如何存储
+
+        自己描述一个类---->一个题目类型
+
+        有两个属性----题干   真实答案
+
+        public class Question(){}
+
+      - 几个实体类（3个）类的关系
+
+        考试机
+
+        - 属性----题库 存储好多Question类型的对象   Set 无重复
+        - 方法----随机抽题目，形成试卷
+
+        学生
+
+        - 方法---考试
+
+        老师
+
+        - 方法---批卷子（学生最终选项 真实的试卷）
+
+      - 具体添加每一个类中的成员描述
+
+        如何选择存储容器
+
+      ```java
+      package examsystem;
+      
+      import java.util.ArrayList;
+      import java.util.Scanner;
+      
+      public class TestMain {
+          public static void main(String[] args) {
+              ExamMach examMach = new ExamMach();//创建考试机
+      
+              //创建学生对象
+              Scanner input = new Scanner(System.in);
+              System.out.println("请输入用户名");
+              String username = input.nextLine();
+              System.out.println("请输入密码");
+              String password = input.nextLine();
+              Student student = new Student(username,password);
+              String result = examMach.login(student.getUsername(),student.getPassword());
+              if (result.equals("Login succ")){
+                  System.out.println("登陆成功，开始考试");
+                  ArrayList<Question> paper = examMach.getPaper(); //获取试卷
+                  String[] answers = student.exam(paper);  //考试
+                  Teacher teacher = new Teacher();
+                  int score = teacher.checkPaper(paper,answers);
+                  System.out.println(student.getUsername()+"最终的成绩是"+score);
+              }
+      
+      
+          }
+      }
+      
+      ```
+
+      ```java
+      package examsystem;
+      
+      import java.util.ArrayList;
+      import java.util.HashSet;
+      import java.util.Random;
+      import java.util.HashMap;
+      
+      public class ExamMach {
+          //属性  题库 Question对象
+          //Set集合，自动
+          private HashSet<Question> questionBank = new HashSet<>();
+          {
+              //利用块初始化hashSet集合内的题目对象
+              questionBank.add(new Question("如下A哪个选项不是Java的基本数据类型？\n\tA.String\n\tB.Char\n\tC.Boolean\n\tD.int","A"));
+              questionBank.add(new Question("如下C哪个选项不是Java的基本数据类型？\n\tA.String\n\tB.Char\n\tC.Boolean\n\tD.int","C"));
+              questionBank.add(new Question("如下D哪个选项不是Java的基本数据类型？\n\tA.String\n\tB.Char\n\tC.Boolean\n\tD.int","D"));
+              questionBank.add(new Question("如下B哪个选项不是Java的基本数据类型？\n\tA.String\n\tB.Char\n\tC.Boolean\n\tD.int","B"));
+              questionBank.add(new Question("如下C哪个选项不是Java的基本数据类型？\n\tA.String\n\tB.Char\n\tC.Boolean\n\tD.int","C"));
+              questionBank.add(new Question("如下D哪个选项不是Java的基本数据类型？\n\tA.String\n\tB.Char\n\tC.Boolean\n\tD.int","D"));
+              questionBank.add(new Question("如下A哪个选项不是Java的基本数据类型？\n\tA.String\n\tB.Char\n\tC.Boolean\n\tD.int","A"));
+              questionBank.add(new Question("如下B哪个选项不是Java的基本数据类型？\n\tA.String\n\tB.Char\n\tC.Boolean\n\tD.int","B"));
+              questionBank.add(new Question("如下B哪个选项不是Java的基本数据类型？\n\tA.String\n\tB.Char\n\tC.Boolean\n\tD.int","B"));
+              questionBank.add(new Question("如下A哪个选项不是Java的基本数据类型？\n\tA.String\n\tB.Char\n\tC.Boolean\n\tD.int","A"));
+          }
+      
+          private HashMap<String,String> userBox = new HashMap<>();
+          {
+              userBox.put("martin","111");
+              userBox.put("jerry","222");
+              userBox.put("tony","333");
+          }
+      
+          //登陆认证
+          public String login(String name,String password){
+              String readPassword = this.userBox.get(name);
+              if (readPassword!=null && readPassword.equals(password)){
+                  return "Login succ";
+              }
+              return "username or password error";
+          }
+      
+      
+          //设计方法 随机产生试卷
+          //参数  确定试卷5道题  不用  返回值 试卷ArrayList<Question>
+          public ArrayList<Question> getPaper(){
+              //随机抽取试卷的时候 试卷题目应该不充分 Set存 --->ArrayList
+              HashSet<Question> paper = new HashSet<>(); //试卷
+              //产生一个随机序号 去寻找题目 题库是Set无序号
+              ArrayList<Question> questionBank = new ArrayList<>(this.questionBank);
+              //随机抽取题目
+              while (paper.size()!=5){
+                  int index = new Random().nextInt(this.questionBank.size());
+                  paper.add(questionBank.get(index));
+              }
+              return new ArrayList<Question>(paper);
+          }
+      }
+      
+      ```
+
+      ```java
+      package examsystem;
+      
+      public class Question {
+          private String title;
+          private String answer; //真实答案
+      
+          public Question(String title,String answer){
+              this.title = title;
+              this.answer = answer;
+          }
+      
+          //重写方法，将默认比较题目对象的地址规则改编成比较题干
+          public boolean equals(Object obj) {
+              if (this==obj){
+                  return true;
+              }
+              if (obj instanceof Question){
+                  Question anotherQuestion = (Question)obj;
+                  if (this.title.equals(anotherQuestion)){
+                      return true;
+                  }
+              }
+              return false;
+          }
+          public int hashCode(){
+              return this.title.hashCode();
+          }
+      
+          public String getTitle(){
+              return this.title;
+          }
+          public String getAnswer(){
+              return this.answer;
+          }
+      
+      }
+      
+      
+      ```
+
+      ```java
+      package examsystem;
+      
+      import java.security.PublicKey;
+      import java.util.ArrayList;
+      import java.util.Scanner;
+      
+      public class Student {
+          //属性
+          private String username;
+          private String password;
+          public Student(String username,String password){
+              this.username = username;
+              this.password = password;
+          }
+          public String getUsername(){
+              return this.username;
+          }
+          public String getPassword(){
+              return this.password;
+          }
+      
+          //考试方法
+          //参数是一套试卷  返回值 学生的所有选项String[]
+          public String[] exam(ArrayList<Question> paper){
+              String[] answers = new String[paper.size()];
+              for (int i=0;i<paper.size();i++){
+                  Scanner input  = new Scanner(System.in);
+                  Question question = paper.get(i);
+                  System.out.println((i+1)+"."+question.getTitle());
+                  System.out.println("请输入您认为正确的选项？");
+                  answers[i] = input.nextLine();
+              }
+              return answers;
+          }
+      
+      }
+      
+      ```
+
+      ```java
+      package examsystem;
+      
+      import javax.swing.table.TableRowSorter;
+      import java.util.ArrayList;
+      
+      public class Teacher {
+          //批卷子
+          //参数 学生作答的选项 真实的试卷
+          //返回值 int
+          public int checkPaper(ArrayList<Question> paper,String[] answers){
+              System.out.println("老师正在批阅，请等待");
+              try {
+                  Thread.sleep(5000);
+              }catch (Exception e){
+                  e.printStackTrace();
+              }
+              int score = 0;
+              for (int i =0;i<paper.size();i++){
+                  Question question = paper.get(i);
+                  if (question.getAnswer().equalsIgnoreCase(answers[i])){
+                      score+=(100/paper.size());
+                  }
+              }
+              return score;
+          }
+      }
+      
+      ```
+
+      
+
 
