@@ -112,6 +112,59 @@
 
       输入流     输出流
 
-   3. 
+   3. IO之文件夹遍历删除（递归）
 
-2. 
+      1. 文件夹的遍历
+      2. 文件夹的删除
+
+      ```java
+      package testfile;
+      
+      import com.sun.xml.internal.fastinfoset.tools.FI_DOM_Or_XML_DOM_SAX_SAXEvent;
+      
+      import java.io.File;
+      
+      public class TestMethord {
+          //遍历或者展示文件夹
+          public void showFile(File file){
+              //判断如果file是一个文件夹 并且文件夹内有元素
+              File[] files = file.listFiles();  //files=bull说明是个文件
+              //files!=null说明是个文件夹，files.length!=0说明文件夹有元素
+              if (files!=null && files.length!=0){
+                  for (File f:files){ //遍历每一个子元素
+                      this.showFile(f);
+                  }
+              }
+              //做自己的显示
+              System.out.println(file.getAbsolutePath());
+          }
+      
+          //删除文件夹
+          public void deleteFile(File file){
+              //判断是不是空文件夹
+              File[] files = file.listFiles();
+              if (files!= null && files.length!=0){
+                  for (File f:files){
+                      this.deleteFile(f);
+                  }
+              }
+              //删除文件或者空文件夹
+              file.delete();
+          }
+      
+          public static void main(String[] args) {
+              TestMethord tm = new TestMethord();
+              File file = new File("F:\\Test");
+              tm.showFile(file);
+          }
+      }
+      
+      ```
+
+2. ### **字节型文件流**
+
+   
+
+3. ### **字符型文件流**
+
+4. ### **缓冲流+对象流**
