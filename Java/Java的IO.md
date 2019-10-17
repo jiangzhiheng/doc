@@ -110,7 +110,25 @@
 
    2. 什么叫文件流  做什么
 
-      输入流     输出流
+      按照方向（功能）来区分 :输入流     输出流
+
+      操作的目标来区分
+
+      - 文件流  数组流 字符串流  数据流  对象流 网络liu .......
+
+      文件流
+
+      - 读取文件中的信息，将信息写入文件中
+
+      文件流按照读取或写入的单位大小来区分
+
+      - 字节型文件流
+
+        FileInputStream/FileOutputStream
+
+      - 字符型文件流
+
+        FileReader/FileWirter
 
    3. IO之文件夹遍历删除（递归）
 
@@ -162,6 +180,87 @@
       ```
 
 2. ### **字节型文件流**
+
+   FileInputStream/FileOutputStream
+
+   FileInputStream
+
+   1. java.io类
+
+   2. 继承InputStream类，字节型输入流的父类
+
+   3. 创建对象
+
+      调用一个带File类型的构造方法
+
+      调用一个带String类型的构造方法
+
+   4. 常用方法
+
+      - int code = read();  每次从流管道中读取一个字节 字节的code码
+      - int count = read(byte[] ); 每次从流管道中读取若干个字节存入数组中 返回有效元素
+      - int count = available(); 返回流管道中还有多少缓存的字节数
+      - long count  = skip(long n);  跳过n个字节开始读取
+      - close();  表示将流通到关闭，最好放在finally里，注意代码的严谨性判断
+
+      ```java
+      package teststream;
+      
+      import java.io.File;
+      import java.io.FileInputStream;
+      import java.io.FileNotFoundException;
+      import java.io.IOException;
+      
+      public class TestFileInputStream {
+          public static void main(String[] args) {
+              try {
+                  FileInputStream fis = new FileInputStream("F:\\Test\\Test.txt");
+                  //创建一个空数组，从文件读东西，存入数组
+                  byte[] b = new byte[5];
+                  int count= fis.read(b);
+                  while (count!=-1){
+                    String value = new  String(b,0,count);//指定构建的起始位置，数量
+                    System.out.print(value);
+                    count = fis.read(b);
+                  }
+      
+              } catch (IOException e) {
+                  e.printStackTrace();
+              }
+      
+      
+              //创建一个FileInputStream对象 字节型
+              FileInputStream fileInputStream = null;
+              try {
+                  File file = new File("F:\\Test\\Test.txt");
+                  fileInputStream = new FileInputStream(file);
+                  int value1 = fileInputStream.available(); //流管道中有多少缓存的字节
+                  int code = fileInputStream.read();  //读取的字节对用的unicode码
+                  while (code!=-1){
+                      //System.out.print((char)code);
+                      code = fileInputStream.read();
+                  }
+              } catch (FileNotFoundException e) { //编译时异常
+                  e.printStackTrace();
+              } catch (IOException e) {
+                  e.printStackTrace();
+              }finally {
+                  try {
+                      if (fileInputStream!=null){  //判断非空才能close，否则会空指针
+                          fileInputStream.close(); //关闭流通道,必须进行的操作
+                      }
+                  } catch (IOException e) {
+                      e.printStackTrace();
+                  }
+              }
+          }
+      }
+      
+      ```
+
+      
+
+   FileOutputStream
 
    
 
