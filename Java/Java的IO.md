@@ -260,9 +260,77 @@
 
       
 
-   FileOutputStream
+   FileOutputStream  
 
-   
+   将数据写入文件中
+
+   1. java.io包
+
+   2. 继承OutputStream 所有字节型输出流的父类
+
+   3. 创建对象
+
+      - 调用一个带File参数的
+      - 调用一个带String参数
+
+   4. 常用方法
+
+      - write(int code);将给定的code对应的字符写入文件
+      - write(byte[] b);
+      - close();
+      - flush();
+
+      ```java
+      package teststream;
+      
+      import java.io.File;
+      import java.io.FileNotFoundException;
+      import java.io.FileOutputStream;
+      import java.io.IOException;
+      
+      public class TestFileOutputStream {
+          public static void main(String[] args) {
+      //        //创建一个字节型文件输出流
+      //        File file = new File("F:\\Test\\Test.txt");
+      //        //创建的文件输入流，若文件路径有问题，则抛出异常 FileNotFoundException
+      //        //创建的文件输出流，若文件路径有问题，则直接帮我们创建一个新的文件
+      //        try {
+      //            FileOutputStream fileOutputStream = new FileOutputStream(file,true);//true append模式
+      //            fileOutputStream.write(97);
+      //            System.out.println("写入完毕");
+      //            fileOutputStream.flush();//刷新，落盘
+      //        } catch (FileNotFoundException e) {
+      //            e.printStackTrace();
+      //        } catch (IOException e) {
+      //            e.printStackTrace();
+      //        }
+              FileOutputStream fileOutputStream = null;
+              try {
+                  fileOutputStream = new FileOutputStream("F:\\Test\\Test.txt",true);
+                  //创建一个数组
+                  byte[] b = new byte[]{97,98,99};
+                  fileOutputStream.write(b);
+                  String str = "1+1=2";
+                  byte[] c = str.getBytes();
+                  fileOutputStream.write(c);
+                  fileOutputStream.flush();
+              } catch (FileNotFoundException e) {
+                  e.printStackTrace();
+              } catch (IOException e) {
+                  e.printStackTrace();
+              }finally {
+                  try {
+                      if (fileOutputStream!= null){
+                          fileOutputStream.close();
+                      }
+                  } catch (IOException e) {
+                      e.printStackTrace();
+                  }
+              }
+          }
+      }
+      
+      ```
 
 3. ### **字符型文件流**
 
