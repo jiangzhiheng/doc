@@ -331,7 +331,152 @@
       }
       
       ```
+      
+      Demo：文件复制
+      
+      ```java
+      
+      import java.io.*;
+      
+      public class OperateFile {
+      
+          public void copyFile(File file,String path){
+              FileInputStream fileInputStream = null;
+              FileOutputStream fileOutputStream = null;
+              try {
+                  //创建一个输入流
+                  fileInputStream = new FileInputStream(file);
+                  //读取文件中的信息
+                  //创建一个新的file对象
+                  File newFile = new File(path+"//"+file.getName());
+                  //创建一个输出流
+                  fileOutputStream = new FileOutputStream(newFile);
+                  byte[] b = new byte[1024]; //通常创建的数组 1kb-8kb直接
+                  int count = fileInputStream.read(b);
+                  while (count!=-1){
+                      fileOutputStream.write(b,0,count);  //将读取到的有效内容写入
+                      fileOutputStream.flush();
+                      count = fileInputStream.read(b);
+                  }
+      
+              } catch (FileNotFoundException e) {
+                  e.printStackTrace();
+              } catch (IOException e) {
+                  e.printStackTrace();
+              }finally {
+                  //关闭
+                  try {
+                      fileInputStream.close();
+                  } catch (IOException e) {
+                      e.printStackTrace();
+                  }
+                  try {
+                      fileOutputStream.close();
+                  } catch (IOException e) {
+                      e.printStackTrace();
+                  }
+              }
+          }
+          //文件夹的复制
+          public void superCopyFile(File file,String newPath){
+              //通过新的file对象操作，在硬盘上创建一个文件夹
+              String oldFilePath = file.getAbsolutePath();
+              String newFilePath = newPath + oldFilePath.split(":")[1];
+              //创建一个新的file对象
+              //获取file的绝对路径，拼串的方式获取新文件的名字
+              File newFile = new File(newFilePath);
+              //判断当前传递进来的是文件还是文件夹
+              File[] files = file.listFiles();//获取当前对象的所有子元素
+              if (files!=null){ //文件夹
+                  //通过新的file对象操作 在硬盘上创建一个文件夹
+                  newFile.mkdir();
+                  //里面的元素
+                  if (files.length!=0){
+                      for (File f:files){
+                          this.superCopyFile(f,newPath);
+                      }
+                  }
+              }else {//是个文件 无子元素
+                  //创建两个文件流，分别读取旧的file和写入新的newFile
+                  FileInputStream fileInputStream = null;
+                  FileOutputStream fileOutputStream = null;
+      
+                  try {
+                      fileInputStream = new FileInputStream(file);
+                      fileOutputStream = new FileOutputStream(newFile);
+                      byte[] b = new byte[1024];
+                      int count = fileInputStream.read(b);
+                      while (count!=-1){
+                          fileOutputStream.write(b,0,count);  //将读取到的有效内容写入
+                          fileOutputStream.flush();
+                          count = fileInputStream.read(b);
+                      }
+                      System.out.println(newFile.getName()+"复制完毕");
+                  } catch (IOException e) {
+                      e.printStackTrace();
+                  }finally {
+                      //关闭
+                      try {
+                          fileInputStream.close();
+                      } catch (IOException e) {
+                          e.printStackTrace();
+                      }
+                      try {
+                          fileOutputStream.close();
+                      } catch (IOException e) {
+                          e.printStackTrace();
+                      }
+                  }
+              }
+      
+          }
+      
+          public static void main(String[] args) {
+              OperateFile of = new OperateFile();
+              of.copyFile(new File("C://test.txt"),"D://Test");
+          }
+      }
+      
+      ```
 
 3. ### **字符型文件流**
+
+   FileReader/FileWriter
+
+   只能操作纯文本文件 .txt
+
+   FileReader
+
+   1. java.io包
+   2. 继承 InputStreamReader Reader
+   3. 构造方法
+
+   ```java
+   import java.io.FileNotFoundException;
+   import java.io.FileReader;
+   import java.io.FileWriter;
+   
+   public class TestReader {
+       public static void main(String[] args) {
+           //创建字符文件输入流
+           try {
+               FileReader fileReader = new FileReader("D://test.txt");
+               FileWriter fileWriter = new FileWriter("D://aaaa.txt");
+               int code = fileReader.read();
+               char[] c = new char[1024];
+               int count = fileReader.read(c);
+               while (count!=-1){
+                   System.out.println(code);
+                   fileWriter.write(c);
+   
+               }
+               fileWriter.flush();fileWriter.close();
+           } catch (java.io.IOException e) {
+               e.printStackTrace();
+           }
+   
+       }
+   }
+   ```
 
 4. ### **缓冲流+对象流**
