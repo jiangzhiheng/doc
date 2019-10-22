@@ -64,7 +64,65 @@
    echo "fun return value:$result"
    ```
 
-   
+4. 函数的参数
 
-4. 
+   ```shell
+   #!/bin/bash
+   # shell args
+   if [ $# -eq 3 ];then
+           echo "usage: `basename $0` par1 par2 par3"
+           exit
+   fi
+   
+   fun(){
+           echo "$(($1 * $2 * $3))"
+   }
+   
+   #result=`fun 2 3 4`
+   result=`fun $1 $2 $3`
+   echo "result is :$result"
+   ```
+
+5. 数组变量传参
+
+   ```shell
+   #!/bin/bash
+   
+   num=(1 2 3 4 5)
+   echo "${num[@]}"
+   
+   array(){
+           local result=1
+           for i in "$@" #$@ 或$*代指所有参数
+           do
+                   result=$[result * $i]
+           done
+           echo "$result"
+   }
+   array ${num[@]}
+   ```
+
+6. 函数返回值 输出数组变量
+
+   ```shell
+   #!/bin/bash
+   #
+   num=(1 2 3)
+   array(){
+           echo "all parameters: $*"
+           local newarray=(`echo $*`)
+           local i
+           for((i=0;i<$#;i++))
+           do
+                   outarray[$i]=$[ ${newarray[$i]}*5 ]
+           done
+           echo "${outarray[@]}"
+   }
+   
+   result=`array ${num[@]}`
+   echo "${result[@]}"
+   
+   ```
+
+7. 
 
