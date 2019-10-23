@@ -479,4 +479,144 @@
    }
    ```
 
+   字符集
+
+   常见字符编码
+
+   - ASCII 	American Standard Code for
+   - GB2313  GB13030  GBK  BIG5
+   - Unicode
+   - UTF-8
+   - ISO-8859-1
+
+   Windows平台默认字符集GBK   Linux(MacOS)默认使用UTF-8
+
+   IDEA默认UTF-8
+
 4. ### **缓冲流+对象流**
+
+   缓冲流
+
+   在流管道内增加缓存的数据
+
+   高级流--->创建通过低级流
+
+   BufferedInputStream/BufferedOutputStream
+
+   BufferedReader/BufferedWriter
+
+   基本使用方法与低级流的方法完全一致
+
+   ```java
+   import java.io.*;
+   
+   public class TestBufferedStream {
+       public static void main(String[] args) {
+           try {
+               //创建一个流
+               File file = new File("F://test/Test.txt");
+               FileInputStream fileInputStream = new FileInputStream(file);
+               BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
+               bufferedInputStream.available();
+               bufferedInputStream.read();
+   
+               FileOutputStream fileOutputStream = new FileOutputStream("F://test/Test.txt");
+               BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(fileOutputStream);
+               //构建方式：通过低级流对象创建
+           } catch (java.io.IOException e) {
+               e.printStackTrace();
+           }
+       }
+   }
+   ```
+
+   *****
+
+   ```java
+   package teststream;
+   
+   import java.io.*;
+   
+   public class TestBufferedStream {
+   
+       //用户登陆认证
+       public String login(String username,String password){
+           //用户信息存储在.txt文件中，以行为单位
+           try {
+               BufferedReader bufferedReader = new BufferedReader(new FileReader("F://test//Test.txt"));
+               String user = bufferedReader.readLine();
+               while (user!=null){
+                   //将user信息拆分比较
+                   String[] value = user.split("-");
+                   if (value[0].equals(username)){
+                       if (value[1].equals(password)){
+                           return "Login succ";
+                       }
+                   }
+                   user = bufferedReader.readLine();
+               }
+           } catch (IOException e) {
+               e.printStackTrace();
+           }
+           return "Login Failed/用户名或密码错误";
+       }
+   
+       public static void main(String[] args) {
+           try {
+               //创建一个流
+               File file = new File("F://test/Test.txt");
+               FileReader fileReader = new FileReader(file);
+               BufferedReader bufferedReader = new BufferedReader(fileReader);
+   
+               BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("F://test/Test.txt",true));
+               bufferedWriter.newLine();
+               bufferedWriter.write("Tony-99999");
+               bufferedWriter.flush();
+               String value = bufferedReader.readLine();  //读取文件中一行的信息
+               while (value!=null){
+                   System.out.println(value);
+                   value = bufferedReader.readLine();
+               }
+   //            int code=bufferedReader.read();
+   //            while (code!=-1){
+   //                System.out.println((char)code);
+   //                code = bufferedReader.read();
+   //            }
+           } catch (java.io.IOException e) {
+               e.printStackTrace();
+           }
+       }
+   }
+   
+   ```
+
+   数据流
+
+   - byte数组     ByteArrayInputStream/ByteArrayOutputStream
+   - char数组    CharArrayInputStream/CharArrayOutputStream
+
+   数据流
+
+   - DataInputStream
+   - DataOutputStream
+
+   对象流
+
+   - ObjectInputStream
+   - ObjectOutputStream
+
+   1. 对象的序列化/反序列化
+
+      - 系列化：将一个完整的对象拆分成字节碎片 记录在文件中
+
+      - 反序列化：将文件中记录的对象碎片 ，反过来组合成一个完整对象
+
+   2. 如果想要让对象序列化到文件中，需要实现Serializable接口（示意性接口，无方法），同时，为了让对象可以反序列化，需要让对象多一个属性，
+
+      private long serialVersionUID=任意L;
+
+   3. 如果想要将对象反序列化回来，需要给对象提供一个序列化的版本号
+
+   
+
+5. 
