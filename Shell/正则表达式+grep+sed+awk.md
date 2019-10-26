@@ -117,5 +117,59 @@
      
      `egrep '([0-9]{1,3}).{3}\.[0-9]{1,3}'  /etc/hosts`    匹配IP地址
 
+### **`Sed`流编辑器**
 
+1. `sed`工作流程
 
+   `sed`是一种在线的，非交互式的编辑器，它一次处理一行内容，处理时，把当前处理的存储在临时缓冲区中，称为"模式空间(Pattern space)"，接着用`sed`命令处理缓冲区中的内容，处理完成后，把缓冲区中的内容送往屏幕，接着处理下一行，直到文件末尾。文件内容并没有改变，此非食用重定向存储输出。
+
+2. 命令格式
+
+   `sed [options]  'command'   file(s)`
+
+   `sed [options]  -f scriptsfile file(s)`
+
+   Tips :  `sed`和`grep` 不一样，不管是否找到指定的格式，它的退出状态都是0
+
+3.  支持正则表达式
+
+   - 使用基本元字符集
+   - 使用扩展的元字符集  `sed -r`
+
+4. `sed`基本用法
+
+   `# sed -r 's/root/alice/gi' /etc/passwd     g代表全局，i忽略大小写`  查找替换 
+
+   .......
+
+5. `sed`扩展
+
+   1. 地址
+
+      地址用于决定对哪些进行编辑。地址形式可以是数字，正则表达式或二者的集合，如果没指定则默认处理所有行
+
+      `sed -r 'd' /etc/passwd`
+
+      `sed -r '3d' /etc/passwd`  
+
+      `sed -r '1,3d' /etc/passwd`
+
+      `sed -r '/root/d' /etc/passwd`
+
+      `sed -r '/root/,5d' /etc/passwd` 从匹配到的行开始删掉5行
+
+      `sed -r 's/root/alice/g' /etc/passwd`
+
+      `sed -r '/root/!d' /etc/passwd`
+
+      `sed -r '1~2d' /etc/passwd`  删掉所有的奇数行
+
+      `sed -r '0~2d' /etc/passwd`  删掉所有的偶数行
+
+   2. `sed`命令
+
+      `sed`命令告诉`sed`对指定行进行何种操作，包括打印，删除，修改等
+
+   3. 
+
+6. 
