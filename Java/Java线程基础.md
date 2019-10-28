@@ -264,4 +264,186 @@
    
    ```
 
-5. 
+
+### **生产者消费者模型**
+
+- Demo：
+
+  ```java
+  package producer;
+  
+  import java.util.ArrayList;
+  
+  public class Warehorse {
+      //创库里面的集合
+      private ArrayList<String> arrayList = new ArrayList<>();
+  
+      //向集合内添加元素
+      public synchronized void add(){
+          if (arrayList.size()<20){
+              arrayList.add("a");
+          }else {
+              //return; //让方法执行到这里结束
+              try {
+                  this.notifyAll();
+                  this.wait();   //不是仓库wait，而是访问仓库的线程wait，生产者
+              } catch (InterruptedException e) {
+                  e.printStackTrace();
+              }
+          }
+      }
+  
+      //取元素
+      public synchronized void get(){
+          if (arrayList.size()>0){
+              arrayList.remove(0);
+          }else {
+              //return;
+              try {
+                  this.notifyAll();
+                  this.wait();  //不是仓库wait，而是访问仓库的线程wait，消费者
+              } catch (InterruptedException e) {
+                  e.printStackTrace();
+              }
+          }
+      }
+  }
+  
+  ```
+
+  ```java
+  package producer;
+  
+  public class Producer extends Thread{
+  
+      //为了保证生产者和消费者使用同一个仓库对象，添加一个属性
+      private Warehorse warehorse;
+      public Producer(Warehorse warehorse){
+          this.warehorse = warehorse;
+      }
+  
+      //生产者中的run方法
+      public  void run(){
+          while (true){
+              warehorse.add();
+              System.out.println("生产者存入一个元素");
+              try {
+                  Thread.sleep(200);
+              } catch (InterruptedException e) {
+                  e.printStackTrace();
+              }
+          }
+      }
+  }
+  
+  ```
+
+  ```java
+  package producer;
+  
+  public class Consumer extends Thread {
+  
+      private Warehorse warehorse;
+      public Consumer(Warehorse warehorse){
+          this.warehorse = warehorse;
+      }
+      //消费者的方法，一直拿元素
+      public void run(){
+          while (true){
+              warehorse.get();
+              System.out.println("消费者获取了一个元素");
+              try {
+                  Thread.sleep(300);
+              } catch (InterruptedException e) {
+                  e.printStackTrace();
+              }
+          }
+      }
+  }
+  
+  ```
+
+  ```java
+  package producer;
+  
+  public class TestMain {
+      public static void main(String[] args) {
+          Warehorse warehorse = new Warehorse();//里面有一个ArrayList
+  
+          Producer p = new Producer(warehorse);
+          //设置线程的优先级别1-10
+          p.setPriority(10);
+          Consumer c1 = new Consumer(warehorse);
+          Consumer c2 = new Consumer(warehorse);
+          p.start();
+          c1.start();
+          c2.start();
+      }
+  }
+  
+  ```
+
+1. 通过这个模型演示了线程安全问题
+
+   两个消费者同时访问一个仓库对象， 仓库内只有一个元素的时候
+
+   两个消费者并发访问，可能会产生抢夺资源的问题
+
+2. 解决线程安全问题
+
+   让仓库对象被线程访问的时候，仓库对象被锁定
+
+   `synchorized`   同步，一个时间点只有一个线程访问
+
+   线程安全锁
+
+   - 将`synchronized`关键字，放在方法的结构上
+
+     `public synchronized void test(){}`
+
+     锁定的是调用方法时的那个对象
+
+   - 将`synchronized`关键字放在方法的内部
+
+     public void get(){
+
+     ​		代码
+
+     ​		synchronized(对象){
+
+     ​				代码
+
+     ​		{
+
+     ​		代码
+
+     }
+
+3. 将return修改为wait状态
+
+   `wait()   Object`类中的方法
+
+   对象.wait()    ：不是当前的这个对象wait，而是访问当前这个对象的线程wait
+
+   `notify   notifyAll`
+
+   假死状态，所有线程进入等待状态
+
+4. 通过上述生产消费者模型
+
+   - 利用线程安全锁 特征修饰符 `synchronized`,两种不同的写法
+
+   - 利用方法控制线程状态的来回切换
+
+     `wait    notify    notifyAll`
+
+   - Thread类中的方法
+
+     sleep方法  静态方法(参数 long)
+
+     `setPriority(10)`  设置优先级
+
+     `getPriority();`
+
+### **join方法&死锁&Timer**
+
