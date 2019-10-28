@@ -48,18 +48,18 @@
         |    x{m,}     |    字符x重复至少m次    |      |
         |    x{m,n}    |    字符x重复m到n次     |      |
 
-     3. POSIX字符类
+     3. `POSIX`字符类
 
-        | 表达式    | 功能                             | 示例            |
-        | --------- | -------------------------------- | --------------- |
-        | [:alnum:] | 字母与数字字符                   | [[:alnum:]]+    |
-        | [:alpha:] | 字母字符（包括大小写）           |                 |
-        | [:blank:] | 空格与制表符                     |                 |
-        | [:digit:] | 数字                             | [[:digit:]]?    |
-        | [:lower:] | 小写字母                         | [[:lower:]]{5,} |
-        | [:upper:] | 大写字母                         |                 |
-        | [:punct:] | 标点符号                         |                 |
-        | [:space:] | 包括换行符，回车等在内的所有空白 | [[:space:]]+    |
+        | 表达式      | 功能                             | 示例              |
+        | ----------- | -------------------------------- | ----------------- |
+        | `[:alnum:]` | 字母与数字字符                   | `[[:alnum:]]+`    |
+        | `[:alpha:]` | 字母字符（包括大小写）           |                   |
+        | `[:blank:]` | 空格与制表符                     |                   |
+        | `[:digit:]` | 数字                             | `[[:digit:]]?`    |
+        | `[:lower:]` | 小写字母                         | `[[:lower:]]{5,}` |
+        | `[:upper:]` | 大写字母                         |                   |
+        | `[:punct:]` | 标点符号                         |                   |
+        | `[:space:]` | 包括换行符，回车等在内的所有空白 | `[[:space:]]+`    |
 
 3. 正则表达式示例
 
@@ -196,16 +196,83 @@
 
 6. `sed`命令示例
 
-   删除命令
+   删除命令：d
 
    - `sed -r '3d' /etc/passwd`     删除第三行
    - `sed -r '3{d;}' /etc/passwd`     删除第三行
    - `sed -r '3{d}' /etc/passwd`     删除第三行
    - `sed -r '$d' /etc/passwd`       删除最后一行
 
-   替换命令
+   替换命令：s
 
    - `sed -r 's/west/north/g' datafile`
-   - 
+   - `sed -r 's/[0-9][0-9]$/&.5/' datafile`  #&表示在查找串中匹配到的内容
 
-7. 
+   读文件命令：r
+
+   - `sed -r '2r' /etc/hosts a.txt`   第二行的时候读入文件
+   - `sed -r /2/r /etc/hosts a.txt`    匹配到带有2的行
+
+   写文件命令：w   写入到新文件
+
+   - `sed -r '/root/w /tmp/newfile'datafile`
+   - `sed -r '3,$w /tmp/newfile' datafile`
+
+   追加命令：a
+
+   插入命令：i
+
+   获取下一行命令：n
+
+   暂存和去用命令：h	H	g	G(小写字母覆盖，大写字母追加)
+
+   - `sed -r '1h;$G' /etc/hosts`     将第一行内容放到暂存空间，并追加到最后一行后面
+   - `sed -r '1{h;d};$G' /etc/hosts`    将第一行内容移到暂存空间后删除，然后将暂存空间放到最后一行
+   - `sed -r '1h;2,$g' /etc/hosts`    
+   - `sed -r '1h;2,3H;$G' /etc/hosts`
+
+   暂存空间和模式空间呼唤命令：x
+
+   多重编辑选项：-e
+
+7. `sed`常见操作
+
+   - 删除配置文件中#号注释行
+
+     `sed -ri '/^#/d' file.conf`
+
+     `sed -ri '/^[ \t]*#/d' file.conf`   #号之前有空格或\t
+
+   - 删除//注释的行
+
+     `sed -ri '\#^[ \t]*//#d' file.conf`
+
+   - 删除空行
+
+     `sed -ri '/^[ \t]*$/d' file.conf`
+
+   - 修改文件
+
+     `sed -ri '$a\chroot_local_user=YES' /etc/vsftpd/vsftpd.conf`  最后一行追加`chroot_local_user=YES`
+
+     `sed -ri '/^SELINUX=/cSELINUX=disable' /etc/selinu/config`     #找到以`SELINUX`开头的行，整行替换为`SELINUX=disable`
+
+   - 给文件行添加注释
+
+     `sed -r '2,6s/^/#/' a.txt`
+
+     `sed -r '2,6s/(.*)/#\1/' a.txt`
+
+     `sed -r '2,6s/.*/#&/' a.txt`
+
+     `sed -r '2,6s/^#*/#/' a.txt`   将行首的0到多个#替换为一个#
+
+   - `sed`中使用外部变量
+
+     `var1=123456`
+
+     `sed -ri '3a$var1' /etc/hosts `  第三行后追加`$var1`的内容
+
+     `sed -ri '$a'"$var1" /etc/hosts`    最后一行追加变量中的内容
+
+8. 
