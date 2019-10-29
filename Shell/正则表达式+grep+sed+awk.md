@@ -275,4 +275,77 @@
 
      `sed -ri '$a'"$var1" /etc/hosts`    最后一行追加变量中的内容
 
-8. 
+
+### **`awk`文本处理**
+
+1. `awk`简介
+
+   `awk`是一种编程语言，用于在Linux/Unix下对文本和数据进行处理。数据可以来自标准输入、一个或多个文件，或其他命令的输出。它支持用户自定义函数和动态正则表达式等先进功能，是Linux下一个强大编程工具。
+
+   `awk`通过逐行扫描文件，从第一行到最后一行，寻找匹配的特定模式的行，并在这些行上进行你想要的操作。
+
+2. `awk`的两种新式的语法格式
+
+   `awk [options] 'commands' filenames`
+
+   `awk [options] -f awk-script-file filenames`
+
+   - options:
+
+     -F  定义输入字段分隔符，默认的分隔符是空格或者\t制表符
+
+   - command:
+
+     `BEGIN{}`   行处理前
+
+     `{}`			  行处理
+
+     `END{}`	  行处理后
+
+     `# awk 'BEGIN{print 1/2}{print "ok"}END{pring "-----"}' /etc/hosts`
+
+     `# awk 'BEGIN{FS=":"}{print $1}' /etc/passwd`
+
+     `# awk 'BEGIN{FS=":";OFS="---"}{print $1,$2}' /etc/passwd`  #FS输入分隔符，OFS输出分隔符
+
+   - `awk`命令格式
+
+     `awk 'pattern' filename`     
+
+     `awk '{action}' filename`
+
+     `awk 'pattern{action}' filename`
+
+     `COMMAND |awk 'pattern{action}'`
+
+3. `awk`工作原理
+
+   `awk -F: '{print $1,$3}' /etc/passwd`
+
+   1. `awk`使用一行作为输入，并将这一行赋值给内部变量$0,每一行也可称为一个记录，以换行符结束
+   2. 然后行被：(默认为空格或制表符)分解成字段（或域），每个字段存储在已编号的变量中，从$1开始，最多100个字段
+   3. `awk`如何知道用空格来分割字段呢？因为有一个内部变量FS来确定字段分隔符。初始时，FS赋为空格
+   4. `awk`打印字段时，将已设置的方法使用print函数打印，`awk`在打印的字段间加上空格，因为$1,$3之间有一个逗号，逗号比较特殊，它映射为另一个内部变量，称为输出字段分隔符OFS，OFS默认为空格。
+   5. `awk`输出之后，将从文件中获取另一行，并将其存在$0中，覆盖原来的内容，然后将新的字符串分割成字段并进行处理。
+
+4. 记录与字段相关的内部变量
+
+   - `$0`   `awk`变量$0保存当前记录的内容  `awk -F":" '{print $0}' /etc/passwd`
+
+   - `NR`：  所有输入文件行号 `awk -F":" '{print NR,$0}' /etc/passwd /etc/hosts`   多个文件
+
+   - `FNR`：  当前输入文件行号  `awk -F":" '{print FNR,$0}' /etc/passwd /etc/hosts`   多个文件
+
+   - `NF`：保存记录的字段数    每一行按照分隔符有几个字段
+
+   - `FS`：输入字段分隔符`field separator` 
+
+   - `OFS`：输出字段分隔符
+
+   - `RS`： 记录分隔符`record separator`  默认为换行符
+
+   - `ORS`：输出记录分隔符
+
+     `awk 'BEGIN{ORS=""}{print $0}' /etc/passwd`  将文件每一行合并为一行
+
+5. 
