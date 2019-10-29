@@ -447,3 +447,152 @@
 
 ### **join方法&死锁&Timer**
 
+1. join方法
+
+   两个线程并行变成单线程
+
+   ```java
+   package testjoin;
+   
+   public class Thread1 extends Thread{
+       public void run(){
+           System.out.println("Thread-one Start");
+           Thread2 thread2 = new Thread2();
+           thread2.start();
+           try {
+               thread2.join(2000);  //线程2加入线程1里面
+               /*
+               * 1.有两个线程， two加入one，在one的run里面创建
+               * 2.thread2.join();
+               * 3.synchronized 一旦有对象被锁定，不释放的情况下，其它对象都要等待
+               * */
+           } catch (InterruptedException e) {
+               e.printStackTrace();
+           }
+           System.out.println("Thread=ont End");
+       }
+   }
+   ```
+
+   ```java
+   package testjoin;
+   
+   public class Thread2 extends Thread{
+       public void run(){
+           System.out.println("Thread-two Start");
+           Thread3 thread3 = new Thread3(this);
+           thread3.start();
+   
+           try {
+               Thread.sleep(5000);
+           } catch (InterruptedException e) {
+               e.printStackTrace();
+           }
+           System.out.println("Thread-two End");
+       }
+   }
+   
+   ```
+
+   ```java
+   package testjoin;
+   
+   public class Thread3 extends Thread{
+       private Thread2 thread2;
+       public Thread3(Thread2 thread2){
+           this.thread2 = thread2;
+       }
+       //在two执行的过程中，one等待的过程中  three将two锁定
+       public void run(){
+           System.out.println("Thread-three Start");
+           synchronized (thread2){
+               System.out.println("thread2 is locked");
+               try {
+                   Thread.sleep(10000);
+               } catch (InterruptedException e) {
+                   e.printStackTrace();
+               }
+               System.out.println("thread2 is free");
+           }
+           System.out.println("Thread-three End");
+       }
+   }
+   
+   ```
+
+   ```java
+   package testjoin;
+   
+   public class TestMain {
+       public static void main(String[] args) {
+           Thread1 thread1 = new Thread1();
+           thread1.start();
+       }
+   }
+   ```
+
+2. 死锁的效果
+
+   经典的哲学家就餐问题
+
+   解决：
+
+   - 时间差
+   - 不要产生对象共用的问题
+
+### **计时器/定时器---->线程应用**
+
+1. Timer类
+
+2. 示例
+
+   ```java
+   package timer;
+   
+   import java.text.ParseException;
+   import java.text.SimpleDateFormat;
+   import java.util.ArrayList;
+   import java.util.Date;
+   import java.util.Timer;
+   import java.util.TimerTask;
+   
+   public class TestTimer {
+   
+       //设计一个方法
+       //每隔一段时间发送一些数据
+       //属性  集合
+       private ArrayList<String> userBox = new ArrayList<>();
+       {
+           userBox.add("a");
+           userBox.add("b");
+           userBox.add("c");
+           userBox.add("d");
+       }
+   
+       public void test() throws ParseException {
+           Timer timer = new Timer();
+           SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+           Date firstTime = simpleDateFormat.parse("2019-10-29 10:45:00");
+           timer.schedule(new  TimerTask(){
+               @Override
+               public void run() {
+                   for (int i=0;i<userBox.size();i++){
+                       System.out.println("给"+userBox.get(i)+"发送了一条消息");
+                   }
+               }
+           },firstTime,3000);
+       }
+   
+       public static void main(String[] args) {
+           TestTimer testTimer = new TestTimer();
+           try {
+               testTimer.test();
+           } catch (ParseException e) {
+               e.printStackTrace();
+           }
+       }
+   }
+   
+   ```
+
+   
