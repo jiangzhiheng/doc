@@ -412,8 +412,24 @@
 
      `awk -F: '{if($3>300) {print $0}}' /etc/passwd`
 
-   - 算术运算
+   - 算术运算 ：`+ - * / %(取模) ^(幂2^3)`
+
+     可以在模式中执行计算，`awk`都按浮点数方式执行算术运算
+
+     `awk -F: '{if($3*10>500){print $0}}' /etc/passwd`
 
    - 逻辑操作符和复合模式
+
+     `&&     ||    !`
+
+     `awk -F: '$1~/root/ && $3<=15' /etc/passwd`
+
+     `awk -F: '!($1~/root || $3<=15)' /etc/passwd`
+
+   - 范围模式
+
+     `awk '/Tom/,/Suzanne/' filename`
+
+   - 
 
 7. 
