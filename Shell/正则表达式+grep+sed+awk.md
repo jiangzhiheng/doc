@@ -430,6 +430,68 @@
 
      `awk '/Tom/,/Suzanne/' filename`
 
-   - 
+7. `awk`流程控制
 
-7. 
+   - 条件判断
+
+     格式：{ if(表达式){语句1；语句2；......} }
+
+     `awk -F: '{ if($3==0){print $1 " is administrator."} }' /etc/passwd`
+
+     `awk -F: '{ if($3>0 && $3<1000){count++}} END{print count }' /etc/passwd`   //统计系统用户数
+
+   - if...else语句
+
+     `awk -F: '{ if($3==0){print $1} else{print $7} }' /etc/passwd`
+
+     `awk -F: '{ if($3==0){count++}else{i++} }END{print"管理员个数： "count;print"系..用户数： "i}' /etc/passwd`
+
+   - if...else if...else语句
+
+   - 循环
+
+     1. while
+
+        `awk 'BEGIN{ i=1;while(i<=10){ print i;i++ } }'`
+
+        `awk -F: '{i=1;while(i<=10){print $0; i++}}' /etc/passwd`  //每行打印10次
+
+        `awk '{i=1;while(i<=NF){print $i;i++}}'  a.txt` //分别打印每行的每列
+
+     2. for
+
+        `awk 'BEGIN{ for(i=1;i<=5;i++){print i} }'`
+
+        `awk '{for(i=1,i<=NF;i++){print $i}}' a.txt`   //分别打印每行的每列
+
+8. `awk`数组
+
+   1. 数组定义
+
+      `awk -F: '{username[++i]=$1}END{print username[1]}' /etc/passwd`
+
+      `awk -F: '{username[i++]=$1}END{print username[0]}' /etc/passwd`
+
+   2. 数组遍历
+
+      `awk -F: '{ username[j++]=$1 }END{ for(i in username){print i,username[i]} }' /etc/passwd`
+
+      `awk -F: '{ username[++j]=$1 }END{ for(i in username){print i,username[i]} }' /etc/passwd`
+
+   3. 示例
+
+      - 统计当前系统中各shell的数量
+
+        `awk -F: '{shells[$NF]++} END{ for( i in shells){print i,shells[i]} }' /etc/passwd`
+
+      - 统计网站访问状态<当前实时状态 `netstat -ant`>
+
+        `netstat -ant|grep ':80' |awk '{status[$NF]++}END{ for(i in status){print i,status[i]} }'`
+
+        `netstat -ant|grep ':80' |awk '{status[$NF]++}END{ for(i in status){print i,status[i]} }'|sort -k2 -n|head`  从小到大排序
+
+        `ss -an|grep ':80' |awk '{status[$2]++}END{ for(i in status){print i,status[i]} }'|sort -k2 -n|head`
+
+      - 
+
+9. 
