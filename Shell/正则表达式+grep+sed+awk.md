@@ -492,6 +492,36 @@
 
         `ss -an|grep ':80' |awk '{status[$2]++}END{ for(i in status){print i,status[i]} }'|sort -k2 -n|head`
 
-      - 
+      - 统计`Apache/Nginx`日志中某一天的`PV`量<统计日志>
+      
+        `grep '07/Aug/2019' access.log |wc -l`
+      
+      - 统计`Apache/Nginx`日志中某一天不同`IP`的访问量 top10
+      
+        `awk '/07\/Aug\/2019/{ips[$1]++}END{for(i in ips){print i,ips[i]}}' access.log |sort -k2 -rn|head`
 
-9. 
+9. `awk`使用外部变量
+
+   `awk`函数 统计用户名为四个字符的用户
+
+   `awk -F: 'length($1)==4{count++;print $1}END{print "count is "count}' /etc/passwd`
+
+   1. 使用外部变量01(双引号)
+
+      `# var="bash"`
+
+      `# echo "unix scritps" |awk "gsub(/unix/,\"$var\")"`   `#gsub为awk内置函数，用于查找替换`
+
+   2. 使用外部变量02(单引号)
+
+      `# echo "unix scritps" |awk 'gsub(/unix/,"'"$var"'")'`  #双引号中间套一个单引号
+
+   3. 使用外部变量03
+
+      `[root@martin ~]# i=10`
+      `[root@martin ~]# df -h|awk '{ if(int($5)>'''$i'''){print $6":"$5} }'`
+
+   4. 使用外部变量04     -v参数
+
+      ` echo "unix scritps" |awk -v var=bash 'gsub(/unix/,var)'`
+
