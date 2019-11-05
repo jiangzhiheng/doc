@@ -1,4 +1,4 @@
-1. 分析系统资源性能瓶颈
+1. ### **分析系统资源性能瓶颈**
 
    脚本功能：
 
@@ -259,4 +259,62 @@
 
    
 
-2. 
+2. ### **判断主机存活状态**
+
+   示例01
+
+   ```shell
+   #!/bin/bash
+   #
+   ip_list="192.168.1.158 192.168.1.129 192.168.1.130"
+   
+   #while read ip
+   for ip in $ip_list
+   do
+           for count in {1..3}
+           do
+                   ping -c1 -W1 $ip &>/dev/null
+                   if [ $? -eq 0 ];then
+                           echo "$ip is ok"
+                           break
+                   else
+                           echo "$ip ping is failure: $count"
+                           fail_count[$count]=$ip
+                   fi
+           done
+           if [ ${#fail_count[*]} -eq 3 ];then
+                   echo "${fail_count[1]} ping is failure!"
+                   unset fail_count[*]
+           fi
+   done
+   #done <$1
+   ```
+
+   示例02
+
+   ```shell
+   #!/bin/bash
+   #
+   ping_success(){
+           ping -c1 -W1 $ip &>/dev/null
+           if [ $? -eq 0 ];then
+                   echo "$ip is ok"
+                   continue
+           fi
+   }
+   
+   while read ip
+   do
+           ping_success
+           ping_success
+           ping_success
+           echo "$ip ping is failure!"
+   done < $1
+   
+   ```
+
+   
+
+3. 
+
+   
