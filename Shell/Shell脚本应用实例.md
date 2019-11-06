@@ -315,6 +315,49 @@
 
    
 
-3. 
+3. ### **`Nginx`日志分析**
+
+   1. `Nginx`日志分析
+   
+      日志格式：
+   
+      ```nginx
+      log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                            '$status $body_bytes_sent "$http_referer" '
+                            '"$http_user_agent" "$http_x_forwarded_for"';
+      # $remote_addr  $1
+      # $time_local   $4
+      # $request	    $7
+      # $status       $9
+      # $body_bytes_sent  $10
+      ```
+   
+      - 统计2019年9月5日`PV`量
+   
+        `grep '06/Nov/2019' /var/log/nginx/access.log |wc -l`
+   
+        `awk '$4>="[06/Nov/2019:22:30:20 && $4<=[06/Nov/2019:22:40:00"{print $0}' /var/log/nginx/access.log |wc -l`   统计具体某一时段的PV量
+   
+      - 统计2019年9月5日访问最多的10个`IP(Top10)`
+   
+        `awk '/06\/Nov\/2019/{ips[$1]++}END{for(i in ips){print i,ips[i]}}' /var/log/nginx/access.log |sort -k2 -rn |head -n10`
+   
+      - 统计2019年9月5日访问大于100次的`IP ` 
+   
+        `awk '/06\/Nov\/2019/{ips[$1]++}END{for(i in ips){if(ips[i]>100){print i,ips[i]}}}' /var/log/nginx/access.log`
+   
+      - 统计2019年9月5日访问最多的10个页面` $request top10`
+   
+        `awk '/06\/Nov\/2019/{urls[$1]++}END{for(i in urls){if(urls[i]>100){print i,urls[i]}}}' /var/log/nginx/access.log |sort -k2 -rn |head -n10` 
+   
+      - 统计2019年9月5日 每个URL访问内容总大小`($body_bytes_sent)`
+   
+        `awk '/06\/Nov\/2019/{size[$7]+=$10}END{for(i in size){print i,size[i]}}' /var/log/nginx/access.log |sort -k2 -rn |head -10`
+   
+      - 
+   
+   2. 
+   
+4. 
 
    
