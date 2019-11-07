@@ -354,10 +354,50 @@
    
         `awk '/06\/Nov\/2019/{size[$7]+=$10}END{for(i in size){print i,size[i]}}' /var/log/nginx/access.log |sort -k2 -rn |head -10`
    
-      - 
+      - 统计2019年9月5日每个`IP`访问状态码数量`($status)`
    
-   2. 
+        `awk '/06\/Nov\/2019/{ip_code[$1" "$9]++}END{for (i in ip_code){print i,ip_code[i]}}' /var/log/nginx/access.log |sort -k1 -rn |head -n10`
    
-4. 
+      - 统计2019年9月5日`IP`访问状态码为404及出现次数
+   
+        `awk '/06\/Nov\/2019/{if($9=="404"){ip_code[$1" "$9]++}}END{for(i in ip_code){print i,ip_code[i]}}' /var/log/nginx/access.log |sort -k2 -rn|head`
+   
+      - 统计前一分钟的`PV`量
+   
+        `date=$(date -d '1 minute' +%d/%b/%Y:%H:%M);awk -v date=$date '$0 ~ date{i++}END{print i}' /var/log/nginx/access.log`
+   
+      - 统计2019年9月5日`8：30---9：00`之间访问状态码404
+   
+        `awk '$4>="[06/Nov/2019:22:30:00 && $4<=[06/Nov/2019:23:00:00"{if($9=="404"){ip_code[$1" "$9]++}}END{for(i in  ip_code){print i,ip_code[i]}}' /var/log/nginx/access.log`
+   
+      - 统计2019年9月5日各种状态码数量
+   
+        `awk '/06\/Nov\/2019/{code[$9]++}END{for (i in code){print i,code[i]}}' /var/log/nginx/access.log`
+   
+4. ### **备份保存**
+
+   需求：
+   
+   - 定期删除/data目录下修改时间大于7天的文件
+   
+     `find /data -mtime +7 -exec -rf {} \;`
+   
+     `find /data -mtime +7 |xargs rm -rf`
+   
+   - 定期清理`/data/YY-DD-MM.tar.gz`
+   
+     该目录仅工作日周一至周五自动生成文件`/data/YY-DD-MM.tar.gz`
+   
+     希望只保留最近两天的文件
+   
+     无论过几个节假日/data仍会有前两个工作日的备份文件
+   
+     `ls -t /data/*.tar.gz |awk 'NR>2'|xargs rm -rf`   #原理是利用ls命令按照时间排序功能，并且利用`awk`筛选出行号大于2的其它文件进行删除
+   
+     `ls -t /data/*.tar.gz |awk 'NR>2{print "rm -f "$0}' |bash`
+   
+     
+   
+5. 
 
    
