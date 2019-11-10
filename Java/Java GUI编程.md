@@ -143,6 +143,12 @@
    
    ```
 
-   
+3. 登录功能
 
-3. 
+   MVC架构
+
+   - V:View      视图层
+   - C:Controller    控制层
+   - M:Model     模型层（数据存储DAO， 数据读取，数据处理Service）
+
+4. 
