@@ -1,0 +1,11 @@
+以下哪个是Java的基本数据类型？<br>   A.String<br>   B.Integer<br>   C.Boolean<br>   D.Math#C
+以下哪个是Java的引用数据类型？<br>   A.String<br>   B.int<br>   C.char<br>   D.float#A
+以下那个不是Object类中的方法？<br>   A.equals<br>   B.hashCode<br>   C.toString<br>   D.compareTo#D
+以下哪个不是String类中的方法？<br>   A.charAt<br>   B.reverse<br>   C.replace<br>   D.indexOf#
+以下那个是Java中非法标识符？<br>   A.variable<br>   B.variable2<br>   C.%variable<br>   D._varaiable#C
+以下哪个选项用于编译源文件？<br>   A.javac<br>   B.java<br>   C.path<br>   D.classPath#A
+经过编译后形成的文件后缀名？<br>   A. .obj<br>   B. .exe<br>   C. .class<br>   D. .java#C
+未编译前的文件后缀名？<br>   A. .obj<br>   B. .exe<br>   C. .class<br>   D. .java#D
+下面那个写法声明数组正确？<br>   A.char[] a = new char[10];<br>  B. float f = new float[10]<br>   C.char[] c = new char('10')<br>   D. byte[] b = new byte[]#A
+下面那个选项是k-v形式？<br>   A.ArrayList<br>   B.HashMap<br>   C. LinkedList<br>   D.Vector#C
+
