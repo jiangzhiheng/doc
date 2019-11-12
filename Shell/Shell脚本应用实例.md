@@ -455,8 +455,106 @@
    
 6. 多机部署LNMP
 
-   
-   
-7. 
+7. 配合`Zabbix`信息采集
 
+   1. TCP连接状态收集
+   
+      ```shell
+      #!/bin/bash
+      # tcp status for zabbix
+      LISTEN(){
+              ss -an|grep '^tcp' |grep 'LISTEN'|wc -l
+      }
+      
+      SYN_RECV(){
+               ss -an|grep '^tcp' |grep 'SYN[_-]RECV'|wc -l
+      }
+      
+      ESTABLISHED(){
+              ss -an|grep '^tcp' |grep 'ESTAB'|wc -l
+      }
+      
+      TIME_WAIT(){
+              ss -an|grep '^tcp' |grep 'TIME[_-]WAIT'|wc -l
+      }
+      
+      $1   #执行$1传入的参数所代表的函数
+      ```
+   
+   2. `Mysql`状态信息收集
+   
+      ```shell
+      #!/bin/bash
+      # mysql for zabbix
+      
+      Uptime(){
+              mysqladmin status|awk '{print $2}'
+      }
+      
+      Slow_queries(){
+              mysqladmin status|awk '{print $9}'
+      }
+      
+      Com_insert(){
+              mysqladmin extended-status |awk '/\<Com_insert\>/{print $4}'
+      }
+      
+      Com_delete(){
+              mysqladmin extended-status |awk '/\<Com_delete\>/{print $4}'
+      }
+      
+      Com_update(){
+              mysqladmin extended-status |awk '/\<Com_update\>/{print $4}'
+      }
+      
+      Com_select(){
+              mysqladmin extended-status |awk '/\<Com_select\>/{print $4}'
+      }
+      
+      Com_commit(){
+              mysqladmin extended-status |awk '/\<Com_commit\>/{print $4}'
+      }
+      Com_rollback(){
+              mysqladmin extended-status |awk '/\<Com_rollback\>/{print $4}'
+      }
+      
+      $1
+      
+      ```
+   
+   3. 内存信息收集
+   
+      ```shell
+      #!/bin/bash
+      # memory status for zabbix
+      MemTotal(){
+              awk '/^MemTotal/{print $2}' /proc/meminfo
+      }
+      
+      MemFree(){
+              awk '/^MemFree/{print $2}' /proc/meminfo
+      }
+      
+      Buffers(){
+              awk '/^Buffers/{print $2}' /proc/meminfo
+      }
+      
+      Dirty(){
+              awk '/^Dirty/{print $2}' /proc/meminfo
+      }
+      
+      Cached(){
+              awk '/^Cached/{print $2}' /proc/meminfo
+      }
+      
+      SwapTotal(){
+              awk '/^SwapTotal/{print $2}' /proc/meminfo
+      }
+      
+      $1
+      
+      ```
+   
+      
+   
    
