@@ -238,4 +238,109 @@
    }
    ```
 
-6. 
+
+二、Nginx日志管理
+
+`https://nginx.org/en/docs/http/ngx_http_log_module.html`
+
+`ngx_http_log_module`
+
+- Nginx日志配置相关指令
+  - log_format
+  - access_log
+  - error_log
+  - open_log_file_cache
+
+1. log_format指令
+
+   ```shell
+   Syntax:	access_log path [format [buffer=size] [gzip[=level]] [flush=time] [if=condition]];
+   access_log off;
+   Default:	
+   access_log logs/access.log combined;
+   Context:	http, server, location, if in location, limit_except
+   ```
+
+   - name   	表示格式名称
+   - string       表示定义的儿是
+
+   注意： 如果nginx位于负载均衡器，squid，nginx反向代理之后，web服务器无法直接获取到客户端真实Ip地址，$remote_addr获取的是反向代理的IP地址，反向代理服务器在转发请求的http头信息中，可以增加$http_x_forwarded_for信息。
+
+   日志格式允许包含的变量：
+
+   - $remote_addr    $http_x_forwarded_for   记录客户端IP地址
+   - $remote_user    记录客户端名称
+   - $request  记录请求的URL和HTTP协议
+   - $status    记录请求状态
+   - $body_bytes_sent     发送给客户端的字节数，不包括相应头的大小
+   - $http_referer   
+   - $bytes_sent    发送给客户端的总字节数
+   - $http_user_agent     记录客户端浏览器相关信息
+   - connection   连接的序列号
+   - $msec   日志写入时间，单位为秒
+   - $connection_requests  当前通过一个链接获得的请求数量
+   - $http_referer  记录从哪个页面链接访问来的
+   - $time_local   通用日志格式下的本地时间
+   - $time_iso8601   ISO8601标准下的本地时间
+   - $request_length   请求处理时间
+
+2. access_log指令
+
+   ```shell
+   Syntax:	access_log path [format [buffer=size] [gzip[=level]] [flush=time] [if=condition]];
+   access_log off;
+   Default:	
+   access_log logs/access.log combined;
+   Context:	http, server, location, if in location, limit_except
+   ```
+
+   - gzip   压缩等级
+   - buffer   设置内存缓存区大小
+   - flush    保存在缓存区中的最长时间
+
+3. open_log_file_cache指令
+
+   ```shell
+   Syntax:	open_log_file_cache max=N [inactive=time] [min_uses=N] [valid=time];
+   open_log_file_cache off;
+   Default:	
+   open_log_file_cache off;
+   Context:	http, server, location
+   ```
+
+   对于每一条日志记录，都将先打开文件，再写入日志，然后关闭。可以使用open_log_file_cache设置日志文件缓存(默认是off)，格式如下
+
+   - max   设置缓存中最大文件描述符数量，如果缓存被占满，采用LCR算法将描述符关闭
+   - inactive  设置存活时间 默认10s
+   - min_uses   设置在inactive时间段内，日志文件最少使用多少次后，该日志文件描述符记入缓存，默认1次
+   - valid：设置检查频率，默认60s
+   - off   禁用缓存
+
+   示例：
+
+   `open_log_file_cache  max=1000 inactive=20s valid=1m  min_uses=2`
+
+4. error_log
+
+三、Nginx日志轮转
+
+`/etc/logrotate.d/nginx`
+
+```shell
+/var/log/nginx/*.log {
+        daily     #每天切割
+        missingok
+        rotate 52
+        compress
+        delaycompress
+        notifempty
+        create 640 nginx adm
+        sharedscripts
+        postrotate
+                if [ -f /var/run/nginx.pid ]; then
+                        kill -USR1 `cat /var/run/nginx.pid`
+                fi
+        endscript
+}
+```
+

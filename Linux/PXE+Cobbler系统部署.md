@@ -206,6 +206,8 @@
 
       cp centos7.ks /var/ftp/
 
+      Tisps：注意ks文件权限为644
+      
       ```shell
       label linux
         menu label ^Install CentOS 7
