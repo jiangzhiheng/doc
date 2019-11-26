@@ -601,8 +601,331 @@
 
    一种事物的多种形态，都可以按照统一的接口进行操作
 
+   ```go
+   package main
+   
+   import (
+   	"fmt"
+   	"math/rand"
+   	"sort"
+   )
+   
+   type Student struct {
+   	Name string
+   	Id   string
+   	Age  int
+   }
+   type Book struct {
+   	Name   string
+   	Author string
+   }
+   
+   type StudentArray []Student
+   
+   func (p StudentArray) Len() int {
+   	return len(p)
+   }
+   func (p StudentArray) Less(i, j int) bool {
+   	return p[i].Name < p[j].Name
+   }
+   func (p StudentArray) Swap(i, j int) {
+   	p[i], p[j] = p[j], p[i]
+   }
+   
+   func main() {
+   	var stus StudentArray
+   	for i := 0; i < 10; i++ {
+   		stu := Student{
+   			Name: fmt.Sprintf("stu%d", rand.Intn(100)),
+   			Id:   fmt.Sprintf("110%d", rand.Int()),
+   			Age:  rand.Intn(100),
+   		}
+   		stus = append(stus, stu)
+   	}
+   	for _, v := range stus {
+   		fmt.Println(v)
+   	}
+   	fmt.Println("\n\n")
+       //如果想要自定义类型实现sort排序，需要先实现sort.go中的接口，也就是说自定义类型必须是可排序的
+   	sort.Sort(stus)
+   	for _, v := range stus {
+   		fmt.Println(v)
+   	}
+   }
+   
+   ```
+
 6. 接口嵌套
 
    一个接口可以嵌套在另外的接口
 
+   ```go
+   package main
+   
+   import "fmt"
+   
+   type Reader interface {
+   	Read()
+   }
+   type Writer interface {
+   	Write()
+   }
+   type ReadWriter interface {
+   	Reader
+   	Writer
+   }
+   
+   type File struct {
+   }
+   
+   func (f *File) Read() {
+   	fmt.Println("Read data")
+   }
+   func (f *File) Write() {
+   	fmt.Println("Write data")
+   }
+   func Test(rw ReadWriter) {
+   	rw.Read()
+   	rw.Write()
+   }
+   func main() {
+   	var f File
+   	Test(&f)
+   }
+   
+   ```
+
 7. 类型断言
+
+   由于接口是一般类型，不知道具体类型，如果要转成具体类型，可以采用以下方法进行转换
+
+   `可以用switch x.(type)`
+
+   ```go
+   package main
+   
+   import "fmt"
+   
+   func Test(a interface{}) {
+   	b, ok := a.(int)
+   	if ok == false {
+   		fmt.Println("convert failed")
+   	}
+   	b += 3
+   	fmt.Println(b)
+   }
+   func Just(items ...interface{}) {
+   	for index, v := range items {
+   		switch v.(type) {
+   		case bool:
+   			fmt.Printf("%d parms is bool,value is %v\n", index, v)
+   		case int, int32, int64:
+   			fmt.Printf("%d parms is int,value is %v\n", index, v)
+   		case float32, float64:
+   			fmt.Printf("%d parms is float,value is %v\n", index, v)
+   		case string:
+   			fmt.Printf("%d parms is string,value is %v\n", index, v)
+   		}
+   	}
+   }
+   
+   func main() {
+   	var b int
+   	Test(b)
+   	Just(28, 2.4, 45, "hah")
+   }
+   
+   ```
+
+8. 空接口interface{}
+
+   空接口没有任何方法，所有所有类型都实现了空接口
+
+9. 判断一个变量是否实现了指定接口，只需查看改变了有没有实现接口的所有方法
+
+10. 实现一个通用的链表类
+
+    ```go
+    package main
+    
+    //实现一个通用的链表
+    import "fmt"
+    
+    type LinkNode struct {
+    	data interface{}
+    	next *LinkNode
+    }
+    
+    type Link struct {
+    	head *LinkNode
+    	tail *LinkNode
+    }
+    
+    func (p *Link) InsertHead(data interface{}) {
+    	node := &LinkNode{
+    		data: data,
+    		next: nil,
+    	}
+    	if p.tail == nil && p.head == nil {
+    		p.tail = node
+    		p.head = node
+    		return
+    	}
+    	node.next = p.head
+    	p.head = node
+    }
+    func (p *Link) InsertTail(data interface{}) {
+    	node := &LinkNode{
+    		data: data,
+    		next: nil,
+    	}
+    	if p.tail == nil && p.head == nil {
+    		p.tail = p.head
+    		return
+    	}
+    	p.tail.next = node
+    	p.tail = node
+    }
+    
+    func (p *Link) Trans() {
+    	q := p.head
+    	for q != nil {
+    		fmt.Println(q.data)
+    		q = q.next
+    	}
+    }
+    
+    ```
+
+11. 实现一个负载均衡调度算法，支持随机，轮询等算法
+
+### 三、反射
+
+1. 可以在运行时动态获取变量的相关信息
+
+   `import reflect`
+
+   - `reflect.TypeOf`   获取变量的类型，返回`reflect.Type`类型
+   - `reflect.ValueOf`   获取变量的值，返回`reflect.Value`类型
+   - `relfect.Value.Kind`  获取变量的类别，返回一个常量
+   - `reflect.Value.Interface()`   转换成`interface{}`类型
+
+   ```go
+   package main
+   
+   import (
+   	"fmt"
+   	"reflect"
+   )
+   
+   type Student struct {
+   	Name  string
+   	Age   int
+   	Score int
+   }
+   
+   func test(b interface{}) {
+   	t := reflect.TypeOf(b)
+   	fmt.Println(t)
+   
+   	v := reflect.ValueOf(b)
+   	k := v.Kind()
+   	fmt.Println(k)
+   
+   	iv := v.Interface()
+   	stu, ok := iv.(Student)
+   	if ok {
+   		fmt.Printf("%v %T\n", stu, stu)
+   	}
+   }
+   
+   func testInt(b interface{}) {
+   	val := reflect.ValueOf(b)
+   	val.Elem().SetInt(100) //反射里面对指针操作Elem()
+   	c := val.Elem().Int()
+   	fmt.Printf("Get value interface{} %d\n", c)
+   
+   }
+   func main() {
+   	var a Student = Student{
+   		Name:  "Martin",
+   		Age:   18,
+   		Score: 99,
+   	}
+   	test(a)
+   	var b int = 1
+   	testInt(&b)
+   	fmt.Println(b)
+   }
+   
+   //main.Student
+   //struct
+   //{Martin 18 99} main.Student
+   //Get value interface{} 1234
+   
+   ```
+
+2. 通过反射设置变量的值
+
+   注意值传递和指针的影响
+
+3. 操作结构体
+
+   - `reflect.Value.NumField()` 获取结构体中字段的个数
+   - `reflect.Value.Method(n).Call` 调用结构体中的方法
+
+   ```go
+   package main
+   
+   import (
+   	"fmt"
+   	"reflect"
+   )
+   
+   type Student struct {
+   	Name  string
+   	Age   int
+   	Score int
+   }
+   
+   func (s Student) SetFiled(name string, age int, score int) {
+   	s.Name = name
+   	s.Age = age
+   	s.Score = score
+   }
+   func (s Student) Print() {
+   	fmt.Println(s)
+   }
+   
+   func TestStruct(a interface{}) {
+   	val := reflect.ValueOf(a)
+   	kind := val.Kind()
+   	if kind != reflect.Struct { //判断是否为结构体
+   		fmt.Println("expect struct!")
+   		return
+   	}
+   	num := val.NumField()
+   	for i := 0; i < num; i++ {
+   		fmt.Printf("%d %v\n", i, val.Field(i))
+   	}
+   	fmt.Printf("struct has %d filed\n", num)
+   
+   	numOfMethod := val.NumMethod()
+   	fmt.Printf("struct has %d method\n", numOfMethod)
+   
+   	var parms []reflect.Value
+   	val.Method(0).Call(parms)
+   }
+   
+   func main() {
+   	var a Student = Student{
+   		Name:  "stu01",
+   		Age:   18,
+   		Score: 89,
+   	}
+   	TestStruct(a)
+   }
+   
+   ```
+
+   

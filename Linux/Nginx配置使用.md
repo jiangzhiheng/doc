@@ -330,7 +330,7 @@
 /var/log/nginx/*.log {
         daily     #每天切割
         missingok
-        rotate 52
+        rotate 52    #保留52份
         compress
         delaycompress
         notifempty
@@ -338,9 +338,13 @@
         sharedscripts
         postrotate
                 if [ -f /var/run/nginx.pid ]; then
-                        kill -USR1 `cat /var/run/nginx.pid`
+                        kill -USR1 `cat /var/run/nginx.pid`   #重新加载程序reload信号
                 fi
         endscript
 }
 ```
+
+四、Nginx日志分析
+
+五、Nginx模块管理
 
