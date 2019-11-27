@@ -348,3 +348,99 @@
 
 五、Nginx模块管理
 
+- 模块一
+
+1. `ngx_http_stub_status_module`
+
+   ```nginx
+   Syntax:	stub_status;
+   Default:	—
+   Context:	server, location
+   ```
+
+2. 编译参数
+
+   `--with-http_stub_status_module`
+
+3. 配置Nginx status
+
+   vim /etc/nginx/conf.d/default.conf
+
+   ```nginx
+       location /status {
+           stub_status;
+       }
+   ```
+
+   访问`http://192.168.1.129/status`
+
+   ```nginx
+   Active connections: 2 
+   server accepts handled requests
+    6 6 32 
+   Reading: 0 Writing: 1 Waiting: 1
+   # 6 总连接数connection
+   # 6 成功的连接数connection   失败连接=(总连接数 - 成功连接数)
+   # 32 总共处理的请求数
+   # connection  tcp连接   请求：http请求
+   
+   # Reading 读取客户端Header的信息数   请求头
+   # Writing  返回给客户端的header的信息数  响应头
+   # Waiting   等待的请求数，开启了keepalive
+   ```
+
+- 模块二
+
+1. `ngx_http_random_index_module`
+
+   ```nginx
+   Syntax:	random_index on | off;
+   Default:	
+   random_index off;
+   Context:	location
+   ```
+
+2. 设置网站主目录下的文件随机作为默认主页，不包含隐藏文件
+
+- 模块三
+
+1. `ngx_http_sub_module` 替换网站响应内容
+
+   Dirtctives
+
+   - sub_filter
+   - sub_filter_last_modified
+   - sub_filter_once
+   - sub_filter_types
+
+   假如站点出现什么敏感字，想修改但很耗费时间，可以试试该模块
+
+   或者想临时在站点中加上一个通用js或者css之类的文件，也可以使用该模块
+
+2. 语法
+
+   ```nginx
+   Syntax:	sub_filter string replacement;
+   Default:	—
+   Context:	http, server, location
+   ##############################################
+   Syntax:	sub_filter_once on | off;
+   Default:	
+   sub_filter_once on;
+   Context:	http, server, location
+   ```
+
+3. 示例：
+
+   ```nginx
+   location / {
+           root   /usr/share/nginx/html;
+           index  index.html index.htm;
+           sub_filter nginx 'Jiangzhiheng';   #可以用来替换网站中的敏感字
+           sub_filter_once on;
+       }
+   
+   ```
+
+4. 如果我们使用模板生成网站的时候，因为疏漏或者别的原因造成代码不如意，但是此时因为文件数量巨大，不方便全部重新生成，那么这个时候我们就可以用此模块实现暂时纠错，另一方面，我们也可以用这个实现服务端文字过滤的效果。
+
