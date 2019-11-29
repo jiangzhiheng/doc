@@ -1,4 +1,4 @@
-一、Nginx安装及配置
+### 一、Nginx安装及配置
 
 1. 概述：
 
@@ -238,8 +238,7 @@
    }
    ```
 
-
-二、Nginx日志管理
+### 二、Nginx日志管理
 
 `https://nginx.org/en/docs/http/ngx_http_log_module.html`
 
@@ -322,7 +321,7 @@
 
 4. error_log
 
-三、Nginx日志轮转
+### 三、Nginx日志轮转
 
 `/etc/logrotate.d/nginx`
 
@@ -344,9 +343,9 @@
 }
 ```
 
-四、Nginx日志分析
+### 四、Nginx日志分析
 
-五、Nginx模块管理
+### 五、Nginx模块管理
 
 - 模块一
 
@@ -444,3 +443,160 @@
 
 4. 如果我们使用模板生成网站的时候，因为疏漏或者别的原因造成代码不如意，但是此时因为文件数量巨大，不方便全部重新生成，那么这个时候我们就可以用此模块实现暂时纠错，另一方面，我们也可以用这个实现服务端文字过滤的效果。
 
+六、Nginx访问控制
+
+模块一：`ngx_http_limit_conn_module`  连接频率限制
+
+1. `ngx_http_limit_conn_module`
+
+   Directives
+
+   - `limit_conn`
+   - `limit_conn_log_level`
+   - `limit_conn_status`
+   - `limit_conn_zone`
+   - `limit_zone`
+
+2. 语法
+
+   ```nginx
+   Syntax:	limit_conn_zone key zone=name:size;   # size共享内存空间
+   Default:	—
+   Context:	http
+   ```
+
+   注释：
+
+   客户端的IP地址做为键
+
+   - `$remote_addr`   变量的长度为7字节到15字节
+   - `$binary_remote_addr`  变量的长度是固定的4字节
+
+   如果共享内存空间被耗尽，服务器将会对后续所有的请求返回503错误
+
+   ```nginx
+   Syntax:	limit_conn zone number;
+   Default:	—
+   Context:	http, server, location
+   ```
+
+3. 示例
+
+   ```nginx
+   http {
+   	limit_conn_zone $binary_remote_addr zone=conn_zone:10m;
+   }
+   server {
+   	location / {
+   	...
+   	limit_conn conn_zone 2;
+   	}
+   }
+   ```
+
+模块二：`ngx_http_limit_req_module` 请求频率限制
+
+1. `ngx_http_limit_req_module` 
+
+   Directives
+
+   - `limit_req`
+   - `limit_req_log_level`
+   - `limit_req_status`
+   - `limit_req_zone`
+
+2. 语法
+
+   ```nginx
+   Syntax:	limit_req_zone key zone=name:size rate=rate [sync];
+   Default:	—
+   Context:	http
+   ```
+
+   ```nginxg
+   Syntax:	limit_req zone=name [burst=number] [nodelay | delay=number];
+   Default:	—
+   Context:	http, server, location
+   ```
+
+模块四：访问控制
+
+1. `ngx_http_access_module`
+
+   Directives
+
+   - allow
+   - deny
+
+   语法
+
+   ```nginx
+   Syntax:	allow address | CIDR | unix: | all;
+   Default:	—
+   Context:	http, server, location, limit_except
+   ```
+
+   ```nginx
+   Syntax:	deny address | CIDR | unix: | all;
+   Default:	—
+   Context:	http, server, location, limit_except
+   
+   ```
+
+   基于主机的访问控制
+
+   示例
+
+   ```nginx
+   location / {
+       deny  192.168.1.1;
+       allow 192.168.1.0/24;
+       allow 10.1.1.0/16;
+       allow 2001:0db8::/32;
+       deny  all;
+   }
+   ```
+
+   基于用户的访问控制`ngx_http_auth_basic_module`
+
+   Directives：
+
+   - auth_basic
+   - anth_basic_user_file
+
+   语法
+
+   ```nginx
+   Syntax:	auth_basic string | off;
+   Default:	
+   auth_basic off;
+   Context:	http, server, location, limit_except
+   ```
+
+   ```nginx
+   Syntax:	auth_basic_user_file file;
+   Default:	—
+   Context:	http, server, location, limit_except
+   ```
+
+   1. 建立口令文件
+
+      ```shell
+      root@martin:~# htpasswd -c /etc/nginx/martin.pass wang
+      root@martin:~# htpasswd  /etc/nginx/martin.pass jiang
+      root@martin:~# cat /etc/nginx/martin.pass 
+      wang:$apr1$35ISJhcQ$RgGOZUu1wqJaLFgzOWb7z.
+      jiang:$apr1$ptD1anV8$uYEpN5BUsPn3sub1LF/6Z/
+      ```
+
+   2. 实现认证
+
+      ```nginx
+      location / {
+              root   /usr/share/nginx/html;
+              index  index.html index.htm;
+              auth_basic "auth test~~~";   #提示信息，可自定义
+              auth_basic_user_file /etc/nginx/martin.pass;   #指定生成的口令文件
+          }
+      
+      ```
