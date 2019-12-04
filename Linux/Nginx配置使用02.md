@@ -96,4 +96,85 @@
    - 请求
    - 响应
 
-4. 
+4. HTTP Header
+
+   场景一：下载一个源码包
+
+   ```shell
+   [root@nginx01 app]# wget -d http://nginx.org/download/nginx-1.12.1.tar.gz
+   ---request begin---
+   GET /download/nginx-1.12.1.tar.gz HTTP/1.1
+   User-Agent: Wget/1.14 (linux-gnu)
+   Accept: */*
+   Host: nginx.org
+   Connection: Keep-Alive
+   
+   ---request end---
+   HTTP request sent, awaiting response... 
+   ---response begin---
+   HTTP/1.1 200 OK   #协议版本
+   Server: nginx/1.17.3  #服务器软件版本
+   Date: Wed, 04 Dec 2019 06:15:33 GMT   #从服务器获取该资源的时间
+   Content-Type: application/octet-stream   #字节流，响应的数据类型，其它还有图片，视频，json，html，xml，css等；
+   Content-Length: 981093  #请求的资源大小
+   Last-Modified: Tue, 11 Jul 2017 15:45:25 GMT #下载的文件在服务器最后修改时间
+   Connection: keep-alive  #支持长连接
+   Keep-Alive: timeout=15
+   ETag: "5964f295-ef865" #ETag HTTP响应头是资源的特定版本的标识符，这可以让缓存更高效
+   Accept-Ranges: bytes
+   
+   ---response end---
+   200 OK
+   Registered socket 3 for persistent reuse.
+   Length: 981093 (958K) [application/octet-stream]
+   Saving to: ‘nginx-1.12.1.tar.gz’
+   
+   100%[==================================================>] 981,093      210KB/s   in 4.6s   
+   
+   2019-12-03 23:36:05 (210 KB/s) - ‘nginx-1.12.1.tar.gz’ saved [981093/981093]
+   
+   ```
+
+   
+
+二、Nginx Web服务器
+
+1. 静态资源
+
+   非Web服务器端运行处理而生成的文件
+
+   - 浏览器渲染：`HTML，CSS，JS`
+   - 图片文件：`GIF，JPEG`
+   - 视频文件：`MP4，FLV，MPEG`
+   - 其它文件：`ISO，PDF，TXT，EXE`
+
+2. 文件读取
+
+   ```nginx
+   Syntax:	sendfile on | off;
+   Default:	
+   sendfile off;
+   Context:	http, server, location, if in location
+   ```
+
+   ```nginx
+   Syntax:	tcp_nodelay on | off;   #不缓存数据，及时发送，及时性要求较高的场景
+   Default:	
+   tcp_nodelay on;
+   Context:	http, server, location
+   ```
+
+   ```nginx
+   Syntax:	tcp_nopush on | off;    #在一个数据包中发送所有的头文件
+   Default:	
+   tcp_nopush off;
+   Context:	http, server, location
+   ```
+
+   使用`sendfile()`来进行网络传输的过程
+
+   硬盘 >> `kernel buffer(快速拷贝到kernel sorcket buffer)` >> 协议栈
+
+   `sendfile()`不但能减少切换次数而且还能减少拷贝次数
+
+3. 文件压缩
