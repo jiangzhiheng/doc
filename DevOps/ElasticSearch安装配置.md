@@ -322,7 +322,13 @@
       echo "All Finished....."
       ```
 
-      
+9. 配置中文分词器
+
+   1. 下载中文分词器`https://github.com/medcl/elasticsearch-analysis-ik`
+
+      `https://github.com/medcl/elasticsearch-analysis-ik/releases/download/v6.2.4/elasticsearch-analysis-ik-6.2.4.zip`
+
+   2. 解压缩到es根目录下plugins目录下并重启es
 
 
 
