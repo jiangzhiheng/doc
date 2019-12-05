@@ -255,13 +255,75 @@
 
    2. 解压缩
 
+      ```shell
+      cd /root/app
+      tar -xf kibana-6.2.4-linux-x86_64.tar.gz
+      mv kibana-6.2.4-linux-x86_64 kibana
+      ```
+
    3. 修改配置文件
 
       `vim /root/app/kibana/config/kibana.yml`
 
+      ```yaml
+      server.host: "192.168.1.130"
+      elasticsearch.url: "http://192.168.1.130:9200"
+      ```
+
    4. 启动kibana
+
+      ```shell
+      #!/bin/bash
+      #
+      if [ "$USER" != "esadmin"  ];then
+              echo "nohup /home/esadmin/app/elasticsearch/bin/elasticsearch >>startup_server.log &"|su - esadmin &>/dev/null
+      fi
+      echo "Startup ES Services....."
+      while true
+      do
+              lsof -i:9200 &> /dev/null
+              if [ $? -eq 0 ];then
+                      echo "ElasticSearch is Running"
+                      break
+              fi
+              sleep 1
+      done
+      
+      echo "Startup Kibana Services....."
+      cd /root/app/kibana/bin
+      ./kibana &>/dev/null &
+      while true
+      do
+              lsof -i:5601 &> /dev/null
+              if [ $? -eq 0 ];then
+                      echo "ES-kibana is Running"
+                      echo "Started connect web server on http://192.168.1.130:5601"
+                      break
+              fi
+              sleep 1
+      done
+      ```
 
    5. 访问测试
 
-9. 
+      `http://192.168.1.130:9100`
+
+   6. 关闭服务
+
+      ```shell
+      #!/bin/bash
+      #
+      echo "shutdown Kibana..."
+      KIBANA_PID=`lsof -i:5601|awk '{if(NR==2)print $2}'`
+      kill -9 $KIBANA_PID
+      
+      echo "shutdown ElasticSearch Services.."
+      pkill -9 java*
+      echo "All Finished....."
+      ```
+
+      
+
+
+
 
