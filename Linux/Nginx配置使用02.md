@@ -178,3 +178,72 @@
    `sendfile()`不但能减少切换次数而且还能减少拷贝次数
 
 3. 文件压缩
+
+   - 文件压缩 `ngx_http_gzip_module`
+
+     - 示例
+
+       ```nginx
+       gzip            on;
+       gzip_min_length 1000;
+       gzip_proxied    expired no-cache no-store private auth;
+       gzip_types      text/plain application/xml;
+       ```
+
+     - 语法
+
+       ```nginx
+       Syntax:	gzip on | off;
+       Default:	
+       gzip off;
+       Context:	http, server, location, if in location
+       ```
+
+       ```nginx
+       Syntax:	gzip_types mime-type ...;
+       Default:	
+       gzip_types text/html;
+       Context:	http, server, location
+       ```
+
+       ```nginx
+       Syntax:	gzip_comp_level level;
+       Default:	
+       gzip_comp_level 1;
+       Context:	http, server, location
+       ```
+
+     - 配置示例
+
+       ```nginx
+       location ~ .*\.(jpg|gif|png)$ {
+       	gzip on;
+       	gzip_http_version 1.1;
+       	gzip_comp_level 2;
+       	gzip_types text/plain application/javascript application/x-javascript text/css application/xml text/javascript application/x-httpd-php image/jpeg image/gif image/png;
+       	root /app/martin.show/images;
+       }
+       ```
+
+   - 预读`ngx_http_gzip_static_module`
+
+     ``` nginx
+     location ~ ^/download {
+     	gzip_static on;
+     	tcp_nopush on;
+     	root /app/martin.show
+     }
+     ```
+
+4. HTTP协议定义的缓存机制 `ngx_http_headers_module`
+
+   指令：
+
+   - `Expires     http1.0`
+   - `Cache-Control(max-age)   http1.1`
+
+   浏览器第一次请求   无缓存
+
+   浏览器第二次请求    有缓存，校验是否过期
+
+5. 
