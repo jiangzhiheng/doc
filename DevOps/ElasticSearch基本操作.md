@@ -30,4 +30,89 @@
    - `Whitespace分词器`：仅仅是去除空格，不支持中文
    - `language分词器`：特定语言的分词器，不支持中文
 
-3. 
+3. 使用`ElasticSearch API `实现CRUD（以下操作都在`kibana Dev Tools`中执行）
+
+   添加索引
+
+   ```
+   PUT /lib/
+   {
+       "settings":{
+   		"index":{
+   			"number_of_shards":3,
+   			"number_of_replicas":0
+   		}
+       }  
+   }
+   ```
+
+   查看索引信息
+
+   ```json
+   GET /lib/_settings    //查看lib的信息
+   GET _all/_settings        //查看所有索引的信息
+   ```
+
+   添加文档
+
+   1）指定文档ID用PUT方法
+
+   ```json
+   PUT /lib/user/1
+   {
+   "first_name":	"Jane",
+   "last_name":	"Smith",
+   "age":			32,
+   "about":		"I like to collect rock albums",
+   "interests":	"music"
+   }
+   //user:  type 相当于mysql中的一个table
+   //1 ：文档ID  相当于表中的一行信息
+   ```
+
+   2）不指定文档ID用
+
+   ```json
+   POST /lib/user/
+   {
+   "first_name":	"Douglas",
+   "last_name":	"Fir",
+   "age":			23,
+   "about":		"I like to build cabinets",
+   "interests":	["forestry"]
+   }
+   ```
+
+   查询文档
+
+   ```json
+   GET /lib/user/1   //获取制定文档的全部信息
+   //1:指定文档ID
+   GET /lib/user/1?_source=last_name,about    //查询文档中指定的字段
+   ```
+
+   更新文档
+
+   1）用相同ID的文档内容PUT覆盖
+
+   2）用POST方法修改文档中的信息
+
+   ```json
+   POST /lib/user/1/_update
+   {
+       "doc":{
+   		"age":33
+       }
+   }
+   ```
+
+   删除文档
+
+   ```json
+   DELETE /lib/user/1  //删除文档
+   DELETE lib2		   //删除索引
+   ```
+
+   
+
+4. 

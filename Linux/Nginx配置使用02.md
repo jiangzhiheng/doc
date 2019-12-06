@@ -137,7 +137,7 @@
 
    
 
-二、Nginx Web服务器
+### 二、Nginx Web服务器
 
 1. 静态资源
 
@@ -231,7 +231,7 @@
      location ~ ^/download {
      	gzip_static on;
      	tcp_nopush on;
-     	root /app/martin.show
+     	root /app/martin.show;
      }
      ```
 
@@ -246,4 +246,33 @@
 
    浏览器第二次请求    有缓存，校验是否过期
 
-5. 
+5. 防盗链 `ngx_http_referer_module`
+
+   - 语法
+
+     ```nginx
+     Syntax:	valid_referers none | blocked | server_names | string ...;
+     Default:	—
+     Context:	server, location
+     ```
+
+   - 示例：
+
+     ```nginx
+     valid_referers none blocked *.martin.show;
+     if($invalid_referer){
+     	return 403;
+     }
+     ```
+
+     如果希望某些网站能够使用资源
+
+     ```nginx
+     valid_referers none blocked *.martin.show server_names ~google ~baidu;
+     if($invalid_referer){
+     	return 403;
+         #rewrite ^$ http://martin.show/403.jpg break;
+     }
+     ```
+
+6. 
