@@ -248,4 +248,91 @@
 
    一般建议是1000-5000个文档，大小建议是5-15MB，默认不能超过100M，可以在ES的配置文件中修改。
 
-6. 
+6. 版本控制
+
+   `ElasticSearch`采用了乐观锁来保证数据的一致性，也就是说，当用户对`docunment`进行操作时，并不需要对该用户作加锁和解锁的操作，只需要指定要操作的版本即可，当版本号一致时，`ElasticSearch`会允许该操作顺利执行，而当版本号存在冲突时，`ElasticSearch`会提示冲突并抛出异常。
+
+   `ElasticSearch`的版本号的取值范围是`1-(2^36-1)`
+
+   内部版本控制：使用的是`_version`
+
+   外部版本控制：`ElasticSearch`在处理外部版本号时会与对内部版本号的处理有些不同。它不再是检查`_version`是否与请求中指定的数值相同，而实检查`_version`是否比指定的数值小，如果请求成功，那么外部版本号就会存储到文档中的`_version`中。
+
+   为了保持`_version`与外部版本控制的数据一致，使用`version_type=externel`
+
+7. 什么是`Mapping`
+
+   `Mapping`定义了type中每个字段的数据类型及这些字段该如何分词等相关属性
+
+   查看ES中自动创建的`mapping`
+
+   `GET /myindex/article/_mapping`
+
+   创建索引的时候，可以预先定义字段的类型及相关属性，这样就能够把日期字段处理成日期，把数字字段处理成数字，把字符串字段处理成字符串值等。
+
+   支持的数据类型：
+
+   - 核心数据类型
+
+     字符串：string类型包括
+
+     - text：需要分词
+     - keyword：不需要进行分词
+
+     数字型：`long integer short byte double float`
+
+     日期型：`date`
+
+     布尔型：`boolean`
+
+     二进制型：`binary`
+
+   - 复杂数据类型
+
+     数组类型
+
+     - 字符串
+     - 整形数组
+     - 数组型数组
+     - 对象数组
+
+     对象类型：`_object_`用于单个JSON对象
+
+     ```json
+     PUT /lib5/person/1
+     {
+         "name":"Tom",
+         "age":25,
+         "birthday":"1993-12-3",
+         "address":{
+             "country":"china",
+             "province":"guangdong",
+             "city":"shenzhen"
+         }
+     }
+     ```
+
+     `GET /lib5/person/_mapping`
+
+     嵌套类型：`_nested_`用于JSON数组
+
+   - 地理位置类型
+
+   - 特定类型
+
+   Tips:
+
+   - 日期和数字不分词，查询的时候需要精确查询
+
+     `GET /myindex/article/_search?q=post_date:2019-12-7`
+
+   支持的属性：
+
+   - `"index":true`：//true 分词，false，不分词
+   - `"analyzer":"ik"` ：//指定分词器
+   - `"ignore_above":100`：//超过100个字符的文本，将会被忽略，不被索引
+   - `"search_analyzer":"ik"`：//设置搜索时的分词器，默认跟`analyzer`是一致的
+
+   
+
+8. 
