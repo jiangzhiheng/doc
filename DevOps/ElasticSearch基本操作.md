@@ -113,6 +113,139 @@
    DELETE lib2		   //删除索引
    ```
 
-   
+4. 批量获取文档
 
-4. 
+   使用es提供的`Multi Get API`：
+
+   使用`Multi Get API`可以通过索引名，类型名，文档ID一次得到一个文档集合，文档可以来自同一个索引库，也可以来自不同索引库
+
+   使用`curl`命令(在命令行中操作)：
+
+   ```json
+   curl 'http://192.168.1.130:9200/_mget' -d '{
+       "docs":[
+           .....
+       ] 
+   }'
+   ```
+
+   使用kibana客户端操作：
+
+   ```json
+   GET /_mget
+   {
+     "docs":[
+       {
+         "_index":"lib",
+         "_type":"user",
+         "_id":1
+       },
+           {
+         "_index":"lib",
+         "_type":"user",
+         "_id":2
+       },
+           {
+         "_index":"lib",
+         "_type":"user",
+         "_id":3
+       }
+       ]
+   }
+   ```
+
+   指定具体的字段
+
+   ```json
+   GET /_mget
+   {
+     "docs":[
+       {
+         "_index":"lib",
+         "_type":"user",
+         "_id":1,
+         "_source":["age","interests"]  
+       },
+           {
+         "_index":"lib",
+         "_type":"user",
+         "_id":3
+       }
+       ]
+   }
+   ```
+
+   对于同索引，同type下的文档，可以简写为如下形式
+
+   ```json
+   GET /lib/user/_mget
+   {
+       "docs":[
+           {
+               "_id":1
+           },
+           {
+               "_type":"user",
+               "_id":2
+           }
+       ]
+   }
+   ```
+
+   简化形式2：
+
+   ```json
+   GET /lib/user/_mget
+   {
+       "ids":["1","2"]
+   }
+   ```
+
+5. 使用Bulk API实现批量操作
+
+   bulk的格式：
+
+   `{action:{metadata}}\n`
+
+   `{requestbody}\n`
+
+   `action`(行为)：
+
+   - `create`：文档不存在时创建
+   - `update`：更新文档
+   - `index`：创建新文档或替换已有文档
+   - `delete`：删除一个文档
+   - `metadata`：`_index`,`_type`,`_id`
+
+   create和index的区别：如果数据存在，使用create操作失败，会提示文档已经存在，使用index则可以成功
+
+   示例
+
+   `{"delete":{"_index":"lib","_type":"user","_id":"1"}}`
+
+   批量添加：
+
+   ```json
+   POST /lib2/books/_bulk
+   {"index":{"_id":1}}
+   {"title":"Java","price":55}
+   {"index":{"_id":2}}
+   {"title":"TTML5","price":45}
+   {"index":{"_id":3}}
+   {"title":"PHP","price":35}
+   {"index":{"_id":4}}
+   {"title":"Python","price":50}
+   ```
+
+   ```json
+   GET /lib2/book/_mget
+   {
+       "ids":["1","2","3","4"]
+   }
+   ```
+
+   bulk会把将要处理的数据载入内存中，所以数据量是有限制的，最佳的数据量不是一个确定的数值，它取决于你的硬件，文档大小以及文档复杂性，你的索引以及搜索的负载
+
+   一般建议是1000-5000个文档，大小建议是5-15MB，默认不能超过100M，可以在ES的配置文件中修改。
+
+6. 
