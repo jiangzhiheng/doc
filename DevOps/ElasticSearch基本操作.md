@@ -333,6 +333,225 @@
    - `"ignore_above":100`：//超过100个字符的文本，将会被忽略，不被索引
    - `"search_analyzer":"ik"`：//设置搜索时的分词器，默认跟`analyzer`是一致的
 
-   
+8. 基本查询（Query查询）
 
-8. 
+   1. 数据准备
+
+      ```json
+      //创建索引
+      PUT /lib3 
+      {
+          "settings":{
+              "number_of_shards":3,
+      	    "number_of_replicas":0
+          },
+          "mappings":{
+              "user":{
+                  "properties":{
+                      "name":{"type":"text"},
+                      "address":{"type":"text"},
+                      "age":{"type":"integer"},
+                      "interests":{"type":"text"},
+                  	"birthday":{"type":"date"}
+                  }
+              }
+          }
+      }
+      ```
+
+      随机添加几个文档
+
+      ```json
+      PUT /lib3/user/1
+      {
+          "name":		"zhangsan",
+          "age":		29,
+          "address":	"bei jing chao yang qu",
+          "birthday":	"1988-12-11",
+          "interests":"xi huan music ,hike"
+      }
+      PUT /lib3/user/2
+      {
+          "name":		"lisi",
+          "age":		28,
+          "address":	"si chuan cheng du qing yang qu",
+          "birthday":	"1998-09-13",
+          "interests":"xi huan music ,hike"
+      }
+      PUT /lib3/user/3
+      {
+          "name":		"wangwu",
+          "age":		21,
+          "address":	"shan xi xi an yan ta qu",
+          "birthday":	"1994-12-01",
+          "interests":"xi huan music ,hike"
+      }
+      ```
+
+      基本查询
+
+      `GET /lib3/user/_search?q=name:lisi`
+
+      输出：
+
+      ```json
+      {
+        "took": 73,   //查询用时，毫秒
+        "timed_out": false,
+        "_shards": {
+          "total": 3,
+          "successful": 3,
+          "skipped": 0,
+          "failed": 0
+        },
+        "hits": {
+          "total": 1,  //匹配的文档个数
+          "max_score": 0.2876821,   //相关度分数 值最大为1
+          "hits": [
+            {
+              "_index": "lib3",
+              "_type": "user",
+              "_id": "2",
+              "_score": 0.2876821,
+              "_source": {
+                "name": "lisi",
+                "age": 28,
+                "address": "si chuan cheng du qing yang qu",
+                "birthday": "1998-09-13",
+                "interests": "xi huan music ,hike"
+              }
+            }
+          ]
+        }
+      }
+      ```
+
+      基本查询2：
+
+      `GET /lib3/user/_search?q=interests:changge&sort=age:desc`：查询需要的字段信息并以年龄排序
+
+   2. term查询和terms查询
+
+      `term query`回去倒排索引中寻找确切的term，它并不知道分词器的存在，这种查询适合`keyword,numeric,date`.
+
+      term：查询某个字段里含有某个关键词的文档
+
+      terms：查询某个字段里含有多个关键词的文档
+
+      ```json
+      GET /lib3/user/_search/{"query":{"term":{"interests":"changge"}}}
+      GET /lib3/user/_search/{"query":{"term":{"interests":["changge","hejiu"]}}}
+      ```
+
+   3. 控制查询返回的数量
+
+      from:从哪一个文档开始查询，size：需要的个数
+
+      ```json
+      GET /lib3/user/_search/{"from":0,"size":2,"query":{"term":{"interests":["changge","hejiu"]}}}
+      ```
+
+   4. 返回版本号
+
+      ```json
+      GET /lib3/user/_search/{"version":true,"query":{"term"}:{"interests":"changge"}}
+      ```
+
+   5. match查询
+
+      `match query`知道分词器的存在，会对field进行分词操作，然乎在查询
+
+      ```json
+      GET /lib3/user/_search {"query":{"match":{"name":"zhaoliu"}}}
+      GET /lib3/user/_search {"query":{"match":{"age":20}}}
+      ```
+
+      `match_all`查看所有文档
+
+      ```json
+      GET /lib3/user/_search {"query":{"match_all":{}}}
+      ```
+
+      `multi_match`：可以指定多个字段
+
+      ```json
+      GET /lib3/user/_search {"query":{"multi_match":{"query":"lvyou","field":["interests","name"]}}}
+      ```
+
+      `match_phrase`：短语匹配查询：
+
+      - ES引擎首先分析查询字符串，从分析后的文本中构建短语查询，这意味着必须匹配短语中的所有分词，并且保证各个分词的相对位置不变。
+
+      ```json
+      GET /lib3/user/_search
+      {
+      	"query":{
+              "match_phrase":{
+                  "interests":"duanlian,shuoxiangsheng"
+              }
+          }
+      }
+      ```
+
+   6. 排序
+
+      使用sort实现排序：desc降序，asc升序
+
+      ```json
+      GET /lib3/user/_search
+      {
+      	"query":{
+              "match_all":{}
+          },
+          "sort":{
+              "age":{
+                  "order":"desc"
+              }
+          }
+      }
+      ```
+
+   7. 前缀匹配查询
+
+      ```json
+      GET /lib3/user/_search {"query":{"match_parse_prefix":{"name"{"query":"zhao"}}}}
+      ```
+
+   8. 范围查询
+
+      ```json
+      GET /lib3/user/_search
+      {
+          "query":{
+              "range":{
+                  "birthday":{
+                      "from":"1980-10-10",
+                      "to":"2019-10-10",
+                      "include_lower":true,
+                      "include_upper":false
+                  }
+              }
+          }
+      }
+      ```
+
+   9. wildcard查询
+
+      允许使用通配符来进行查询
+
+      * *代表0或多个字符
+      * ？代表任意一个字符
+
+      ```json
+      GET /lib3/user/_search {"query":{"wildcard":"name":"zhao*"}}
+      ```
+
+   10. fuzzy实现模糊查询
+
+       - value：查询的关键字
+       - boost：查询的权值，默认值是1.0
+       - min_similarity：设置匹配的最小相似度，默认为0.5
+
+   11. 高亮搜索结果
+
+9. 
