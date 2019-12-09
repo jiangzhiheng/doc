@@ -275,4 +275,138 @@
      }
      ```
 
-6. 
+
+### 三、Nginx反向代理
+
+- Proxy配置`ngx_http_proxy_module`
+- 代理对象的不同
+  - 正向代理  是为客户端作代理
+  - 反向代理  是为服务器作代理
+
+1. `Proxy_pass`
+
+   - 语法：
+
+     ```nginx
+     Syntax:	proxy_pass URL;
+     Default:	—
+     Context:	location, if in location, limit_except
+     ```
+
+   - 示例
+
+     ```nginx
+     location / {
+         proxy_pass http://localhost:8000;
+         proxy_set_header Host $host;
+         proxy_set_header X-Real-IP $remote_addr;
+     }
+     ```
+
+2. 缓冲区
+
+   - 语法
+
+     ```nginx
+     Syntax:	proxy_buffering on | off;
+     Default:	
+     proxy_buffering on;
+     Context:	http, server, location
+     ```
+
+     `proxy_buffering`开启的情况下，nginx会把后端返回的内容先放到缓冲区中，然后再退回给客户端，（边收边传，不是全部接受完再传给客户端）
+
+     ```nginx
+     Syntax:	proxy_buffer_size size;
+     Default:	
+     proxy_buffer_size 4k|8k;
+     Context:	http, server, location
+     ```
+
+   - 示例
+
+     ```nginx
+     location / {
+         proxy_pass http://localhost:8000;
+         proxy_redirect default;
+         proxy_set_header Host $host;
+         proxy_set_header X-Real-IP $remote_addr;
+         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+         
+         proxy_connect_timeout 30;
+         proxy_send_timeout 60;
+         proxy_read_timeout 60;
+         
+         proxy_buffering on;
+         proxy_buffer_size 32k;
+         proxy_buffers 4 128k;
+         proxy_busy_buffers_size 256k;
+         proxy_max_temp_file_size 256k;
+     }
+     ```
+
+3. 缓存
+
+   - 缓存类型
+     - 服务器缓存  memcache redis
+     - proxy缓存
+     - 客户端缓存 浏览器缓存
+
+   - 语法
+
+     ```nginx
+     Syntax:	proxy_cache_path path [levels=levels] [use_temp_path=on|off] keys_zone=name:size [inactive=time] [max_size=size] [manager_files=number] [manager_sleep=time] [manager_threshold=time] [loader_files=number] [loader_sleep=time] [loader_threshold=time] [purger=on|off] [purger_files=number] [purger_sleep=time] [purger_threshold=time];
+     Default:	—
+     Context:	http
+     ```
+
+     示例：`proxy_cache_path /data/nginx/cache levels=1:2 keys_zone=one:10m;`
+
+     ```nginx
+     # 缓存过期
+     Syntax:	proxy_cache_valid [code ...] time;
+     Default:	—
+     Context:	http, server, location
+     # 示例
+     proxy_cache_valid 200 302 10m;
+     proxy_cache_valid 404      1m;
+     ```
+
+     ```nginx
+     Syntax:	proxy_cache_key string;
+     Default:	
+     proxy_cache_key $scheme$proxy_host$request_uri;
+     Context:	http, server, location
+     ```
+
+   - 示例
+
+     ```nginx
+     proxy_cache_path /data/nginx/cache levels=1:2 keys_zone=proxy_cacha:10m max_size=10g inactive=60m use_temp_path=off;
+     
+     location / {
+         proxy_cache proxy_cache;
+         proxy_pass http://192.168.1.129:8080;
+         proxy_cache_valid 200 304 12h; #当返回200/304的时候缓存10h
+         proxy_cache_valid any 10m;
+         proxy_cache_key $host$uri$is_args$args;
+         add_header Nginx-Cache "$upstream_cache_status";
+         
+         proxy_next_upstream error timeout invalid_header http_500 http_502 http_503 http_504;
+         proxy_redirect default;
+         proxy_set_header Host $host;
+         proxy_set_header X-Real-IP $remote_addr;
+         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+         
+         proxy_connect_timeout 30;
+         proxy_send_timeout 60;
+         proxy_read_timeout 60;
+         
+         proxy_buffering on;
+         proxy_buffer_size 32k;
+         proxy_buffers 4 128k;
+         proxy_busy_buffers_size 256k;
+         proxy_max_temp_file_size 256k;
+     }
+     
+     ```
