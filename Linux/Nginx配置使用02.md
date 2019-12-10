@@ -410,3 +410,51 @@
      }
      
      ```
+
+
+
+### 四、`Nginx PHP`部署 `LNMP`
+
+1. 安装`php-fpm`
+
+   `yum -y install php-fpm php-mysql php-gd`
+
+   `systemctl start php-fpm`
+
+   `systemctl enable php-fpm`
+
+   - `php-fpm`配置文件：影响php处理php程序的性能，例如php进程数，最大连接数配置等(运维人员关注)
+   - `php.ini`：影响php代码，例如允许客户端最大上传的文件的大小，设置的timezone，php所支持的扩展功能，例如是否可以连接Mysql，memcache，(程序员关注)
+
+2. 修改nginx配置文件
+
+   `vim /etc/nginx/conf.d/default.conf`
+
+   ```nginx
+       location ~ \.php$ {
+           root           /usr/share/nginx/html;
+           fastcgi_pass   127.0.0.1:9000;
+           fastcgi_index  index.php;
+           fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+           include        fastcgi_params;
+       }
+   
+   ```
+
+   重启`nginx`
+
+3. `php`连接`nginx`方式二：使用socket
+
+   `vim /etc/php-fpm.conf`
+
+   ```php
+   listen = /run/php-fpm.sock
+   listen.owner = nginx
+   listen.group = nginx
+   listen.mode = 0660
+       
+   修改localtion文件
+   fastcgi_pass unix:/run/php-fpm.sock
+   ```
+
+4. 
