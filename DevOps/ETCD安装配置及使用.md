@@ -66,50 +66,50 @@
         initial-cluster-state: new
         ```
 
+        查看版本号
+
+        `./etcdctl version`
+
+        查看集群成员
+
+        `./etcdctl member list`
+
+        查看集群状态
+   
+        `./etcdctl --write-out=table endpoint status`
+   
+        查看leader状态
+     
+        `curl http://127.0.0.1:2379/v2/stats/leader`
+     
+        查看自己的状态
+     
+        `curl http://127.0.0.1:2379/v2/stats/self`
+     
      3. 启动etcd
-
-        `./etcd --config-file=/etc/etcd/conf.yml`
-
+     
+     `./etcd --config-file=/etc/etcd/conf.yml`
+     
         添加至系统服务
-
+     
         `vim /etc/systemd/system/etcd.service`
-
+     
         ```shell
-   [Unit]
+     [Unit]
         Description=Etcd Server
-   After=network.target
-        
-   [Service]
+     After=network.target
+        [Service]
         Type=simple
-   WorkingDirectory=/root/app/etcd
+        WorkingDirectory=/root/app/etcd
         EnvironmentFile=-/etc/etcd/conf.yml
-   # set GOMAXPROCS to number of processors
+        #set GOMAXPROCS to number of processors
         ExecStart=/bin/bash -c "GOMAXPROCS=$(nproc) /root/app/etcd/etcd"
-   Type=notify
-        
-   [Install]
+        Type=notify
+        [Install]
         WantedBy=multi-user.target
         ```
-        
-        查看版本号
-        
-        `./etcdctl version`
-        
-        查看集群成员
-        
-        `./etcdctl member list`
-        
-        查看集群状态
-        
-        `./etcdctl --write-out=table endpoint status`
-        
-        查看leader状态
-        
-        `curl http://127.0.0.1:2379/v2/stats/leader`
-        
-        查看自己的状态
-        
-        `curl http://127.0.0.1:2379/v2/stats/self`
+     
+   
 
 4. etcd主要命令介绍
 
