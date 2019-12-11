@@ -457,4 +457,61 @@
    fastcgi_pass unix:/run/php-fpm.sock
    ```
 
-4. 
+4. `php-fpm`配置
+
+   1. `fpm`配置
+
+      `/etc/php-fpm.conf`
+
+      `/etc/php-fpm.d/www.conf`
+
+      ```ini
+      pm = dynamic
+      pm.start_servers = 32 #初始启动进程数
+      pm.max_children = 512  #最大子进程数
+      pm.min_spare_servers = 32
+      pm.max_spare_servers = 64
+      pm.max_requests = 1500
+      ```
+
+   2. 全局配置
+
+   3. 进程池配置
+
+   4. `php`状态功能
+
+      `vim /etc/php-fpm.conf`
+
+      添加`pm.status_path=/php_status`
+
+      添加location配置
+
+      ```nginx
+      location  = /php_status {
+          fastcgi_pass 127.0.0.1:9000;
+          fastcgi_param SCRIPT_FILENAME $fastcgi_script_name;
+          include fastcgi_params;
+      }
+      ```
+
+      ```shell
+      [root@nginx01 ~]# curl http://192.168.1.129/php_status
+      pool:                 www
+      process manager:      dynamic
+      start time:           11/Dec/2019:16:48:21 +0800
+      start since:          31
+      accepted conn:        5
+      listen queue:         0
+      max listen queue:     0
+      listen queue len:     128
+      idle processes:       4
+      active processes:     1
+      total processes:      5
+      max active processes: 2
+      max children reached: 0
+      slow requests:        0
+      ```
+
+   
+
+   
