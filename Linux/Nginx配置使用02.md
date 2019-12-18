@@ -533,3 +533,54 @@
 
 ### 六、`URL Rewrite`
 
+1. 什么是`Rewrite`
+
+   `URL Rewirte`，就是把传入的Web请求重定向到其它URL的过程
+
+   - `URL Rewrite`最常见的应用就是URL伪静态化
+   - 从安全角度，URL中不能暴露太多的参数，防止信息泄露
+   - 实现网址跳转
+
+2. `Rewrite`相关指令
+
+   `Nginx Rewrite`相关指令有`if,rewrite,set,return`
+
+   if语句
+
+   - 应用环境：`server,location`
+
+   语法：
+
+   - `if (condition){...}`
+
+   if可支持如下条件判断的匹配符号
+
+   - ~     正则匹配  区分大小写
+   - ~*    正则匹配   不区分大小写
+   - !~    正则不匹配
+   - !~*   正则不匹配
+   - -f 和 !-f    判断是否存在文件
+   - -d 和  !-d   判断是否存在目录
+   - -e 和 !-e    判断是否存在文件或目录
+   - -x 和 !-x    判断文件四会否可执行
+
+   在匹配过程中可以引用一些Nginx的全局变量
+
+   - `$args`
+   - `$document_root`
+   - `host`
+   - `remote_addr`
+   - `request_filename`
+   - `request_uri`
+   - `server_name`
+
+3. `Rewrite flag`
+
+   `rewrite`指令根据表达式来重定向URI，或者修改字符串，可以应用与`server,location,if`环境下，每行`rewrite`指令最后跟一个flag标记，支持的`flag`标记有
+
+   - `last`    相当于Apache中的[L]标记，表示完成rewrite
+   - `break`   本条规则匹配完成后，终止匹配，不再匹配后边的规则
+   - `redirect`  返回302临时重定向，浏览器地址会显示跳转后的URL地址
+   - `permanent`   返回301永久重定向，浏览器地址会显示跳转后的URL地址（推荐使用）
+
+4. 
