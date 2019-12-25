@@ -71,6 +71,30 @@
 
 6. `Neutron`
 
-   - 
+   - `Openstack Networking`
+     - `Network service`
+     - `Provides framework for Software Defined Network(SDN)`
+     - `Plugin architecture`
+       - 整合软硬件
 
-7. 
+7. `Heat`
+
+   - `Openstack Orchestration`
+     - `Template-based deployment prchestrator`
+     - `Automates deployment of compute,storage,and networking resources`
+   - 云资源编排
+
+8. `Ceilometer` ：计量，资源用量统计
+
+   - `Monitor,collects,and stores usage data for all Openstack infrastructure`
+   - `Provides API access to usage data `
+
+9. `Keystone`
+
+   - `OpenStack Identity`
+     - `Identity Service`
+     - `Common authorization framework`
+     - `Manages users,tenants and roles`
+     - `Pluggable backends(SQL,PAM,LDAP,etc)`
+
+10. `Ironic`：裸机管理(物理机)
