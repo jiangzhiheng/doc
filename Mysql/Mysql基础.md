@@ -34,4 +34,49 @@
 
 2. 二进制预编译包
 
+   `wget https://dev.mysql.com/get/Downloads/MySQL-5.7/mysql-5.7.28-linux-glibc2.12-x86_64.tar.gz`
+
+   ```
+   groupadd mysql
+   useradd -r -g mysql -s /bin/false mysql
+   cd /usr/local
+   tar xvf /root/mysql-5.7.28-linux-glibc2.12-x86_64.tar.gz
+   ln -s mysql-5.7.28-linux-glibc2.12-x86_64 mysql
+   
+   #mysql初始化
+   cd /usr/local/mysql
+   mkdir mysql-files
+   chmod 750 mysql-files
+   chown -R mysql.mysql /usr/local/mysql
+   bin/mysqld --initialize --user=mysql --basedir=/usr/local/mysql --datadir=/usr/local/mysql/data
+   bin/mysql_ssl_rsa_setup --datadir=/usr/local/mysql/data
+   chown -R root /usr/local/mysql
+   chown -R mysql data mysql-files
+   
+   a+fq<1veEysa
+   
+   #建立配置文件
+   vim /etc/my.cnf
+   [mysqld]
+   basedir=/usr/local/mysql
+   datadir=/usr/local/mysql/data
+   
+   #启动mysql
+   #方法1
+   bin/mysqld_safe --user=mysql &
+   #方法2
+   cp support-files/mysql.server /etc/init.d/mysqld
+   chkconfig --add mysqld
+   chkconfig mysqld on
+   service mysqld restart
+   
+   echo "export PATH=$PATH:/usr/local/mysql/bin" >> /etc/profile
+   source /etc/profile
+   mysql -uroot -p
+   
+   mysql> alter user root@'localhost' identified by '123456';
+   ```
+
+   
+
 3. 源码编译安装
