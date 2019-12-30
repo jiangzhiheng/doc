@@ -113,6 +113,6 @@
 
 7. 公有云中操作
 
-   - 创建虚拟私有云  vpc (相当于openstack中创建网络和子网)
+   - 创建虚拟私有云  vpc（`Virtual Private Cloud`） (相当于openstack中创建网络和子网)
 
-8. 
+   
