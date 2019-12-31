@@ -36,7 +36,7 @@
 
    `wget https://dev.mysql.com/get/Downloads/MySQL-5.7/mysql-5.7.28-linux-glibc2.12-x86_64.tar.gz`
 
-   ```
+   ```shell
    groupadd mysql
    useradd -r -g mysql -s /bin/false mysql
    cd /usr/local
@@ -54,7 +54,7 @@
    chown -R mysql data mysql-files
    
    a+fq<1veEysa
-   
+   PeyQNs(Mj2>m
    #建立配置文件
    vim /etc/my.cnf
    [mysqld]
@@ -66,6 +66,7 @@
    bin/mysqld_safe --user=mysql &
    #方法2
    cp support-files/mysql.server /etc/init.d/mysqld
+   chmod a+x /etc/init.d/mysqld
    chkconfig --add mysqld
    chkconfig mysqld on
    service mysqld restart
@@ -77,6 +78,60 @@
    mysql> alter user root@'localhost' identified by '123456';
    ```
 
-   
+   如果出错需要重新初始化
+
+   ```shell
+   killall mysqld
+   rm -rf /usr/local/data
+   chown -R mysql.mysql /usr/local/mysql
+   bin/mysqld --initialize --user=mysql --basedir=/usr/local/mysql --datadir=/usr/local/mysql/data
+   bin/mysql_ssl_rsa_setup --datadir=/usr/local/mysql/data
+   chown -R root /usr/local/mysql
+   chown -R mysql data mysql-files
+   ```
 
 3. 源码编译安装
+
+   1. 准备编译环境
+
+      `yum -y install ncurses ncurses-devel openssl-devel bison gcc gcc-c++ make cmake`
+
+   2. 获取源码包，boost包
+
+      `https://dev.mysql.com/downloads/mysql/`
+
+      `wget https://dev.mysql.com/get/Downloads/MySQL-5.7/mysql-5.7.28.tar.gz`   不含有boost，需要单独安装boost
+
+      `wget https://dev.mysql.com/get/Downloads/MySQL-5.7/mysql-boost-5.7.28.tar.gz`  使用自带boost的包
+
+   3. 编译安装
+
+      ```shell
+      groupadd mysql
+      useradd -r -g mysql -s /bin/false mysql
+      tar -xf mysql-boost-5.7.28.tar.gz
+      cd mysql-5.7.28
+      [root@mysql01 mysql-5.7.28]# cmake . \
+       -DWITH_BOOST=boost/boost_1_59_0/ \
+       -DCMAKE_INSTALL_PREFIX=/usr/local/mysql \
+       -DSYSCONFDIR=/etc \
+       -DMYSQL_DATADIR=/usr/local/mysql/data \
+       -DINSTALL_MANDIR=/usr/share/man \
+       -DMYSQL_TCP_PORT=3306 \
+       -DMYSQL_UNIX_ADDR=/tmp/mysql.sock \
+       -DDEFAULT_CHARSET=utf8 \
+       -DEXTRA_CHARSETS=all \
+       -DDEFAULT_COLLATION=utf8_general_ci \
+       -DWITH_READLINE=1 \
+       -DWITH_SSL=system \
+       -DWITH_EMBEDDED_SERVER=1 \
+       -DENABLED_LOCAL_INFILE=1 \
+       -DWITH_INNOBASE_STORAGE_ENGINE=1
+      
+      make && make install
+      
+      #编译完成后参考二进制安装方法进行初始化配置即可
+      ```
+
+      
+
