@@ -106,3 +106,124 @@
 六、虚拟机类型和创建流程
 
 七、`Openstack`使用命令行操作
+
+1. 创建`openstack`客户端环境脚本
+
+   `vim keystonerc_admin`
+
+   ```shell
+   unset OS_SERVICE_TOKEN
+       export OS_USERNAME=admin
+       export OS_PASSWORD='admin'
+       export OS_REGION_NAME=RegionOne
+       export OS_AUTH_URL=http://172.16.100.10:5000/v3
+       export PS1='[\u@\h \W(keystone_admin)]\$ '
+   
+   export OS_PROJECT_NAME=admin
+   export OS_USER_DOMAIN_NAME=Default
+   export OS_PROJECT_DOMAIN_NAME=Default
+   export OS_IDENTITY_API_VERSION=3
+   ```
+
+   `vim keystonerc_user01`
+
+   ```shell
+   unset OS_SERVICE_TOKEN
+       export OS_USERNAME=user01
+       export OS_PASSWORD='admin'
+       export OS_REGION_NAME=RegionOne
+       export OS_AUTH_URL=http://172.16.100.10:5000/v3
+       export PS1='[\u@\h \W(keystone_user01)]\$ '
+   
+   export OS_PROJECT_NAME=trustfar
+   export OS_USER_DOMAIN_NAME=Default
+   export OS_PROJECT_DOMAIN_NAME=Default
+   export OS_IDENTITY_API_VERSION=3
+   ```
+
+2. 生效认证脚本
+
+   `source keystonerc_admin`
+
+   `source keystonerc_user01`
+
+3. 常用命令
+
+   - 创建/删除一个cinder卷(创建一块磁盘)
+
+     `cinder list`
+
+     `cinder snapshat-list`
+
+     `cinder snapshot-delete`
+
+     `[root@openstack01 ~(keystone_user01)]# cinder create --display-name vol00001 2`
+
+     `[root@openstack01 ~(keystone_user01)]# cinder delete vol00001`
+
+   - 虚拟机删除操作
+
+     `[root@openstack01 ~(keystone_user01)]# nova delete VM_NAME`
+
+   - 网络删除操作
+
+     `neutron floatingip-list`   获取ID
+
+     `neutron floatingip-delete ID`
+
+     `neutron router-list`    获取router ID
+
+     `neutron router-gateway-clear  ROUTER_ID`  #清除gateway
+
+     `openstack subnet list`  列出所有子网
+
+     `neutron router-interface-delete router01 c89aea82-ef34-4635-8634-5868e832eeb3` 删除接口
+
+     删除路由：
+
+     `openstack router list`
+
+     `openstack router delete router01`
+
+     删除网络(删除网络前需要删除该网络所有的子网以及interface，否则会删除失败)
+
+     `openstack network list`
+
+     `openstack network delete public`
+
+     `openstack network delete private`
+
+   - 安全组删除操作
+
+     `openstack security group list`
+
+     `openstack security group delete trustfar_secGroup`
+
+   - 删除密钥对
+
+     `openstack keypair list`
+
+     `openstack keypair delete test01`
+
+   - 删除镜像image
+
+     `openstack image list`
+
+     `openstack image delete centos7_mini`
+
+   - 租户删除
+
+     `openstack project list`
+
+     `openstack project delete Myweb`
+
+   - 用户删除
+
+     `openstack user delete user01`
+
+八、使用命令行创建openstack实例流程
+
+
+
+
+
