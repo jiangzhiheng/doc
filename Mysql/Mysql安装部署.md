@@ -133,5 +133,41 @@
       #编译完成后参考二进制安装方法进行初始化配置即可
       ```
 
-      
+
+三、`Mysql`基本使用
+
+1. `Mysql`忘记密码
+
+   ```shell
+   # Mysql 5.7.5 and earlier:
+   vim /etc/my.cnf
+   [mysqld]
+   skip-grant-tables
+   
+   service mysqld restart
+   mysql
+   mysql> update mysql.user set password=password("123456") where user="root" and host="localhost";
+   mysql> flush privileges;
+   mysql> quit
+   vim /etc/my.cnf
+   [mysqld]
+   #skip-grant-tables
+   service mysqld restart
+   
+   #Mysql 5.7.6 and later
+   vim /etc/my.cnf
+   [mysqld]
+   skip-grant-tables
+   systemctl restart mysqld
+   mysql> select user,host,authentication_string from mysql.user;
+   mysql> update mysql.user set authentication_string=password('jjj123456') where user='root';
+   mysql> flush privileges;
+   
+   vim /etc/my.cnf
+   [mysqld]
+   #skip-grant-tables
+   service mysqld restart
+   ```
+
+   
 
