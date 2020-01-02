@@ -95,15 +95,27 @@
      - 散列：在候选的一个大小范围的主机中， 随机选择一个主机
 
    - `Filter`：对主机进行过滤的实体，支持自研扩展
-
-     - `scheduler_default_filters`配置新写的filter
+- `scheduler_default_filters`配置新写的filter
      - `scheduler_available_filters`指定扩展的filter目录的收集函数。
 
-四、Nova中资源管理的机制
+四、Nova中的网络
 
 五、Numa亲和性相关概念
 
+- `numa`亲和性指的是虚拟机分享同一个`numa`上的内存，CPU资源
+- `Evs`和`ionuma`亲和性指的是虚拟机在分享同一个`numa`上内存，cpu和pci资源
+
 六、虚拟机类型和创建流程
+
+- 相关准备：
+  - Flavor：虚拟机规格
+  - 网络信息：Port或者net
+  - 镜像信息：glance中注册的镜像（qcow2，iso等）
+  - 卷信息：需要挂载的数据卷或者启动卷
+  - 其他信息（可选）
+    - `schduler_hint`
+    - `meta data`
+    - `user data ,az,max-count,config driver,key-name等`
 
 七、`Openstack`使用命令行操作
 
