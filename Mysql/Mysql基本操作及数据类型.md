@@ -190,4 +190,3 @@
      mysql> insert into student values('martin','m','book,game');
      ```
 
-四、`Mysql`表操作
