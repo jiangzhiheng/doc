@@ -118,8 +118,96 @@
 
    2. 测试`unique`
 
-   ```
+   ```sql
+   mysql> create table department1(
+       -> dept_id int,
+       -> dept_name varchar(50) unique,
+       -> dept_comment varchar(100)
+       -> );
+   Query OK, 0 rows affected (0.01 sec)
    
+   mysql> desc department1;
+   +--------------+--------------+------+-----+---------+-------+
+   | Field        | Type         | Null | Key | Default | Extra |
+   +--------------+--------------+------+-----+---------+-------+
+   | dept_id      | int(11)      | YES  |     | NULL    |       |
+   | dept_name    | varchar(50)  | YES  | UNI | NULL    |       |
+   | dept_comment | varchar(100) | YES  |     | NULL    |       |
+   +--------------+--------------+------+-----+---------+-------+
+   mysql> insert into department1 values(1,'hr','human resource dept..');
+   
+   # 方法2
+   mysql> create table department2(
+       -> id int,
+       -> name varchar(50),
+       -> comment varchar(100),
+       -> unique(name)   //最后单独声明唯一性约束
+       -> );
    ```
+
+   3. 设置主键约束 `primary key`
+
+      `primary key`字段的值不允许重复，并且不允许NULL`(unique+not null)`
+
+      - 单列作主键
+      - 多列作主键（复合主键）
+
+      1. 单列作主键
+
+         ```sql
+         mysql> create table student3(
+             -> id int primary key not null auto_increment,
+             -> name varchar(50),
+             -> sex enum('male','female') not null default 'male',
+             -> age int not null default 18
+             -> );
+         mysql> desc student3;
+         +-------+-----------------------+------+-----+---------+----------------+
+         | Field | Type                  | Null | Key | Default | Extra          |
+         +-------+-----------------------+------+-----+---------+----------------+
+         | id    | int(11)               | NO   | PRI | NULL    | auto_increment |
+         | name  | varchar(50)           | YES  |     | NULL    |                |
+         | sex   | enum('male','female') | NO   |     | male    |                |
+         | age   | int(11)               | NO   |     | 18      |                |
+         +-------+-----------------------+------+-----+---------+----------------+
+         
+         mysql> insert into student3(name,sex,age) values('jack','male',17),('alice','female',19),('alex','male',30);
+         ```
+
+      2. 复合主键
+
+         表service
+
+         - `host_ip`
+         - `service_name`
+         - `port`
+         - `allow('Y','N') `
+
+         主键：`host_ip + port = primary key`
+
+         ```sql
+         mysql> create table service(
+             -> host_ip varchar(15) not null,
+             -> service_name varchar(10) not null,
+             -> port varchar(5) not null,
+             -> allow enum('Y','N') default 'N',
+             -> primary key(host_ip,port)    #定义复合主键
+             -> );
+         Query OK, 0 rows affected (0.29 sec)
+         
+         mysql> desc service;
+         +--------------+---------------+------+-----+---------+-------+
+         | Field        | Type          | Null | Key | Default | Extra |
+         +--------------+---------------+------+-----+---------+-------+
+         | host_ip      | varchar(15)   | NO   | PRI | NULL    |       |
+         | service_name | varchar(10)   | NO   |     | NULL    |       |
+         | port         | varchar(5)    | NO   | PRI | NULL    |       |
+         | allow        | enum('Y','N') | YES  |     | N       |       |
+         +--------------+---------------+------+-----+---------+-------+
+         mysql> insert into service values('192.168.1.10','http','80','Y');
+         mysql> insert into service(host_ip,service_name,port) values('192.168.1.10','ftp','21');
+         ```
+
+   4. `Foreign key`外键约束
 
 5. 
