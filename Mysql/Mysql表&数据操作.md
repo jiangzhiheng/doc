@@ -210,4 +210,93 @@
 
    4. `Foreign key`外键约束
 
-5. 
+      ```sql
+      # 父表
+      mysql> create table employees(
+          -> name varchar(50) not null,
+          -> mail varchar(20),
+          -> primary key(name)
+          -> )engine=innodb;
+      
+      # 子表
+      mysql> create table payroll(
+          -> id int not null auto_increment,
+          -> name varchar(50) not null,
+          -> payroll float(10,2) not null,
+          -> primary key(id),
+          -> foreign key(name)
+          -> references employees(name)
+          -> on update cascade   #同步更新
+          -> on delete cascade   #同步删除
+          -> )engine=innodb;
+      
+      mysql> desc employees;
+      +-------+-------------+------+-----+---------+-------+
+      | Field | Type        | Null | Key | Default | Extra |
+      +-------+-------------+------+-----+---------+-------+
+      | name  | varchar(50) | NO   | PRI | NULL    |       |
+      | mail  | varchar(20) | YES  |     | NULL    |       |
+      +-------+-------------+------+-----+---------+-------+
+      
+      mysql> desc payroll;
+      +---------+-------------+------+-----+---------+----------------+
+      | Field   | Type        | Null | Key | Default | Extra          |
+      +---------+-------------+------+-----+---------+----------------+
+      | id      | int(11)     | NO   | PRI | NULL    | auto_increment |
+      | name    | varchar(50) | NO   | MUL | NULL    |                |
+      | payroll | float(10,2) | NO   |     | NULL    |                |
+      +---------+-------------+------+-----+---------+----------------+
+      mysql> insert into employees values
+          -> ('jack','jack@126.com'),('alice','NULL');
+      mysql> insert into payroll(name,payroll) values ('alice',80000);
+      ```
+
+5. 修改表`ALTER TABLE`
+
+   1. 修改表名
+
+      `alter table 表名 rename 新表名;`
+
+   2. 增加字段
+
+      - `alter table 表名`
+
+        `add 字段名  数据类型[约束条件...],`
+
+        `add 字段名  数据类型[约束条件...];`
+
+      - `alter table 表名`
+
+        `add 字段名  数据类型[约束条件...] FIRST;`
+
+      - `alter table 表名`
+
+        `add 字段名  数据类型[约束条件...] FIRST;`
+
+   3. 删除字段
+
+      `alter table 表名  drop 字段名`
+
+   4. 修改字段
+
+      `alter table 表名 modify 字段名 数据类型[约束条件...];`
+
+6. 复制表
+
+   1. 复制表结构 + 记录（key不会复制：主键，外键和索引）
+
+      `mysql> create table new_service select * from service;`
+
+   2. 只复制表结构
+
+      `mysql> create table new_service select * from service where 1=2;`  //条件为假，查不到任何记录
+
+   3. 复制表结构，包括key
+
+      `mysql> create table t4 like empllyees;`
+
+7. 删除表
+
+   `drop table 表名;`
+
+   
