@@ -1,5 +1,5 @@
 #!/bin/bash
-# This scripts used by Redhat6/Centos6 NIC bonding
+# This scripts used by Redhat/Centos NIC bonding
 # v0.1 by JiangZhiheng
 
 function bondConfig(){
@@ -37,21 +37,33 @@ function memberConfig(){
 
 # 输入bond name
 clear
-echo -e "\033[32m Enter Config Information \033[0m"
+echo -e "\033[31mEnter Config Information: \033[0m"
 read -p "Please Enter BondName[eg.<bond0>]: " BondName
 read -p "Please Enter IPAddress: " IPAddress
 read -p "Please Enter NetMask:" NetMask
 read -p "Please Enter GateWay: " GateWay
 
+echo -e "\033[31mCurrent NIC List：\033[0m"
+array=($(cat /proc/net/dev |awk '{if(NR>2){print $1}}' | awk -F":" '{print $1}'))
+echo ${array[@]}
+
+#输入需要绑定的网卡 eth0，eth1
+echo -e "\033[31mPlease Enter Member Name[eg.<Member1 Member2>]:\033[0m"
+read  Member1 Member2
 echo -e "\n"
-echo -e "\033[32m$BondName config information \033[0m"
-printf ":
-------------------------------
-IPAddress:		$IPAddress
-NetMask:		$NetMask
-GateWay:		$GateWay
-------------------------------
-"
+
+echo -e "\033[31mBond Config Information: \033[0m"
+printf "\033[32m
++-------------------------------------------+
+|
+| BondName:		$BondName                                           
+| IPAddress:		$IPAddress          
+| NetMask:		$NetMask            
+| GateWay:		$GateWay            
+| NIC Members:		$Member1,$Member2    
+|                                               
++-------------------------------------------+
+\033[0m"
 echo "Please Confirm Your Input!"
 read -p "Are you sure?[y/n]: " action
 case "$action" in 
@@ -66,36 +78,26 @@ case "$action" in
 			bondConfig $BondName $IPAddress $NetMask $GateWay
 		fi
 
-
-
-		echo -e "\033[32m NIC list：\033[0m"
-		array=($(cat /proc/net/dev |awk '{if(NR>3){print $1}}' | awk -F":" '{print $1}'))
-		echo ${array[@]}
-
-		#输入需要绑定的网卡 eth0，eth1
-		read -p "Please Enter Member Name[eg.<Member1 Member2>]:" Member1 Member2
-		echo -e "\n"
-
 		# 配置成员网卡信息
 		if test -e /etc/sysconfig/network-scripts/ifcfg-"$Member1" ;then
 			echo "ifcfg-$Member1 is exists backup to ifcfg-$Member1.bak"
 			mv /etc/sysconfig/network-scripts/ifcfg-"$Member1" /etc/sysconfig/network-scripts/ifcfg-"$Member1".bak
-			echo "writing config to new ifcfg-$Member1....."
+			echo "writing config to new ifcfg-$Member1 ....."
 			memberConfig $Member1 $BondName
-			echo "create ifcfg-$Member1 success"
+			echo "create ifcfg-$Member1 success....."
 		else
-			echo "ifcfg-$Member1 is not exists,check it please!!"
+			echo "ifcfg-$Member1 is not exists,check it please!"
 			exit 2
 		fi
 
 		if test -e /etc/sysconfig/network-scripts/ifcfg-"$Member2" ;then
 			echo "ifcfg-$Member2 is exists backup to ifcfg-$Member1.bak"
 			mv /etc/sysconfig/network-scripts/ifcfg-"$Member2" /etc/sysconfig/network-scripts/ifcfg-"$Member2".bak
-			echo "writing config to new ifcfg-$Member2....."
+			echo "writing config to new ifcfg-$Member2 ....."
 			memberConfig $Member2 $BondName
-			echo "create ifcfg-$Member2 success"
+			echo "create ifcfg-$Member2 success..."
 		else
-			echo "ifcfg-$Member2 is not exists,check it please!!"
+			echo "ifcfg-$Member2 is not exists,check it please!"
 			exit 2
 		fi
 
@@ -109,3 +111,12 @@ case "$action" in
 	*)
 		exit 1
 esac
+# ping网关测试
+echo "Ping GateWay Test:"
+ping -c4 -w1 $GateWay
+if [ $? -eq 0 ];then
+	echo "Ping GateWay Test Successful"
+else
+	echo "Ping Test Failed,Please check cable connection!"
+fi
+echo "All finished..."
