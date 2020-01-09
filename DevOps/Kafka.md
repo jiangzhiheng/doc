@@ -6,7 +6,7 @@
 
 1. 消息队列
 
-   ![1562550374968](img\1562550374968.png)
+   ![1562550374968.png](http://ww1.sinaimg.cn/large/d3f19072gy1gaq7m4e7u3j20e907576a.jpg)
 
 2. 什么是Kafka
 
@@ -16,11 +16,11 @@
 
 3. Kafka架构
 
-   ![kafka01](img\kafka架构01.png)
+   ![kafka架构01.png](http://ww1.sinaimg.cn/large/d3f19072gy1gaq7moh9u3j209z06v0tk.jpg)
 
    
 
-   ![kafka02](img\kafka架构02.png)
+   ![kafka架构02.png](http://ww1.sinaimg.cn/large/d3f19072gy1gaq7n8dynoj20r00dnah4.jpg)
 
    - producer：消息生产者，就是向kafka broker发消息的客户端
    - Consumer：消息消费者，向kafka broker取消息的客户端
@@ -122,9 +122,9 @@
 
      消息发送时都被发送到一个topic，其本质就是一个目录，而topic是由一些Partition Logs组成
 
-     ![partition01](img\partition01.jpg)
+     ![partition01.jpg](http://ww1.sinaimg.cn/large/d3f19072gy1gaq7nyk3pwj20ci05vq3m.jpg)
 
-     ![partiton02](img\partition02.jpg)
+     ![partition02.jpg](http://ww1.sinaimg.cn/large/d3f19072gy1gaq7odfhrqj20e904swer.jpg)
 
    - 分区原则
 
@@ -136,7 +136,7 @@
 
    - 写入流程
 
-     ![写入流程](img\pruducer写入流程.jpg)
+     ![pruducer写入流程.jpg](http://ww1.sinaimg.cn/large/d3f19072gy1gaq7pbc4ivj20m10ajdie.jpg)
 
 2. Kafka保存消息
 
@@ -146,6 +146,6 @@
 
    - zookeeper中存储结构
 
-     ![kafka-zookeeper](img\kafka-zookeeper.jpg)
+     ![kafka-zookeeper.jpg](http://ww1.sinaimg.cn/large/d3f19072gy1gaq7pwzspyj20md0f0n4c.jpg)
 
 3. Kafka消费过程分析
