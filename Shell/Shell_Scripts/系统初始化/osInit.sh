@@ -131,7 +131,7 @@ EOF
 
 # disable SELINUX
 setenforce 0
-sed -ri 's/^SELINUX=.*$/SELINUX=disabled' /etc/selinux/config
+sed -ri '/^SELINUX=/cSELINUX=disabled' /etc/selinux/config
  
 # update record command
 sed -ri 's/^HISTSIZE=.*$/HISTSIZE=100000/' /etc/profile
