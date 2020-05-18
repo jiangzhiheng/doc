@@ -1,0 +1,215 @@
+一、视图的概念
+
+1. 视图的作用
+
+   接受用户的请求，并响应给用户
+
+2. 视图函数的本质
+
+   `python`函数
+
+3. 视图的响应
+
+   1. 网页
+      - 重定向
+      - 其它响应的状态
+        - `404 NOT FOUND`
+        - `500 SERVER ERROR`
+        - `400 BAD REQUEST`
+   2. `json`数据
+
+二、`URL`配置
+
+1. 路由：处理`url`地址与视图函数之间的程序，称之为路由
+
+2. 配置
+
+   指定根级的`url(Django已经配置好了)`
+
+   ```python
+   ROOT_URLCONF = 'HelloWorld.urls'
+   ```
+
+3. `url patterns`列表
+
+   装有所有路由地址列表
+
+   `url`方法参数：
+
+   - `regex`正则
+   - `view`视图函数名
+   - `name`给当前的`url`起名（`url`的反向解析）
+
+   `url`中正则参数的使用
+
+   - `r` 必需，转义特殊字符
+   - `^` 必需，必须以。。。开头
+   - `$` 必需，必须以。。。结尾
+
+   注意：
+
+   `r'^$'`限定路由地址完全匹配才能访问到，并且转义特殊字符
+
+   实例：首页路由地址
+
+   ```python
+   url(r'^$', views.index, name='index'),
+   ```
+
+   新建一个路由
+
+   ```python
+   url(r'^test/$', views.test, name='test')
+   ```
+
+   此时的访问规则为必须匹配以`test/`开头结尾的才能被访问，建议使用此方式定义路由规则
+
+4. 新建`urls.py`
+
+   因为我们知道一个`project`下可以有多个`APP`，所以建议每个`APP`下都新建一个独立的`urls.py`
+
+   - `APP`下新建`urls.py`文件，代码如下
+
+     ```python
+     from django.conf.urls import url
+     from APP.views import main
+     
+     urlpatterns = [
+         url(r'^index/$', main.index, name='index')
+     ]
+     ```
+
+   - `project`下的`urls.py`文件中代码如下
+
+     ```python
+     from django.conf.urls import url,include
+     from django.contrib import admin
+     from APP import views
+     
+     urlpatterns = [
+         url(r'^admin/', admin.site.urls),
+         url(r'^', include('APP.urls', namespace='APP')), # namespace用于给当前的应用起名称，用于反向解析
+     ]
+     ```
+
+5. 无参路由
+
+   也就是不带参数的路由地址，以上路由写法均为无参路由
+
+6. 带一个参数路由地址
+
+   - 路由地址
+
+     ```python
+     urlpatterns = [
+         url(r'^index/$', main.index, name='index'),
+         # 以下理由为测试路由传参
+         # 带一个参数的可以传带2-3个字符的参数
+         url(r'^arg/(\w{2,3})/$', testarg.arg, name='arg'),
+     ]
+     ```
+
+   - 视图函数
+
+     ```python
+     # 测试路由参数的视图函数文件
+     
+     from django.shortcuts import HttpResponse
+     
+     # 带一个参数的视图函数
+     
+     def arg(req,name):
+         print(name)
+         return HttpResponse('带一个参数的视图函数')
+     ```
+
+   - 访问`http://127.0.0.1:8000/arg/ha`
+
+7. 带多个参数的路由地址
+
+   - 路由地址
+
+     ```python
+     urlpatterns = [
+         # 带多个参数的路由地址(一个视图函数可以有多个路由地址)
+         url(r'^args/(\w{2,3})/(\d{1,3})/$', testarg.args,name='args1'),
+         url(r'^args/(\w{2,3})_(\d{1,3})/$', testarg.args, name='args2'),
+     ]
+     ```
+
+   - 视图函数
+
+     ```python
+     def args(req,name,age):
+         print(name)
+         print(age)
+         return HttpResponse('我叫%s ,今年 %d 岁 ' % (name, int(age)))
+     ```
+
+   - 访问
+
+     `http://127.0.0.1:8000/args/ha/22/`
+
+     `http://127.0.0.1:8000/args/ha_22/`
+
+   - 注意：
+
+     - 路由地址结尾的`/`建议都加上，和`flask`一样，如果访问了以`/`为结尾的路由地址，那么访问的时候结尾的`/`是否添加都无所谓，只是会多一个301重定向，但是如果结尾的`/`在定制的时候不添加，则访问的时候也不能存在，否则404。
+     - 一个视图函数可以有多个路由地址，但是路由的`name`值不能相同
+     - 路由地址带参需要使用()进行参数值 的存储
+     - 路由地址在接收到传参以后都会转换成字符串类型，所以在接收到参数之后转换成对应的类型
+
+三、反向解析：
+
+1. 概述：如果模板中的链接或使用的`url`为硬链接，则路由地址一旦发生改变，所有的地址都需要修改，增加了代码的后期维护，所以所有路由地址都要动态生成（反向解析）减轻后期 的维护。
+
+2. 作用于：模板中/试图函数中
+
+3. 模板中
+
+   ```html
+   <!DOCTYPE html>
+   <html lang="en">
+   <head>
+       <meta charset="UTF-8">
+       <title>Title</title>
+   </head>
+   <body>
+       <h2>首页</h2>
+       <h4>反向解析 动态生成URL地址</h4>
+       <dl>
+           <dt><h5>无参路由地址的生成</h5></dt>
+           <dd>{% url 'APP:index' %}</dd>
+           <dt><h5>带参路由地址的生成</h5></dt>
+           <dd>{% url 'APP:arg' 'ab' %}</dd>
+           <dd>{% url 'APP:args1' 'lky' 18 %}</dd>
+           <dd>{% url 'APP:args2' 'hah' 22 %}</dd>
+       </dl>
+       <h4>和超链接结合使用</h4>
+       <p><a href="{% url 'APP:args1' 'luy' 19 %}">跳转多个参数的路由地址</a></p>
+   </body>
+   </html>
+   ```
+
+   视图函数为上的一个和多个参数的视图函数
+
+   路由地址
+
+   ```python
+   urlpatterns = [
+       url(r'^index/$', main.index, name='index'),
+       # 以下理由为测试路由传参
+       # 带一个参数的可以传带2-3个字符的参数
+       url(r'^arg/(\w{2,3})/$', testarg.arg, name='arg'),
+       # 带多个参数的路由地址(一个视图函数可以有多个路由地址)
+       url(r'^args/(\w{2,3})/(\d{1,3})/$', testarg.args,name='args1'),
+       url(r'^args/(\w{2,3})_(\d{1,3})/$', testarg.args, name='args2'),
+   ]
+   ```
+
+   注意：
+
+   - 其中的`APP`为`namespace`的值，`name`为`url`方法的`name`值
+
+4. 
+
