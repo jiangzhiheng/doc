@@ -211,5 +211,60 @@
 
    - 其中的`APP`为`namespace`的值，`name`为`url`方法的`name`值
 
-4. 
+
+四、`request`对象
+
+1. `request`对象
+
+   每个视图函数都必须有一个形参，接受`django`传递过来的用户请求的对象，`request`也就是浏览器请求的时候给视图的数据。
+
+2. 概述
+
+   服务器接收到用户请求后，会创建出`request`对象，视图的第一个参数就是`request`对象
+
+3. 属性
+
+   - `path`：请求的路径
+
+   - `method`：获取请求的方式
+
+   - `GET`：获取`get`传参
+     - 获取一个参数：`req.GET.get('KEY')`    `http://127.0.0.1:8000/test_req/?name=lucky`
+     - `get`传参存在相同的`key`：`req.GET.getlist('KEY')`    `http://127.0.0.1:8000/test_req/?name=lucky&name=cls`
+     
+   - `POST`获取`POST`的请求参数
+
+     `django`自带`csrf`验证，防止跨站需求为在保护的攻击，确认表单是从本网站发送过来的恶意攻击，`{% csrf_token %}`或者注释掉`Middleware`中间件那里注释掉
+
+   - `FILES`获取上传文件
+
+   - `COOKIES`获取请求过来的`cookie`
+
+   - `session`获取`session`数据
+
+   - `Meta`包含`HTTP`请求的所有`header`头信息
+
+     格式化显示
+
+     ```python
+         values = req.META.items()
+         html = []
+         for k, v in values:
+             html.append('<tr><td>{}</td><td>{}</td></tr>'.format(k, v))
+         return HttpResponse('<table>%s</table>'%'\n'.join(html))
+     ```
+
+     常用的`key`
+
+     - `REMOTE_ADDR`：客户端`IP`地址
+     - `HTTP_USER_AGENT`：浏览器和系统信息的字符串
+     - `HTTP_REFERER`：获取上一个点击过来的链接地址
+
+4. 方法
+
+   - `get_full_path`：获取完整的请求（不包括域名）
+   - `get_host`：获取远程主机`IP`和端口
+   - `is_ajax`：判断是否为`ajax`请求。
+
+5. 
 
