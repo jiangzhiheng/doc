@@ -1,6 +1,0 @@
-run{
-delete noprompt backupset completed before 'sysdate-7';
-sql 'alter system archive log current';
-backup format '/dbbackup/%d_full_%U' database;
-backup archivelog all format '/dbbackup/%d_arch_%U' delete all input;
-}
