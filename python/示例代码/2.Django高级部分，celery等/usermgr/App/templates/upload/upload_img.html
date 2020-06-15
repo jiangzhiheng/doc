@@ -1,0 +1,13 @@
+{% extends 'common/base.html' %}
+{% block title %}
+    文件上传
+{% endblock %}
+
+{% block pagecontent %}
+<h2>文件上传</h2>
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <p>选择图片：<input type="file" name="file" required></p>
+        <p><input type="submit" value="上传"></p>
+    </form>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'common/base.html' %}
+{% block title %}
+    注册
+{% endblock %}
+
+{% block pagecontent %}
+<h2>登陆</h2>
+    <form action="" method="post">
+        {% csrf_token %}
+        <p>用户名： <input type="text" name="username" placeholder="请输入用户名或邮箱"></p>
+        <p>密码： <input type="password" name="userpass" placeholder="请输入密码"></p>
+        <p><a href="{% url 'App:update_password' %}">修改密码？</a></p>
+        <p><input type="submit" value="登录"></p>
+    </form>
+{% endblock %}

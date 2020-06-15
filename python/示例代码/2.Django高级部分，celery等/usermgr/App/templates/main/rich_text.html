@@ -1,0 +1,26 @@
+{% extends 'common/base.html' %}
+{% load static %}
+{% block title %}
+    发表博客
+{% endblock %}
+{% block scripts %}
+    {{ block.super }}
+    <script type="text/javascript" src="{% static 'tiny_mce/tiny_mce.js' %}"></script>
+    <script>
+        tinyMCE.init({
+            'mode': 'textareas',
+            'theme': 'advanced',
+            'width': '800',
+            'height': '600',
+        })
+    </script>
+{% endblock %}
+{% block pagecontent %}
+<h2>发表博客</h2>
+    <form action="" method="post">
+        {% csrf_token %}
+        <p>标题： <input type="text" name="title" placeholder="请输入标题"></p>
+        <p>博客内容：<textarea name="article" id="" cols="30" rows="10"></textarea></p>
+        <p><input type="submit" value="发表"></p>
+    </form>
+{% endblock %}
