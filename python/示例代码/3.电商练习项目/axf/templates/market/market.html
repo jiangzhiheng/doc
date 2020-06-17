@@ -1,0 +1,95 @@
+{% extends 'common/base.html' %}
+{% load static from staticfiles %}
+{% block linkscript %}
+    <link rel="stylesheet" type="text/css" href="{% static 'market/css/market.css'%}" />
+    <script type="text/javascript" charset="utf-8" src="{% static 'market/js/market.js' %}"></script>
+{% endblock linkscript %}
+
+
+
+{% block base %}
+<div id="market">
+    <aside>
+        <menu>
+            <ul>
+                {% for item in leftSlider %}
+                <li>
+                    <span class="yellowSlide"></span>
+                    <a href="/market/{{item.typeid}}/0/0/">{{item.typename}}</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </menu>
+    </aside>
+
+
+
+    <section>
+        <nav>
+            <ul>
+                <li><span id="alltypebtn">全部类型<span class="glyphicon glyphicon-chevron-down" style="font-weight: 100"></span></span></li>
+				<li><span id="showsortbtn">综合排序<span class="glyphicon glyphicon-chevron-down" style="font-weight: 100"></span></span></li>
+            </ul>
+        </nav>
+
+
+
+        <menu>
+            <ul>
+                {% for item in productList %}
+                <li>
+                    <a href="#">
+                        <img src="{{item.productimg}}" />
+                        <article class="shoppingInfo">
+                            <h6>{{item.productlongname}}</h6>
+                            <p class="detailTag"><span>精选</span><span>{{item.pedesc}}</span></p>
+                            <span class="unit">{{item.specifics}}</span>
+                            <p class="price"><span>￥{{item.price}}</span><s><span>￥{{item.marketprice}}</span></s></p>
+                        </article>
+                    </a>
+                    <section>
+						<button class="subShopping" onclick="doCar({{ item.id }},0)">-</button>
+                        <span id="{{ item.id }}">0</span>
+						<button class="addShopping" onclick="doCar({{ item.id }},1)">+</button>
+					</section>
+                </li>
+                {% endfor %}
+            </ul>
+            <div id="typediv">
+                <div>
+                    {% for item in typeList %}
+                    <a href="/market/{{categoryid}}/{{item.1}}/0/"><span>{{item.0}}</span></a>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div id="sortdiv">
+                <div>
+                    <a href="/market/{{categoryid}}/{{childcid}}/0/" class="sorta"><span>综合排序</span></a>
+                    <a href="/market/{{categoryid}}/{{childcid}}/1/" class="sorta"><span>销量排序</span></a>
+                    <a href="/market/{{categoryid}}/{{childcid}}/2/" class="sorta"><span>价格最低</span></a>
+                    <a href="/market/{{categoryid}}/{{childcid}}/3/" class="sorta"><span>价格最高</span></a>
+                </div>
+            </div>
+        </menu>
+    </section>
+</div>
+<script>
+        {#  点击商品数量的+- 进行调用操作的js代码  #}
+        function doCar(id,state){
+            $.get('{% url 'App:doCar' %}',{'goodsId':id,'state':state},function(data,status){
+                if(status == 'success'){
+                    if(data.code == 500){
+                        if(window.confirm("是否前去登录")){
+                            window.location.href = {% url 'App:login' %};
+                        }
+                    }else if(data.code == 200){
+                            $('#'+id).html(data.totalnum);
+                    }
+                }else{
+                    alert('目前服务繁忙 请稍后再试...')
+                }
+            })
+        }
+</script>
+{% endblock base %}
