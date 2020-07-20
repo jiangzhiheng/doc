@@ -161,7 +161,7 @@ CACHES = {
 
 # 配置发送邮件所需的配置
 EMAIL_HOST = 'smtp.qq.com'
-EMAIL_HOST_PASSWORD = 'bbiijppnixtqdbga'
+EMAIL_HOST_PASSWORD = ''
 EMAIL_HOST_USER = '1689991551@qq.com'
 
 
