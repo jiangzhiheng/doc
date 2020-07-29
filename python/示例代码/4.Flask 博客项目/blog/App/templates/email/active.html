@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>激活</title>
+</head>
+<body>
+<h2>您好：{{ username }}</h2>
+<h5>欢迎加入个人博客网站，Have Fun！</h5>
+<h6>请点击激活链接激活 <a href="{{ url_for('user.active',token=token,_external=True) }}" style="color: red">激活</a></h6>
+</body>
+</html>

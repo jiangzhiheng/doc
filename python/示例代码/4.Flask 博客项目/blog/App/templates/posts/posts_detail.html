@@ -1,0 +1,90 @@
+{% extends 'common/base.html' %}
+{% block title %}
+    博客详情...
+{% endblock %}
+{% block page_content %}
+    {#  博客内容的展示  #}
+    <h2>{{ posts.title }}</h2>
+    <hr style="border:3px double #987cb9;" width="100%" color="#987cb9" size="3">
+    {#  博客内容  #}
+    {{ posts.article|safe }}
+    <br>
+    <br>
+    <span style="float:right;">
+    <p onclick="doFavorite({{ posts.id }})" style="cursor:pointer;" id="collections">{% if current_user.is_authenticated %}{% if current_user.is_favorite(posts.id) %}取消收藏{% else %}收藏{% endif %}{% else %}收藏{% endif %}</p>
+    <p>访问量：{{ posts.visit }}</p>
+    <p>作者：<span style="font-weight: bold;font-size:18px;">{{ posts.user.username }}</span> </p>
+    <p>发表于：{{ moment(posts.timestamp).format('YYYY-MM-DD H:m:s') }}</p>
+    </span>
+    {#  下面是评论内的显示和发表评论的代码  #}
+    <div class="page-header" style="clear: both;"><h3>评论内容</h3></div>
+    {# 评论和回复内容的显示 #}
+    {% for message in comment %}
+        <div class="media">
+            <div class="media-left media-middle">
+                <a href="#">
+                    <img class="media-object" src="{{ url_for('static',filename='upload/s_'+message.user.icon,_external=True) }}" alt="..." width="50" style="border-radius: 5px;border-top:2px solid #ccc;border-right:2px solid #ccc;">
+                </a>
+            </div>
+            <div class="media-body">
+                <h4 class="media-heading">
+                    {% if message.pid == posts.id %}
+                        {{ message.user.username }}
+                    {% else %}
+                        {{ message.user.username }} 回复了 {{ message.pid|replayName }}
+                    {% endif %}
+
+                    <span style="float:right;font-size:14px;">{{ moment(message.timestamp).format('YYYY-MM-DD H:m:s') }} <button class="btn btn-danger btn-xs" onclick="replay({{ message.id }});">回复</button> </span></h4>
+                        <p>{{ message.article }}</p>
+            </div>
+        </div>
+        <form action="{{ url_for('posts.comment') }}" method="post" class="replay" id="replay{{ message.id|string }}">
+        {{ form.csrf_token }}
+        <input type="hidden" name="pid" value="{{ posts.id }}">
+        <input type="hidden" name="rid" value="{{ message.id }}">
+        {{ form.article(class="form-control",style="height:100px;resize:none;",placeholder='请输入评论内容在5～100字之间',required='true',minlength=5,maxlength=100) }}
+        <br>
+        <button class="btn btn-danger">发表回复</button>
+    </form>
+    {% endfor %}
+    <div class="page-header" style="clear: both;"><h3>发表评论</h3></div>
+    <form action="{{ url_for('posts.comment') }}" method="post">
+        {{ form.csrf_token }}
+        <input type="hidden" name="pid" value="{{ posts.id }}">
+        {{ form.article(class="form-control",style="height:200px;resize:none;",placeholder='请输入评论内容在5～100字之间',required='true',minlength=5,maxlength=100) }}
+        <br>
+        <button class="btn btn-success">发表评论</button>
+    </form>
+{% endblock %}
+{% block scripts %}
+    {{ super() }}
+    <script>
+    $(function () {
+        $('.replay').hide();
+    });
+    {#  点击回复的js的函数 #}
+    function replay(pid) {
+        $('.replay').hide();
+        $('#replay'+pid).show()
+    }
+
+    {#  处理博客收藏功能的函数  #}
+    function doFavorite(pid){
+{#     获取收藏的节点标签   #}
+        var collections = $('#collections');
+        var html = collections.html();
+        console.log(html);
+        $.get({{ url_for('posts.do_favorite') }},{'pid':pid},function (data,status) {
+            if(data.res == 200){
+                if(html=='收藏'){
+                    collections.html('取消收藏');
+                }else{
+                    collections.html('收藏')
+                }
+            }else if(window.confirm('您还没有登录？是否前去登录？')){
+                window.location.href = '{{ url_for('user.login',_external=True) }}';
+            }
+        })
+    }
+    </script>
+{% endblock %}

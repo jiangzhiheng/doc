@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="32791db2-4685-4fb0-8cac-7514eddd8391" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand />
+    <select />
+  </component>
+  <component name="FavoritesManager">
+    <favorites_list name="blog" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+        <option value="HTML File" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectId" id="1evhxVp5ZIOkYYGRnJrHnktbm2C" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/App/templates/owncenter" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.templateLanguages.PyTemplateLanguageModulesConfigurable" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="G:\vsCode\pycharm\blog\App\static\upload" />
+      <recent name="G:\vsCode\pycharm\blog" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="G:\vsCode\pycharm\blog\App\templates\owncenter" />
+      <recent name="G:\vsCode\pycharm\blog\App\static\css" />
+      <recent name="G:\vsCode\pycharm\blog\App\templates\posts" />
+      <recent name="G:\vsCode\pycharm\blog\App\static\upload" />
+      <recent name="G:\vsCode\pycharm\blog\App\static\img\banner" />
+    </key>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="32791db2-4685-4fb0-8cac-7514eddd8391" name="Default Changelist" comment="" />
+      <created>1595208220472</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1595208220472</updated>
+      <workItem from="1595208229436" duration="5530000" />
+      <workItem from="1595225522100" duration="6925000" />
+      <workItem from="1595292785158" duration="15662000" />
+      <workItem from="1595384641580" duration="4564000" />
+      <workItem from="1595465552908" duration="7648000" />
+      <workItem from="1595551671561" duration="7300000" />
+      <workItem from="1595570803496" duration="4685000" />
+      <workItem from="1595812228462" duration="10894000" />
+      <workItem from="1595898198363" duration="5644000" />
+      <workItem from="1595916817580" duration="10659000" />
+      <workItem from="1595984141681" duration="8516000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="368" y="11" key="SettingsEditor" timestamp="1595208869879">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="368" y="11" key="SettingsEditor/0.0.1366.728@0.0.1366.728" timestamp="1595208869879" />
+    <state x="819" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1595988178880">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="819" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1595988178880" />
+  </component>
+</project>
