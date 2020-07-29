@@ -10,7 +10,7 @@ class Config:
     # 邮箱配置
     MAIL_SERVER = 'smtp.qq.com'
     MAIL_USERNAME = '1689991551@qq.com'
-    MAIL_PASSWORD = 'afbpijbqunjsdici'
+    MAIL_PASSWORD = ''
     # 分页每页显示数据条数
     PAGE_NUM = 3
     # 文件上传配置
